@@ -1,0 +1,4 @@
+Package: BayesSurvival
+Type: Package
+Title: Bayesian Survival Models 
+Version: 0.0.1.0
