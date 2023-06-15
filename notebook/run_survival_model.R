@@ -2,7 +2,7 @@ library(survival)
 library(cmdstanr)
 library(eha)
 
-setwd("~/Desktop/BayesianSurvivalReg/")
+# setwd("~/Desktop/BayesianSurvivalReg/")
 
 #### ----------- prepare data ---------- ####
 d = survival::cancer
@@ -19,6 +19,8 @@ d$age = ( d$age - mean(d$age) )/ sd(d$age) ## standardize age
 post_draws = bayeshaz(d = d, 
                       reg_formula = Surv(time, status) ~ age + ph.ecog + sex,
                       A = 'sex', num_intervals = 100, warmup = 1000, post_iter = 1000 )
+### need to rename offset in the stan
+#!!! this get divergence 4 of 1000
 
 #### ----------- Plot baseline hazard model ------------- ####
 
@@ -29,7 +31,9 @@ bslhaz_mean = colMeans(post_draws$haz_draws)
 bslhaz_lwr = apply(post_draws$haz_draws, 2, quantile, probs=.025)
 bslhaz_upr = apply(post_draws$haz_draws, 2, quantile, probs=.975)
 
-plot( post_draws$xv, bslhaz_mean, pch=20, ylim=c(0, .05) ) 
+# plot( post_draws$xv, bslhaz_mean, pch=20, ylim=c(0, .05) ) 
+plot( post_draws$xv, bslhaz_mean, pch=20, ylim=c(0, .1) ) 
+
 segments(x0 = post_draws$xv, y0 = bslhaz_lwr,
          x1 = post_draws$xv, y1 = bslhaz_upr)
 
@@ -37,8 +41,8 @@ segments(x0 = post_draws$xv, y0 = bslhaz_lwr,
 freq_res = eha::pchreg(data=d,cuts = seq( 0 , max(d$time) + .01, length.out = 100 ),
                        formula = Surv(time, status) ~  age + ph.ecog + sex)
 ## overlay frequentist point estimates 
-points(post_draws$xv, freq_res$hazards, col='red')
-
+# points(post_draws$xv, freq_res$hazards, col='red')
+points(post_draws$xv, freq_res$hazards, col=rgb(1,0,0,0.5), pch = 19, cex = 0.5)
 
 ## compare coefficients with frequentist estimates
 colMeans(post_draws$beta_draws)
