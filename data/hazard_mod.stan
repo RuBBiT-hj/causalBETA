@@ -30,6 +30,13 @@ transformed parameters{
   for(i in 2:n_pieces){
     log_haz[i] = eta*(1-rho) + rho*log_haz[i-1] + sigma*haz_eps[i];
   }
+
+  // independent priors 
+  // log_haz[1] = eta + sigma*haz_eps[1];
+  // for(i in 2:n_pieces){
+  //   log_haz[i] = eta + sigma*haz_eps[i];
+  // }
+
   
   // specify unsmoothed prior (i.e. independent hazards across increments )
   
