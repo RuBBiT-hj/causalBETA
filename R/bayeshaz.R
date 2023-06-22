@@ -5,6 +5,8 @@
 #' @param d The data in survival format, i.e. processed by Surv function
 #' @param reg_formula The formula for the poisson regression
 #' @param A The name of the treatment
+#' @param model The stan model used, default is "default", other options are "independent" and "beta"
+#' @param B The user-defined variance for odds ratio prior, the default is 3, the same as the default model
 #' @param num_intervals The number of intervals to partition the study time, the default is 100
 #' @param warmup The number of warmup in MCMC, the default is 1000
 #' @param post_iter The number of iterations to draw from the posterior, the default is 1000
@@ -15,8 +17,9 @@
 #' @importFrom survival survSplit
 ## usethis namespace: end
 #' @export
-bayeshaz = function(d, reg_formula, A, num_intervals=100, warmup=1000, post_iter=1000){
-  ## dependency checkins
+bayeshaz = function(d, reg_formula, A, model = "default", B = 3, 
+                    num_intervals=100, warmup=1000, post_iter=1000){
+  ## dependency checkings
   if (!requireNamespace("cmdstanr", quietly = TRUE)) {
     stop(
       "Package \"cmdstanr\" must be installed to use this function.",
@@ -29,6 +32,10 @@ bayeshaz = function(d, reg_formula, A, num_intervals=100, warmup=1000, post_iter
       call. = FALSE
     )
   }
+  
+  # the address of the stan files
+  path_stan <- paste0(.libPaths(), "/BayesSurvival/data/")
+  
   ## user-specified intervention variable
   trt_names = A
   
@@ -66,15 +73,47 @@ bayeshaz = function(d, reg_formula, A, num_intervals=100, warmup=1000, post_iter
   
   ## create list of data to pass to Stan model 
   
-  dlist = list(N=nrow(dsplit),
-               P = ncol(xmat),
-               n_pieces = length( unique(dsplit$interval_num) ),
-               delta = dsplit[, delta_name], 
-               offset  = dsplit$offset, 
-               interval_num = dsplit$interval_num,
-               xmat = xmat)
+  ## use different stan files for different model input
   
-  mod = cmdstan_model("hazard_mod.stan")
+  if (model == "independent"){ # independent instead of being auto-regressive
+    dlist = list(N=nrow(dsplit),
+                 P = ncol(xmat),
+                 n_pieces = length( unique(dsplit$interval_num) ),
+                 delta = dsplit[, delta_name], 
+                 offset  = dsplit$offset, 
+                 interval_num = dsplit$interval_num,
+                 xmat = xmat)
+    mod = cmdstan_model(paste0(path_stan, "hazard_mod_v1.stan"))
+  } else if (model == "beta"){ # a different variance for beta coefficients
+    if (B > 3 | B <= 0) {
+      warning("B must be not less than 0 and less than 3. Forced to be 3")
+      ## force B to be 3
+      B <- 3
+    }
+    dlist = list(N=nrow(dsplit),
+                 P = ncol(xmat),
+                 n_pieces = length( unique(dsplit$interval_num) ),
+                 delta = dsplit[, delta_name], 
+                 offset  = dsplit$offset, 
+                 interval_num = dsplit$interval_num,
+                 xmat = xmat,
+                 B = B)
+    mod = cmdstan_model(paste0(path_stan, "hazard_mod_v2.stan"))
+    
+  } else if (model == "default"){ # the original version
+    dlist = list(N=nrow(dsplit),
+                 P = ncol(xmat),
+                 n_pieces = length( unique(dsplit$interval_num) ),
+                 delta = dsplit[, delta_name], 
+                 offset  = dsplit$offset, 
+                 interval_num = dsplit$interval_num,
+                 xmat = xmat)
+    
+    mod = cmdstan_model(paste0(path_stan, "hazard_mod.stan"))
+  } else { # the model input is not correct
+    stop("The model input is not valid")
+  }
+  
   
   res = mod$sample(data= dlist,
                    chains = 1,  iter_warmup = warmup, iter_sampling = post_iter)
