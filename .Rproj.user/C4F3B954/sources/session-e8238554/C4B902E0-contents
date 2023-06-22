@@ -10,8 +10,25 @@
 #' @param post_iter The number of iterations to draw from the posterior, the default is 1000
 #' @examples
 #' # example demo
+## usethis namespace: start
+#' @import cmdstanr
+#' @importFrom survival survSplit
+## usethis namespace: end
 #' @export
 bayeshaz = function(d, reg_formula, A, num_intervals=100, warmup=1000, post_iter=1000){
+  ## dependency checkins
+  if (!requireNamespace("cmdstanr", quietly = TRUE)) {
+    stop(
+      "Package \"cmdstanr\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
+  if (!requireNamespace("survival", quietly = TRUE)) {
+    stop(
+      "Package \"survival\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
   ## user-specified intervention variable
   trt_names = A
   
