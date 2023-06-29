@@ -5,8 +5,8 @@
 #' @param d The data in survival format, i.e. processed by Surv function
 #' @param reg_formula The formula for the poisson regression
 #' @param A The name of the treatment
-#' @param model The stan model used, default is "default", other options are "independent" and "beta"
-#' @param B The user-defined variance for odds ratio prior, the default is 3, the same as the default model
+#' @param model The stan model used, default is "AR1", other options are "independent" and "beta"
+#' @param sigma The user-defined sd for odds ratio prior, the default is 3, the same as the default model
 #' @param num_intervals The number of intervals to partition the study time, the default is 100
 #' @param warmup The number of warmup in MCMC, the default is 1000
 #' @param post_iter The number of iterations to draw from the posterior, the default is 1000
@@ -17,7 +17,7 @@
 #' @importFrom survival survSplit
 ## usethis namespace: end
 #' @export
-bayeshaz = function(d, reg_formula, A, model = "default", B = 3, 
+bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3, 
                     num_intervals=100, warmup=1000, post_iter=1000){
   ## dependency checkings
   if (!requireNamespace("cmdstanr", quietly = TRUE)) {
@@ -85,10 +85,10 @@ bayeshaz = function(d, reg_formula, A, model = "default", B = 3,
                  xmat = xmat)
     mod = cmdstan_model(paste0(path_stan, "hazard_mod_v1.stan"))
   } else if (model == "beta"){ # a different variance for beta coefficients
-    if (B > 3 | B <= 0) {
+    if (sigma > 3 | sigma <= 0) {
       warning("B must be not less than 0 and less than 3. Forced to be 3")
       ## force B to be 3
-      B <- 3
+      sigma <- 3
     }
     dlist = list(N=nrow(dsplit),
                  P = ncol(xmat),
@@ -97,10 +97,10 @@ bayeshaz = function(d, reg_formula, A, model = "default", B = 3,
                  offset  = dsplit$offset, 
                  interval_num = dsplit$interval_num,
                  xmat = xmat,
-                 B = B)
+                 sigma = sigma)
     mod = cmdstan_model(paste0(path_stan, "hazard_mod_v2.stan"))
     
-  } else if (model == "default"){ # the original version
+  } else if (model == "AR1"){ # the original version
     dlist = list(N=nrow(dsplit),
                  P = ncol(xmat),
                  n_pieces = length( unique(dsplit$interval_num) ),

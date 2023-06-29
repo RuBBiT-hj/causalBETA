@@ -6,7 +6,7 @@ data {
   real offset[N];
   int interval_num[N];
   matrix[N, P] xmat;
-  real<lower=0> B;
+  real<lower=0> sigma;
 }
 
 parameters {
@@ -56,7 +56,7 @@ model {
   rho_eps ~ beta(2,2);
   haz_eps ~ normal(0, 1);
   // user-defined odds ratio prior, B should be less than 3 but greater than 0
-  beta ~ normal(0, B);
+  beta ~ normal(0, sigma);
   
   // likelihood contributions
   for(i in 1:N){
