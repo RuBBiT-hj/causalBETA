@@ -8,6 +8,8 @@ bayeshaz(
   d,
   reg_formula,
   A,
+  model = "AR1",
+  sigma = 3,
   num_intervals = 100,
   warmup = 1000,
   post_iter = 1000
@@ -19,6 +21,10 @@ bayeshaz(
 \item{reg_formula}{The formula for the poisson regression}
 
 \item{A}{The name of the treatment}
+
+\item{model}{The stan model used, default is "AR1", other options are "independent" and "beta"}
+
+\item{sigma}{The user-defined sd for odds ratio prior, the default is 3, the same as the default model}
 
 \item{num_intervals}{The number of intervals to partition the study time, the default is 100}
 
