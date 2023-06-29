@@ -8,7 +8,7 @@ The R package `BayesSurvival` is an MCMC-based implementation of piecewise expon
 install using `devtools` package
 ```
 ## install.packages(devtools) ## make sure to have devtools installed 
-devtools::install_github("RuBBiT-hj/Bayes_Survival_package")
+devtools::install_github("RuBBiT-hj/BayesSurvival")
 library(BayesSurvival)
 ```
 
