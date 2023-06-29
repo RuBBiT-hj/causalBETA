@@ -97,7 +97,7 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
                  offset  = dsplit$offset, 
                  interval_num = dsplit$interval_num,
                  xmat = xmat,
-                 sigma = sigma)
+                 sigma_beta = sigma)
     mod = cmdstan_model(paste0(path_stan, "hazard_mod_v2.stan"))
     
   } else if (model == "AR1"){ # the original version

@@ -6,13 +6,13 @@ data {
   real offset[N];
   int interval_num[N];
   matrix[N, P] xmat;
-  real<lower=0> sigma;
+  real<lower=0> sigma_beta;
 }
 
 parameters {
   vector[n_pieces] haz_eps;
   real eta;
-  real<lower=0> sigma;
+  real<lower=0> sigma_haz;
   real<lower=0, upper=1> rho_eps;
   vector[P] beta;
 }
@@ -27,9 +27,9 @@ transformed parameters{
   
   // specify smoothing prior over increments 
   
-  log_haz[1] = eta + sigma*haz_eps[1];
+  log_haz[1] = eta + sigma_haz*haz_eps[1];
   for(i in 2:n_pieces){
-    log_haz[i] = eta*(1-rho) + rho*log_haz[i-1] + sigma*haz_eps[i];
+    log_haz[i] = eta*(1-rho) + rho*log_haz[i-1] + sigma_haz*haz_eps[i];
   }
 
   // independent priors 
@@ -56,7 +56,7 @@ model {
   rho_eps ~ beta(2,2);
   haz_eps ~ normal(0, 1);
   // user-defined odds ratio prior, B should be less than 3 but greater than 0
-  beta ~ normal(0, sigma);
+  beta ~ normal(0, sigma_beta);
   
   // likelihood contributions
   for(i in 1:N){
