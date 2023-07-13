@@ -2,14 +2,14 @@
 #' 
 #' Perform a bayesian piece-wise exponential model on the given survival data
 #' Use an equivalent poisson regression in MCMC
-#' @param d the data in survival format, i.e. processed by Surv function
-#' @param reg_formula the formula for the poisson regression
-#' @param A the name of the treatment
-#' @param model the stan model used, default is "AR1", other options are "independent" and "beta"
-#' @param sigma the user-defined sd for odds ratio prior, the default is 3, the same as the default model
-#' @param num_partitions the number of partitions of the study time, the default is 100
-#' @param warmup the number of warmup in MCMC, the default is 1000
-#' @param post_iter the number of iterations to draw from the posterior, the default is 1000
+#' @param d The data in survival format, i.e. processed by Surv function
+#' @param reg_formula The formula for the poisson regression
+#' @param A The name of the treatment
+#' @param model The stan model used, default is "AR1", other options are "independent" and "beta"
+#' @param sigma The user-defined sd for odds ratio prior, the default is 3, the same as the default model
+#' @param num_intervals The number of intervals to partition the study time, the default is 100
+#' @param warmup The number of warmup in MCMC, the default is 1000
+#' @param post_iter The number of iterations to draw from the posterior, the default is 1000
 #' @examples
 #' # example demo
 ## usethis namespace: start
@@ -18,7 +18,7 @@
 ## usethis namespace: end
 #' @export
 bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3, 
-                    num_partitions=100, warmup=1000, post_iter=1000){
+                    num_intervals=100, warmup=1000, post_iter=1000){
   ## dependency checkings
   if (!requireNamespace("cmdstanr", quietly = TRUE)) {
     stop(
@@ -56,7 +56,7 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   delta = d[,delta_name]
   
   ## partition time interval
-  partition = seq(0, max(y)+.01,length.out=num_partitions)
+  partition = seq(0, max(y)+.01,length.out=num_intervals)
   
   #outcome = paste0("Surv(", y_name,", ", delta_name,") ~ ")
   #reg_formula = as.formula(paste0(outcome, paste0(covar_names, collapse = "+"), "+", paste0(trt_names, collapse = "+") ) )

@@ -4,7 +4,7 @@
 \alias{predict.haz}
 \title{Piecewise constant hazard distribution prediction}
 \usage{
-predict.haz(x, beta_draws, haz_draws, partition, n = 1000, func)
+\method{predict}{haz}(x, beta_draws, haz_draws, partition, n = 1000, func)
 }
 \arguments{
 \item{x}{the individual used for prediction, with the variables specified in the model}
