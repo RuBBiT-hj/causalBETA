@@ -71,6 +71,11 @@ ATE_estimation = function(d, beta_draws, haz_draws, partition, covariates, trt, 
     return(surv_prob_2[[i]] - surv_prob_1[[i]])
   })
   
+  # calculate the posterior surv_prob for each treatment and posteior ATE
+  surv_1_post <- matrix(nrow = nrow(beta_draws),
+                        ncol = length(t))
+  surv_2_post <- matrix(nrow = nrow(beta_draws),
+                        ncol = length(t))
   ATE <- matrix(nrow = nrow(beta_draws),
                 ncol = length(t))
   
@@ -82,9 +87,14 @@ ATE_estimation = function(d, beta_draws, haz_draws, partition, covariates, trt, 
     # draw Dirichlet for weighted sum
     weights_dir <- matrix(LaplacesDemon::rdirichlet(1, alpha = alpha), ncol = 1)
     
+    surv_1_matrix <- sapply(surv_prob_1, function(x) x[i,])
+    surv_2_matrix <- sapply(surv_prob_2, function(x) x[i,])
     diff_matrix <- sapply(surv_prob_diff, function(x) x[i,]) # n_parition x n_subject
+    
+    surv_1_post[i, ] <- surv_1_matrix %*% weights_dir
+    surv_2_post[i, ] <- surv_2_matrix %*% weights_dir
     ATE[i, ] <- diff_matrix %*% weights_dir
   }
   
-  return(list(t, ATE))
+  return(list(t, surv_1_post, surv_2_post, ATE))
 }

@@ -11,7 +11,7 @@
 
 plot_ATE = function(ATE_estimated){
   t <- ATE_estimated[[1]]
-  ATE <- ATE_estimated[[2]]
+  ATE <- ATE_estimated[[4]]
   # Upper and lower quantiles
   lwr <- apply(ATE, 2, quantile, probs=.025)
   upr <- apply(ATE, 2, quantile, probs=.975)
