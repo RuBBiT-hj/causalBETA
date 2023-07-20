@@ -1,4 +1,4 @@
-#' Piecewise constant hazard distribution prediction
+#' Piecewise Constant Hazard Distribution Prediction
 #' 
 #' Predict quantities of interest using the posterior draws from the piecewise exponential model
 #' @param x the individual used for prediction, with the variables specified in the model

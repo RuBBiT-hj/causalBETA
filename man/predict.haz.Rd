@@ -2,7 +2,7 @@
 % Please edit documentation in R/predict.haz.R
 \name{predict.haz}
 \alias{predict.haz}
-\title{Piecewise constant hazard distribution prediction}
+\title{Piecewise Constant Hazard Distribution Prediction}
 \usage{
 \method{predict}{haz}(x, beta_draws, haz_draws, partition, n = 1000, func)
 }
