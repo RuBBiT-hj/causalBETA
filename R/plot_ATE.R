@@ -3,7 +3,7 @@
 #' Plot the average treatment effect (ATE) estimated from `ATE_estimation` function 
 #' @param ATE_estimated the list with the format: t, time points; ATE, ATE estimated from many posterior draws
 
-#' #' @examples
+#' @examples
 #' # example demo
 ## usethis namespace: start
 ## usethis namespace: end

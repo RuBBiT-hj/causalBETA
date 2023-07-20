@@ -15,10 +15,11 @@ plot_survival(x, beta_draws, haz_draws, partition, n = 1000)
 
 \item{partition}{the time values for each partition}
 
-\item{n}{the number of prediction for each posterior draw; the default is 1000
-#' @examples
-# example demo}
+\item{n}{the number of prediction for each posterior draw; the default is 1000}
 }
 \description{
 Plot the survival curve based on the predictions from the posterior draw
+}
+\examples{
+# example demo
 }

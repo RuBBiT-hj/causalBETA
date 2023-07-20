@@ -7,10 +7,11 @@
 plot_ATE(ATE_estimated)
 }
 \arguments{
-\item{ATE_estimated}{the list with the format: t, time points; ATE, ATE estimated from many posterior draws
-#' @examples
-# example demo}
+\item{ATE_estimated}{the list with the format: t, time points; ATE, ATE estimated from many posterior draws}
 }
 \description{
 Plot the average treatment effect (ATE) estimated from `ATE_estimation` function
+}
+\examples{
+# example demo
 }

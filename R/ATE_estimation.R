@@ -9,7 +9,7 @@
 #' @param trt the treatment variable name
 #' @param trt_values the possible values of the treatment, and the length should be two: reference and treatment
 #' @param n the number of prediction for each posterior draw; the default is 1000
-#' #' @examples
+#' @examples
 #' # example demo
 ## usethis namespace: start
 #' @import survival

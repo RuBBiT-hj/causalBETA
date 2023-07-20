@@ -30,10 +30,11 @@ ATE_estimation(
 
 \item{trt_values}{the possible values of the treatment, and the length should be two: reference and treatment}
 
-\item{n}{the number of prediction for each posterior draw; the default is 1000
-#' @examples
-# example demo}
+\item{n}{the number of prediction for each posterior draw; the default is 1000}
 }
 \description{
 Estimate the average treatment effect (ATE) based on the predicted survival times
+}
+\examples{
+# example demo
 }

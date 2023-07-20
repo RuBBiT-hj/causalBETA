@@ -6,7 +6,7 @@
 #' @param haz_draws the baseline hazard rates from the posterior draws, with dimension number of posterior draws * the number of intervals
 #' @param partition the time values for each partition
 #' @param n the number of prediction for each posterior draw; the default is 1000
-#' #' @examples
+#' @examples
 #' # example demo
 ## usethis namespace: start
 #' @import survival
