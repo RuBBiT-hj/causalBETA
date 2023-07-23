@@ -32,8 +32,9 @@ plot_bayeshaz = function(hazard, partitions, xv, obs_time){
   bslhaz_upr = apply(hazard, 2, quantile, probs=.975)
   
   # Plot
-  par(mar = c(6.1, 4.1, 3.1, 2.1))
-  plot( xv, bslhaz_mean, pch=20, ylim=c(0, .7),
+  par(mar = c(6.1, 4.1, 3.1, 2.1),
+      mgp = c(3,1.5,0))
+  plot( xv, bslhaz_mean, pch=20, ylim=c(0, 1.1*max(bslhaz_upr)),
         type = "o", cex = 0.5,
         xlab = "", xaxt = "n",
         main = "Average Baseline Hazard Rates Over Time",
@@ -41,12 +42,12 @@ plot_bayeshaz = function(hazard, partitions, xv, obs_time){
   segments(x0 = xv, y0 = bslhaz_lwr,
            x1 = xv, y1 = bslhaz_upr,
            lwd = 1.5, col = rgb(0.5, 0.5, 0.5, 0.5))
-  axis(1, time_axis, time_axis)
-  axis(1, time_axis, n_obs_axis, line = 3)
-  title(xlab = "Time", line = 1.8)
-  title(xlab = "Number of Subjects", line = 4.8)
+  axis(1, time_axis, paste0(time_axis, "\n (n=", n_obs_axis, ")"),
+       line = 1, tck = -0.03)
+  title(xlab = "Time", line = 4)
   
   # reset
-  par(mar = c(5.1, 4.1, 4.1, 2.1))
+  par(mar = c(5.1, 4.1, 4.1, 2.1),
+      mgp = c(3,1,0))
 }
 
