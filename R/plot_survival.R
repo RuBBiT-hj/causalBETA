@@ -1,4 +1,4 @@
-#' Plot survival curve predicted
+#' Plot Survival Curve Predicted
 #' 
 #' Plot the survival curve based on the predictions from the posterior draw
 #' @param x the individual used for prediction, with the variables specified in the model

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_survival.R
 \name{plot_survival}
 \alias{plot_survival}
-\title{Plot survival curve predicted}
+\title{Plot Survival Curve Predicted}
 \usage{
 plot_survival(x, beta_draws, haz_draws, partition, n = 1000)
 }
