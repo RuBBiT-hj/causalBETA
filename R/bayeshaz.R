@@ -2,7 +2,7 @@
 #' 
 #' Perform a bayesian piece-wise exponential model on the given survival data
 #' Use an equivalent poisson regression in MCMC
-#' @param d the data in survival format, i.e. processed by Surv function
+#' @param d the data frame in survival format, i.e. processed by Surv function
 #' @param reg_formula the formula for the poisson regression
 #' @param A the name of the treatment
 #' @param model the stan model used, default is "AR1", other options are "independent" and "beta"

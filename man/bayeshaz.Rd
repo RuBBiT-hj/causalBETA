@@ -16,7 +16,7 @@ bayeshaz(
 )
 }
 \arguments{
-\item{d}{the data in survival format, i.e. processed by Surv function}
+\item{d}{the data frame in survival format, i.e. processed by Surv function}
 
 \item{reg_formula}{the formula for the poisson regression}
 
