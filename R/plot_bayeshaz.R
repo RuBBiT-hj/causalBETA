@@ -35,7 +35,7 @@ plot_bayeshaz = function(hazard, partitions, xv, obs_time){
   par(mar = c(6.1, 4.1, 3.1, 2.1),
       mgp = c(3,1.5,0))
   plot( xv, bslhaz_mean, pch=20, ylim=c(0, 1.1*max(bslhaz_upr)),
-        type = "o", cex = 0.5,
+        type='o',cex = 0.5,
         xlab = "", xaxt = "n",
         main = "Average Baseline Hazard Rates Over Time",
         ylab = "Average Baseline Hazard Rates") 
