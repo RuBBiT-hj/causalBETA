@@ -18,7 +18,11 @@
 #' @export
 
 plot.bayeshaz = function(bayeshaz_object, col_hazard = "black", 
-                         col_CI = rgb(0.5, 0.5, 0.5, 0.5), ...){
+                         col_CI = rgb(0.5, 0.5, 0.5, 0.5), 
+                         type = 'o', pch = 20, xlim = NULL, ylim = NULL,
+                         xlab = "Time", ylab = NULL, main = NULL, cex = 0.5,
+                         lwd = 1.5,
+                         ...){
   # extract the key components from the object
   hazard <- bayeshaz_object$haz_draws
   partitions <- bayeshaz_object$partition
@@ -44,23 +48,26 @@ plot.bayeshaz = function(bayeshaz_object, col_hazard = "black",
   bslhaz_upr = apply(hazard, 2, quantile, probs=.975)
   
   # graphic parameters checking for necessary ones
-  # if (is.null(type)) type = 'o'
+  if (is.null(xlim)) xlim = c(0, endpoint)
+  if (is.null(ylim)) ylim = c(0, 1.1*max(bslhaz_upr))
+  if (is.null(ylab)) ylab = "Average Baseline Hazard Rates"
+  if (is.null(main)) main = "Average Baseline Hazard Rates Over Time"
   
   # Plot
   par(mar = c(6.1, 4.1, 3.1, 2.1),
       mgp = c(3,1.5,0))
   
-  plot( xv, bslhaz_mean, pch=20, ylim=c(0, 1.1*max(bslhaz_upr)),
+  plot( xv, bslhaz_mean, pch=20, 
+        xlim = xlim, ylim=ylim,
         type='o',cex = 0.5, col = col_hazard,
         xlab = "", xaxt = "n",
-        main = "Average Baseline Hazard Rates Over Time",
-        ylab = "Average Baseline Hazard Rates") 
+        main = main, ylab = ylab, ...) 
   segments(x0 = xv, y0 = bslhaz_lwr,
            x1 = xv, y1 = bslhaz_upr,
-           lwd = 1.5, col = col_CI)
+           lwd = lwd, col = col_CI)
   axis(1, time_axis, paste0(time_axis, "\n (n=", n_obs_axis, ")"),
        line = 1, tck = -0.03)
-  title(xlab = "Time", line = 4)
+  title(xlab = xlab, line = 4)
   
   # reset
   par(mar = c(5.1, 4.1, 4.1, 2.1),

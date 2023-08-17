@@ -8,6 +8,15 @@
   bayeshaz_object,
   col_hazard = "black",
   col_CI = rgb(0.5, 0.5, 0.5, 0.5),
+  type = "o",
+  pch = 20,
+  xlim = NULL,
+  ylim = NULL,
+  xlab = "Time",
+  ylab = NULL,
+  main = NULL,
+  cex = 0.5,
+  lwd = 1.5,
   ...
 )
 }
