@@ -14,7 +14,7 @@ plot_positivity(d, formula, treatment)
 \item{treatment}{the treatment variable name}
 }
 \description{
-Plot the histogram of the proprensity score of treatment assignment conditional on the observed treatment. 
+Plot the histogram of the proprensity score of treatment assignment conditional on the observed treatment.
 This plot can be used to check the positivity assumption for casual inference.
 If the assumption is met, the mirrored histogram should look similar.
 If there is an obvious shift in the distribution of histograms, the assumption is likely violated.

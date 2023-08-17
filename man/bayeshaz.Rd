@@ -23,61 +23,47 @@ This also decides the formula will be used the function to check positivity over
 
 \item{A}{a character variable that specifies the name of the treatment}
 
-\item{model}{the type of the model used}
+\item{model}{a character variable that tells the stan model used to implement the bayesian piece-wise exponential model, default is "AR1", other options are "independent" and "beta"}
 
-\item{sigma}{the sigma specified}
+\item{sigma}{a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3, the same as the default model}
 
 \item{num_partitions}{a numeric variable as the number of partitions of the study time, the default is 100}
 
 \item{warmup}{a numeric variable as the number of warmup in MCMC, the default is 1000}
 
 \item{post_iter}{a numeric variable as the number of iterations to draw from the posterior, the default is 1000}
-
-\item{data}{the data}
-
-\item{formula}{the regression formula}
-
-\item{treatment}{the name of the treatment variable}
-
-\item{ref}{the reference level for treatment}
-
-\item{partition}{the partition vector}
-
-\item{midpoint}{the midpoints of intervals}
-
-\item{haz_draws}{the baseline hazard rate from each posterior draws}
-
-\item{beta_draws}{the beta coefficients estimated from each posterior draws}
 }
 \value{
-It returns an object of class `bayeshaz` that contains the information about the data, model, etc.
+It returns an object of class \code{bayeshaz} that contains the information about the data, model, etc.
 This serves as the basis for the extended functions in this package.
 
-An object of class `bayeshaz` is a list containing at least the following components:
-* `data` a data frame for the data
-* `formula` the regression formula
-* `treatment` the name of the treatment variable
-* `ref` the reference level for treatment, NA for now but will be specified in other functions
-* `model` the type of the model used
-* `sigma` the sigma specified
-* `partition` the partition vector
-* `midpoint` the midpoints of intervals
-* `haz_draws` the baseline hazard rate from each posterior draws
-* `beta_draws` the beta coefficients estimated from each posterior draws
-
-An object of class 'bayeshaz'
+An object of class \code{bayeshaz} is a list containing at least the following components:
+\itemize{
+\item \code{data}, a data frame for the data
+\item \code{formula}, the regression formula
+\item \code{treatment}, the name of the treatment variable
+\item \code{ref}, the reference level for treatment, NA for now but will be specified in other functions
+\item \code{time}, the name of the time variable
+\item \code{outcome}, the name of the outcome variable
+\item \code{model}, the type of the model used
+\item \code{sigma}, the sigma specified
+\item \code{partition}, the partition vector
+\item \code{midpoint}, the midpoints of intervals
+\item \code{haz_draws}, the baseline hazard rate from each posterior draws
+\item \code{beta_draws}, the beta coefficients estimated from each posterior draws
+}
 }
 \description{
-Perform a bayesian piece-wise exponential model on the given survival data, 
+Perform a bayesian piece-wise exponential model on the given survival data,
 and this function implements it by an equivalent poisson regression in MCMC.
 }
 \details{
-A typical model has the form `Surv(time, outcome) ~ covariates`. The function will capture
+A typical model has the form \code{Surv(time, outcome) ~ covariates}. The function will capture
 the outcome and covariates based on this formula object.
 
 The bayesian piece-wise exponential model uses normal prior for baseline hazard rate,
 beta coefficients, and the error term for basline hazard rate (EXPLAIN the model).
-Under the `beta` model, user can specify the standard deviation for the normal prior of the beta coefficients.
+Under the \code{beta} model, user can specify the standard deviation for the normal prior of the beta coefficients.
 The default is 3, and only values between 0 and 3 are accepted since 3 is already a relatively weak prior.
 }
 \examples{

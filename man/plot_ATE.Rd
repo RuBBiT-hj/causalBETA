@@ -10,7 +10,7 @@ plot_ATE(ATE_estimated)
 \item{ATE_estimated}{the list with the format: t, time points; ATE, ATE estimated from many posterior draws}
 }
 \description{
-Plot the average treatment effect (ATE) estimated from `ATE_estimation` function
+Plot the average treatment effect (ATE) estimated from \code{ATE_estimation} function
 }
 \examples{
 # example demo

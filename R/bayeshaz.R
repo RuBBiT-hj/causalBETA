@@ -26,16 +26,19 @@
 #' This serves as the basis for the extended functions in this package.
 #' 
 #' An object of class `bayeshaz` is a list containing at least the following components:
-#' * `data` a data frame for the data
-#' * `formula` the regression formula
-#' * `treatment` the name of the treatment variable
-#' * `ref` the reference level for treatment, NA for now but will be specified in other functions
-#' * `model` the type of the model used
-#' * `sigma` the sigma specified
-#' * `partition` the partition vector
-#' * `midpoint` the midpoints of intervals
-#' * `haz_draws` the baseline hazard rate from each posterior draws
-#' * `beta_draws` the beta coefficients estimated from each posterior draws
+#' 
+#' * `data`, a data frame for the data
+#' * `formula`, the regression formula
+#' * `treatment`, the name of the treatment variable
+#' * `ref`, the reference level for treatment, NA for now but will be specified in other functions
+#' * `time`, the name of the time variable
+#' * `outcome`, the name of the outcome variable
+#' * `model`, the type of the model used
+#' * `sigma`, the sigma specified
+#' * `partition`, the partition vector
+#' * `midpoint`, the midpoints of intervals
+#' * `haz_draws`, the baseline hazard rate from each posterior draws
+#' * `beta_draws`, the beta coefficients estimated from each posterior draws
 #' 
 #' @examples
 #' # example demo
@@ -152,30 +155,34 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   
   # construct the model object
   # the constructor function - hidden from user as it is embedded in bayeshaz function
-  create_bayeshaz <- function(data, formula, treatment, ref, model, sigma, partition,
-                           midpoint, haz_draws, beta_draws) {
-    #' @param data the data
-    #' @param formula the regression formula
-    #' @param treatment the name of the treatment variable
-    #' @param ref the reference level for treatment
-    #' @param model the type of the model used
-    #' @param sigma the sigma specified
-    #' @param partition the partition vector
-    #' @param midpoint the midpoints of intervals
-    #' @param haz_draws the baseline hazard rate from each posterior draws
-    #' @param beta_draws the beta coefficients estimated from each posterior draws
-    #' 
-    #' @return An object of class 'bayeshaz'
+  create_bayeshaz <- function(data, formula, treatment, ref, time, outcome,
+                              model, sigma, partition,
+                              midpoint, haz_draws, beta_draws) {
+    #  data the data
+    #  formula the regression formula
+    #  treatment the name of the treatment variable
+    #  ref the reference level for treatment
+    #  time the name of the time variable
+    #  outcome the name of the outcome varibale
+    #  model the type of the model used
+    #  sigma the sigma specified
+    #  partition the partition vector
+    #  midpoint the midpoints of intervals
+    #  haz_draws the baseline hazard rate from each posterior draws
+    #  beta_draws the beta coefficients estimated from each posterior draws
+    #  return an object of class 'bayeshaz'
     my_object <- structure(list(
       data = data, formula = formula, treatment = treatment, ref = ref,
+      time = time, outcome = outcome,
       model = model, sigma = sigma, partition = partition, midpoint = midpoint,
       haz_draws = haz_draws, beta_draws = beta_draws
-    ))
+    ), class = "bayeshaz")
     return(my_object)
   }
   
   
   draws = create_bayeshaz(data = d, formula = reg_formula, treatment = A, ref = NA,
+                          time = y_name, outcome = delta_name,
                           model = model, sigma = sigma, partition = partition,
                           midpoint = xv,
                           haz_draws = haz_draws, beta_draws=beta_draws)
