@@ -2,23 +2,52 @@
 % Please edit documentation in R/plot_survival.R
 \name{plot_survival}
 \alias{plot_survival}
-\title{Plot Survival Curve Predicted}
+\title{Plot the Posterior Predictive Survival Curve for a Single individual}
 \usage{
-plot_survival(x, beta_draws, haz_draws, partition, n = 1000)
+plot_survival(
+  bayeshaz_object,
+  x,
+  n = 1000,
+  col = "black",
+  col_CI = rgb(0.5, 0.5, 0.5, 0.5),
+  type = "o",
+  pch = 20,
+  cex = 0.5,
+  lwd = 1.5,
+  xlim = NULL,
+  ylim = c(0, 1),
+  ...
+)
 }
 \arguments{
-\item{x}{the individual used for prediction, with the variables specified in the model}
+\item{bayeshaz_object}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
 
-\item{beta_draws}{the beta coefficients from the posterior draws, with dimension number of posterior draws * the number of variables}
-
-\item{haz_draws}{the baseline hazard rates from the posterior draws, with dimension number of posterior draws * the number of intervals}
-
-\item{partition}{the time values for each partition}
+\item{x}{the data frame for an individual used for prediction, with the variables specified in the model}
 
 \item{n}{the number of prediction for each posterior draw; the default is 1000}
+
+\item{col}{the color parameter for the baseline hazard points, default is \code{black}}
+
+\item{col_CI}{the color parameter for the confidence intervals of the baseline hazard, default is semitransparent-grey}
+
+\item{...}{other graphical parameters for the plot function. Default ones will be used if not provided.}
+}
+\value{
+This function returns a matrix contains the posterior predictive probability for each time interval.
+Each row represents a posterior draw, and each column corresponds to a time interval.
 }
 \description{
-Plot the survival curve based on the predictions from the posterior draw
+Plot the survival curve based on the predictions from the posterior draws for the specified individual
+}
+\details{
+This function uses \code{predict.bayeshaz} to obtain all predictions for an individual,
+and it generates a matrix contains the posterior predictive probability for each time interval.
+Thus, it is required that the number and the order of the variables matches the model for generating the
+\code{bayeshaz} object exactly.
+
+It also makes a plot of survival curve, and the user can modify by providing plot parameters.
+The plot has the the mean survival probability and the 95\% CI from bootstrapping.
+If the users want to make their own new plot, they can utilizes the returned matrix.
 }
 \examples{
 # example demo

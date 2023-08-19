@@ -7,12 +7,13 @@
 #' @param func a function used to obtain the quantities of interest; a common choice is `mean` to get the posterior distribution of the expectation of survival time (more details in the demo).   e
 #' 
 #' @details
-#' The data frame used for prediction could be for a single individual or multiple individuals,
-#' and the result will be a vector with the length of the number of posterior draws or a matrix with
-#' the number of columns equivalent to the number of posterior draws.
-#' Each row represents each individual, and each column represents each posterior draw.
+#' The data frame used for prediction could be for a single individual or multiple individuals.
 #' It is required that the number and the order of the variables matches the model for generating the
 #' `bayeshaz` object exactly.
+#' 
+#' @returns
+#' This function returns a matrix that contains the predicted quantities of interest.
+#' Each column represents an individual, and each row represents a posterior draw.
 #' 
 #' This function use bootstrapping method to get the quantities of interest.
 #' It uses the parameters from each posterior draw to make a set of predictions for the individual(s) provided.
@@ -47,9 +48,6 @@ predict.bayeshaz = function(bayeshaz_object, x, n=1000, func){
     }
     return(res_single)
   })
-
-  # edit the format
-  res = t(res)
-  colnames(res) <- 1:ncol(res)
+  
   return(res)
 }

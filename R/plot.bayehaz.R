@@ -10,6 +10,11 @@
 #' @description
 #' This function plots the baseline hazard rate at the midpoint for each interval,
 #' and it also marks the number at risk at the bottom corresponding to the ticks of the time axis.
+#' To enable the plot with two axes to show both time and the number at risk but also with a clean display,
+#' we limit the freedom of changing any graphical parameters, i.e. some will take the default values overriding `NULL`.
+#' If the users don't like the output format, they can extract the parameters from `bayeshaz` object directly
+#' to generate plot(s).
+#' 
 #' 
 #' @examples
 #' # example demo
@@ -57,9 +62,9 @@ plot.bayeshaz = function(bayeshaz_object, col_hazard = "black",
   par(mar = c(6.1, 4.1, 3.1, 2.1),
       mgp = c(3,1.5,0))
   
-  plot( xv, bslhaz_mean, pch=20, 
+  plot( xv, bslhaz_mean, pch=pch, 
         xlim = xlim, ylim=ylim,
-        type=type,cex = 0.5, col = col_hazard,
+        type=type, cex = cex, col = col_hazard,
         xlab = "", xaxt = "n",
         main = main, ylab = ylab, ...) 
   segments(x0 = xv, y0 = bslhaz_lwr,

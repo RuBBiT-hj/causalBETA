@@ -32,6 +32,10 @@
 \description{
 This function plots the baseline hazard rate at the midpoint for each interval,
 and it also marks the number at risk at the bottom corresponding to the ticks of the time axis.
+To enable the plot with two axes to show both time and the number at risk but also with a clean display,
+we limit the freedom of changing any graphical parameters, i.e. some will take the default values overriding \code{NULL}.
+If the users don't like the output format, they can extract the parameters from \code{bayeshaz} object directly
+to generate plot(s).
 }
 \details{
 Plot the average baseline hazard rate from all posterior draws on all intervals from the given \code{bayeshaz} object.

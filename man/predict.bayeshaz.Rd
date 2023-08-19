@@ -15,20 +15,21 @@
 
 \item{func}{a function used to obtain the quantities of interest; a common choice is \code{mean} to get the posterior distribution of the expectation of survival time (more details in the demo).   e}
 }
-\description{
-Predict quantities of interest using the posterior draws from the piecewise exponential model
-}
-\details{
-The data frame used for prediction could be for a single individual or multiple individuals,
-and the result will be a vector with the length of the number of posterior draws or a matrix with
-the number of columns equivalent to the number of posterior draws.
-Each row represents each individual, and each column represents each posterior draw.
-It is required that the number and the order of the variables matches the model for generating the
-\code{bayeshaz} object exactly.
+\value{
+This function returns a matrix that contains the predicted quantities of interest.
+Each column represents an individual, and each row represents a posterior draw.
 
 This function use bootstrapping method to get the quantities of interest.
 It uses the parameters from each posterior draw to make a set of predictions for the individual(s) provided.
 Within each posterior draw, the function eventually obtains the quantity of interest based on \code{n} predictions and the \code{func} given.
+}
+\description{
+Predict quantities of interest using the posterior draws from the piecewise exponential model
+}
+\details{
+The data frame used for prediction could be for a single individual or multiple individuals.
+It is required that the number and the order of the variables matches the model for generating the
+\code{bayeshaz} object exactly.
 }
 \examples{
 # example demo
