@@ -22,6 +22,7 @@ Predict quantities of interest using the posterior draws from the piecewise expo
 The data frame used for prediction could be for a single individual or multiple individuals,
 and the result will be a vector with the length of the number of posterior draws or a matrix with
 the number of columns equivalent to the number of posterior draws.
+Each row represents each individual, and each column represents each posterior draw.
 It is required that the number and the order of the variables matches the model for generating the
 \code{bayeshaz} object exactly.
 

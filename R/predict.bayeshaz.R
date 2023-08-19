@@ -10,6 +10,7 @@
 #' The data frame used for prediction could be for a single individual or multiple individuals,
 #' and the result will be a vector with the length of the number of posterior draws or a matrix with
 #' the number of columns equivalent to the number of posterior draws.
+#' Each row represents each individual, and each column represents each posterior draw.
 #' It is required that the number and the order of the variables matches the model for generating the
 #' `bayeshaz` object exactly.
 #' 
@@ -36,13 +37,19 @@ predict.bayeshaz = function(bayeshaz_object, x, n=1000, func){
   if (dim(x)[2] != dim(beta_draws)[2]) stop("The number of variables in the data frame doesn't match the model")
   
   post_iter = nrow(haz_draws)
-  res = numeric(length = post_iter)
   
-  for(j in 1:post_iter){
-    hazv = haz_draws[j, ]*exp( sum( beta_draws[j,] * x  ) )
-    simv = mets::rpch(n, hazv, partition)
-    res[j] = func(simv) # get the result from the function specified
-  }
-  
+  res = apply(x, MARGIN = 1, function(y) {
+    res_single = numeric(length = post_iter)
+    for(j in 1:post_iter){
+      hazv = haz_draws[j, ]*exp( sum( beta_draws[j,] * y  ) )
+      simv = mets::rpch(n, hazv, partition)
+      res_single[j] = func(simv) # get the result from the function specified
+    }
+    return(res_single)
+  })
+
+  # edit the format
+  res = t(res)
+  colnames(res) <- 1:ncol(res)
   return(res)
 }
