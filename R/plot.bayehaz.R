@@ -59,7 +59,7 @@ plot.bayeshaz = function(bayeshaz_object, col_hazard = "black",
   
   plot( xv, bslhaz_mean, pch=20, 
         xlim = xlim, ylim=ylim,
-        type='o',cex = 0.5, col = col_hazard,
+        type=type,cex = 0.5, col = col_hazard,
         xlab = "", xaxt = "n",
         main = main, ylab = ylab, ...) 
   segments(x0 = xv, y0 = bslhaz_lwr,

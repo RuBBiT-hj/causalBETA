@@ -9,14 +9,25 @@
 \arguments{
 \item{bayeshaz_object}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
 
-\item{x}{the individual used for prediction, with the variables specified in the model}
+\item{x}{a data frame for the individual(s) used for prediction, with the variables specified in the model}
 
-\item{n}{the number of prediction for each posterior draw; the default is 1000}
+\item{n}{a numeric value as the number of predictions for each posterior draw; the default is 1000}
 
-\item{func}{the function specified to get the quantities of interest; a common choice is \code{mean} to get the posterior distribution of the expectation of survival time}
+\item{func}{a function used to obtain the quantities of interest; a common choice is \code{mean} to get the posterior distribution of the expectation of survival time (more details in the demo).   e}
 }
 \description{
 Predict quantities of interest using the posterior draws from the piecewise exponential model
+}
+\details{
+The data frame used for prediction could be for a single individual or multiple individuals,
+and the result will be a vector with the length of the number of posterior draws or a matrix with
+the number of columns equivalent to the number of posterior draws.
+It is required that the number and the order of the variables matches the model for generating the
+\code{bayeshaz} object exactly.
+
+This function use bootstrapping method to get the quantities of interest.
+It uses the parameters from each posterior draw to make a set of predictions for the individual(s) provided.
+Within each posterior draw, the function eventually obtains the quantity of interest based on \code{n} predictions and the \code{func} given.
 }
 \examples{
 # example demo
