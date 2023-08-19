@@ -17,10 +17,14 @@
 #' A typical model has the form `Surv(time, outcome) ~ covariates`. The function will capture
 #' the outcome and covariates based on this formula object.
 #' 
-#' The bayesian piece-wise exponential model uses normal prior for baseline hazard rate,
-#' beta coefficients, and the error term for basline hazard rate (EXPLAIN the model).
+#' The Bayesian piece-wise exponential model uses normal prior for baseline hazard rate,
+#' beta coefficients, and the error term for baseline hazard rate to form the first-order Gaussian process.
+#' It uses a beta prior to generate the correlation from -1 to 1 for hazard rate.
+#' For more details, users can check the full model listed in the reference.
+#' 
 #' Under the `beta` model, user can specify the standard deviation for the normal prior of the beta coefficients.
-#' The default is 3, and only values between 0 and 3 are accepted since 3 is already a relatively weak prior. 
+#' The default is 3, which is used in the default `AR1` model,
+#' and only values between 0 and 3 are accepted since 3 is already a relatively weak prior. 
 #' 
 #' @return It returns an object of class `bayeshaz` that contains the information about the data, model, etc.
 #' This serves as the basis for the extended functions in this package.
@@ -39,6 +43,11 @@
 #' * `midpoint`, the midpoints of intervals
 #' * `haz_draws`, the baseline hazard rate from each posterior draws
 #' * `beta_draws`, the beta coefficients estimated from each posterior draws
+#' 
+#' @references
+#' Oganisian, Arman, Anthony Girard, Jon A. Steingrimsson, and Patience Moyo.
+#' "A Bayesian Framework for Causal Analysis of Recurrent Events in Presence of Immortal Risk."
+#' arXiv preprint arXiv:2304.03247 (2023).
 #' 
 #' @examples
 #' # example demo
