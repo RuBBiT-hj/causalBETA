@@ -49,7 +49,7 @@ plot_survival = function(bayeshaz_object, x, n=1000,
   all_surv_time = all_surv_time[[1]] # as only a single individual
   
   # let t be the middle points of each partition (the number is the same as the intervals)
-  t <- diff(partition)/2 + partition[-length(partition)]
+  t <- bayeshaz_object$midpoint
   
   surv_prob <- matrix(nrow = length(all_surv_time),
                       ncol = length(t))

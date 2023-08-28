@@ -42,7 +42,7 @@ An object of class \code{bayeshaz} is a list containing at least the following c
 \item \code{data}, a data frame for the data
 \item \code{formula}, the regression formula
 \item \code{treatment}, the name of the treatment variable
-\item \code{ref}, the reference level for treatment, NA for now but will be specified in other functions
+\item \code{covariates}, the name of the covariate(s)
 \item \code{time}, the name of the time variable
 \item \code{outcome}, the name of the outcome variable
 \item \code{model}, the type of the model used

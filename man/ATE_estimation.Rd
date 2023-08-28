@@ -4,36 +4,43 @@
 \alias{ATE_estimation}
 \title{Average Treatment Effect Estimation}
 \usage{
-ATE_estimation(
-  d,
-  beta_draws,
-  haz_draws,
-  partition,
-  covariates,
-  trt,
-  trt_values,
-  n = 1000
-)
+ATE_estimation(bayeshaz_object, ref, n = 1000)
 }
 \arguments{
-\item{d}{the data}
+\item{bayeshaz_object}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
 
-\item{beta_draws}{the beta coefficients from the posterior draws, with dimension number of posterior draws * the number of variables}
-
-\item{haz_draws}{the baseline hazard rates from the posterior draws, with dimension number of posterior draws * the number of intervals}
-
-\item{partition}{the time values for each partition}
-
-\item{covariates}{the names of the covariates used in the model}
-
-\item{trt}{the treatment variable name}
-
-\item{trt_values}{the possible values of the treatment, and the length should be two: reference and treatment}
+\item{ref}{the reference value of the treatment, so its variable type should match the treatment variable}
 
 \item{n}{the number of prediction for each posterior draw; the default is 1000}
 }
+\value{
+This function returns an object of class \code{ATE} that stores the following information:
+\itemize{
+\item \code{surv_ref}, the marginal survival probability for the reference
+\item \code{surv_trt}, the marginal survival probability for the treatment
+\item \code{ref}, the value of the reference treatment
+\item \code{trt_values}, the possible values of the treatment
+\item \code{ATE}, the difference between the marginal survival probability of the treatment and the reference
+}
+}
 \description{
-Estimate the average treatment effect (ATE) based on the predicted survival times
+Estimate the average treatment effect (ATE) based on the predicted survival probability
+}
+\details{
+This function estimates the average treatment effect (ATE) for the data set used to generate
+the \code{bayeshaz} object. It calculates the marginal survival probability for all individuals
+while assuming they all receive the same treatment, like all in control or all in treatment group.
+The ATE estimated would be the weighted sum of the difference between the survival probabilities,
+and we use a Dirichlet prior for the weights.
+
+It is important to specify the correct reference level for this function and also other ATE-related
+ones. Users can specify or change reference by \code{relevel} function or the \code{ref} argument in these
+ATE-related functions. The reference value needs to match the type of treatment variable, and it
+needs to belong to one of the treatment values.
+
+These ATE-related functions only considers treatment as a binary variable (i.e. control and treatment),
+so it is not applicable for more than two treatment values, or they needs to be coerced into a
+binary variable before creating the \code{bayeshaz} object.
 }
 \examples{
 # example demo

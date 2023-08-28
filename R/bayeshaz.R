@@ -34,7 +34,7 @@
 #' * `data`, a data frame for the data
 #' * `formula`, the regression formula
 #' * `treatment`, the name of the treatment variable
-#' * `ref`, the reference level for treatment, NA for now but will be specified in other functions
+#' * `covariates`, the name of the covariate(s)
 #' * `time`, the name of the time variable
 #' * `outcome`, the name of the outcome variable
 #' * `model`, the type of the model used
@@ -164,12 +164,13 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   
   # construct the model object
   # the constructor function - hidden from user as it is embedded in bayeshaz function
-  create_bayeshaz <- function(data, formula, treatment, ref, time, outcome,
+  create_bayeshaz <- function(data, formula, treatment, covariates, time, outcome,
                               model, sigma, partition,
                               midpoint, haz_draws, beta_draws) {
     #  data the data
     #  formula the regression formula
     #  treatment the name of the treatment variable
+    #  covariates the name of the covariate(s)
     #  ref the reference level for treatment
     #  time the name of the time variable
     #  outcome the name of the outcome varibale
@@ -181,7 +182,7 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
     #  beta_draws the beta coefficients estimated from each posterior draws
     #  return an object of class 'bayeshaz'
     my_object <- structure(list(
-      data = data, formula = formula, treatment = treatment, ref = ref,
+      data = data, formula = formula, treatment = treatment, covariates = covariates,
       time = time, outcome = outcome,
       model = model, sigma = sigma, partition = partition, midpoint = midpoint,
       haz_draws = haz_draws, beta_draws = beta_draws
@@ -190,10 +191,11 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   }
   
   
-  draws = create_bayeshaz(data = d, formula = reg_formula, treatment = A, ref = NA,
+  draws = create_bayeshaz(data = d, formula = reg_formula, treatment = A,
+                          covariates = covar_names,
                           time = y_name, outcome = delta_name,
-                          model = model, sigma = sigma, partition = partition,
-                          midpoint = xv,
+                          model = model, sigma = sigma, 
+                          partition = partition, midpoint = xv,
                           haz_draws = haz_draws, beta_draws=beta_draws)
   
   return(draws)
