@@ -3,6 +3,7 @@
 S3method(plot,bayeshaz)
 S3method(predict,bayeshaz)
 S3method(predict,haz)
+S3method(relevel,ATE)
 export(ATE_estimation)
 export(bayeshaz)
 export(plot_ATE)

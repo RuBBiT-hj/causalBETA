@@ -9,7 +9,7 @@ ATE_estimation(bayeshaz_object, ref, n = 1000)
 \arguments{
 \item{bayeshaz_object}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
 
-\item{ref}{the reference value of the treatment, so its variable type should match the treatment variable}
+\item{ref}{the reference value of the treatment, so it should be one of the treatment values}
 
 \item{n}{the number of prediction for each posterior draw; the default is 1000}
 }

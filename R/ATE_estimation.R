@@ -2,7 +2,7 @@
 #' 
 #' Estimate the average treatment effect (ATE) based on the predicted survival probability
 #' @param bayeshaz_object an object of the class `bayeshaz` created by the `bayeshaz()` function
-#' @param ref the reference value of the treatment, so its variable type should match the treatment variable
+#' @param ref the reference value of the treatment, so it should be one of the treatment values
 #' @param n the number of prediction for each posterior draw; the default is 1000
 #' 
 #' @details
