@@ -1,15 +1,54 @@
 #' Bayesian Piece-Wise Exponential Model
 #' 
-#' Perform a bayesian piece-wise exponential model on the given survival data
-#' Use an equivalent poisson regression in MCMC
-#' @param d the data frame in survival format, i.e. processed by Surv function
-#' @param reg_formula the formula for the poisson regression
-#' @param A the name of the treatment
-#' @param model the stan model used, default is "AR1", other options are "independent" and "beta"
-#' @param sigma the user-defined sd for odds ratio prior, the default is 3, the same as the default model
-#' @param num_partitions the number of partitions of the study time, the default is 100
-#' @param warmup the number of warmup in MCMC, the default is 1000
-#' @param post_iter the number of iterations to draw from the posterior, the default is 1000
+#' Perform a bayesian piece-wise exponential model on the given survival data, 
+#' and this function implements it by an equivalent poisson regression in MCMC.
+#' 
+#' @param d data, a data frame in survival format, i.e. processed by Surv function
+#' @param reg_formula a formula object that specifies the formula for the poisson regression.
+#' This also decides the formula will be used the function to check positivity overlap.
+#' @param A a character variable that specifies the name of the treatment
+#' @param model a character variable that tells the stan model used to implement the bayesian piece-wise exponential model, default is "AR1", other options are "independent" and "beta"
+#' @param sigma a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3, the same as the default model
+#' @param num_partitions a numeric variable as the number of partitions of the study time, the default is 100
+#' @param warmup a numeric variable as the number of warmup in MCMC, the default is 1000
+#' @param post_iter a numeric variable as the number of iterations to draw from the posterior, the default is 1000
+#' 
+#' @details
+#' A typical model has the form `Surv(time, outcome) ~ covariates`. The function will capture
+#' the outcome and covariates based on this formula object.
+#' 
+#' The Bayesian piece-wise exponential model uses normal prior for baseline hazard rate,
+#' beta coefficients, and the error term for baseline hazard rate to form the first-order Gaussian process.
+#' It uses a beta prior to generate the correlation from -1 to 1 for hazard rate.
+#' For more details, users can check the full model listed in the reference.
+#' 
+#' Under the `beta` model, user can specify the standard deviation for the normal prior of the beta coefficients.
+#' The default is 3, which is used in the default `AR1` model,
+#' and only values between 0 and 3 are accepted since 3 is already a relatively weak prior. 
+#' 
+#' @return It returns an object of class `bayeshaz` that contains the information about the data, model, etc.
+#' This serves as the basis for the extended functions in this package.
+#' 
+#' An object of class `bayeshaz` is a list containing at least the following components:
+#' 
+#' * `data`, a data frame for the data
+#' * `formula`, the regression formula
+#' * `treatment`, the name of the treatment variable
+#' * `covariates`, the name of the covariate(s)
+#' * `time`, the name of the time variable
+#' * `outcome`, the name of the outcome variable
+#' * `model`, the type of the model used
+#' * `sigma`, the sigma specified
+#' * `partition`, the partition vector
+#' * `midpoint`, the midpoints of intervals
+#' * `haz_draws`, the baseline hazard rate from each posterior draws
+#' * `beta_draws`, the beta coefficients estimated from each posterior draws
+#' 
+#' @references
+#' Oganisian, Arman, Anthony Girard, Jon A. Steingrimsson, and Patience Moyo.
+#' "A Bayesian Framework for Causal Analysis of Recurrent Events in Presence of Immortal Risk."
+#' arXiv preprint arXiv:2304.03247 (2023).
+#' 
 #' @examples
 #' # example demo
 ## usethis namespace: start
@@ -123,8 +162,41 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   
   xv = (partition[-1] - .5*mean(diff(partition)) ) ## midpoint of each interval
   
-  draws = list(haz_draws = haz_draws, beta_draws=beta_draws,
-               xv = xv, partition = partition )
+  # construct the model object
+  # the constructor function - hidden from user as it is embedded in bayeshaz function
+  create_bayeshaz <- function(data, formula, treatment, covariates, time, outcome,
+                              model, sigma, partition,
+                              midpoint, haz_draws, beta_draws) {
+    #  data the data
+    #  formula the regression formula
+    #  treatment the name of the treatment variable
+    #  covariates the name of the covariate(s)
+    #  ref the reference level for treatment
+    #  time the name of the time variable
+    #  outcome the name of the outcome varibale
+    #  model the type of the model used
+    #  sigma the sigma specified
+    #  partition the partition vector
+    #  midpoint the midpoints of intervals
+    #  haz_draws the baseline hazard rate from each posterior draws
+    #  beta_draws the beta coefficients estimated from each posterior draws
+    #  return an object of class 'bayeshaz'
+    my_object <- structure(list(
+      data = data, formula = formula, treatment = treatment, covariates = covariates,
+      time = time, outcome = outcome,
+      model = model, sigma = sigma, partition = partition, midpoint = midpoint,
+      haz_draws = haz_draws, beta_draws = beta_draws
+    ), class = "bayeshaz")
+    return(my_object)
+  }
+  
+  
+  draws = create_bayeshaz(data = d, formula = reg_formula, treatment = A,
+                          covariates = covar_names,
+                          time = y_name, outcome = delta_name,
+                          model = model, sigma = sigma, 
+                          partition = partition, midpoint = xv,
+                          haz_draws = haz_draws, beta_draws=beta_draws)
   
   return(draws)
 }

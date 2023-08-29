@@ -17,7 +17,7 @@
 
 \item{n}{the number of prediction for each posterior draw; the default is 1000}
 
-\item{func}{the function specified to get the quantities of interest; a common choice is `mean` to get the posterior distribution of the expectation of survival time}
+\item{func}{the function specified to get the quantities of interest; a common choice is \code{mean} to get the posterior distribution of the expectation of survival time}
 }
 \description{
 Predict quantities of interest using the posterior draws from the piecewise exponential model

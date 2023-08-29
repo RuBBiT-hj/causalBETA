@@ -4,17 +4,17 @@
 \alias{plot_positivity}
 \title{Positivity Assumption Checking}
 \usage{
-plot_positivity(d, formula, treatment)
+plot_positivity(bayeshaz_object, formula = NULL, breaks = "Scott")
 }
 \arguments{
-\item{d}{the data frame in survival format, i.e. processed by Surv function}
+\item{bayeshaz_object}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
 
-\item{formula}{the formula for the logistic regression for propensity score (a formula object in this version)}
+\item{formula}{an optional formula variable used in fitting propensity score model}
 
-\item{treatment}{the treatment variable name}
+\item{breaks}{the parameter set for breaks, default is \code{"Scott"}}
 }
 \description{
-Plot the histogram of the proprensity score of treatment assignment conditional on the observed treatment. 
+Plot the histogram of the proprensity score of treatment assignment conditional on the observed treatment.
 This plot can be used to check the positivity assumption for casual inference.
 If the assumption is met, the mirrored histogram should look similar.
 If there is an obvious shift in the distribution of histograms, the assumption is likely violated.
