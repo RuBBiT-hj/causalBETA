@@ -138,7 +138,7 @@ ATE_estimation = function(bayeshaz_object, ref, n = 1000){
   
   # construct the ATE object
   # the constructor function - hidden from user as it is embedded in ATE_estimation function
-  create_ATE <- function(surv_ref, surv_trt, ref, trt_values, ATE) {
+  create_ATE <- function(surv_ref, surv_trt, ref, trt_values, ATE, t) {
     #  surv_ref, the marginal survival probability for the reference
     #  surv_trt, the marginal survival probability for the treatment
     #  ref, the value of the reference treatment
@@ -146,14 +146,14 @@ ATE_estimation = function(bayeshaz_object, ref, n = 1000){
     #  ATE, the difference between the marginal survival probability of the treatment and the reference
     #  return an object of class 'ATE'
     my_object <- structure(list(
-      surv_ref = surv_ref, surv_trt = surv_trt, ref = ref, trt_values = trt_values, ATE = ATE
+      surv_ref = surv_ref, surv_trt = surv_trt, ref = ref, trt_values = trt_values, ATE = ATE, t = t
     ), class = "ATE")
     return(my_object)
   }
   
   ATE_object = create_ATE(surv_ref = surv_1_post, surv_trt = surv_2_post, 
                           trt_values = c(ref, trt_values[trt_values != ref]), 
-                          ref = ref, ATE = ATE)
+                          ref = ref, ATE = ATE, t = t)
   
   return(ATE_object)
 }

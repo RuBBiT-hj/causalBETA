@@ -5,7 +5,7 @@
 #' @param x the data frame for an individual used for prediction, with the variables specified in the model
 #' @param n the number of prediction for each posterior draw; the default is 1000
 #' @param col the color parameter for the baseline hazard points, default is `black`
-#' @param col_CI the color parameter for the confidence intervals of the baseline hazard, default is semitransparent-grey
+#' @param col_CI the color parameter for the confidence intervals of the baseline hazard, default is semitransparent grey
 #' @param ... other graphical parameters for the plot function. Default ones will be used if not provided.
 #' 
 #' @details
