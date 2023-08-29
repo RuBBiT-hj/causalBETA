@@ -29,7 +29,7 @@
 \item{ATE_object}{ATE_object an object of the class \code{ATE} created by the \code{ATE_estimation()} function}
 
 \item{mode}{Mode of the plot, the default is \code{"ATE"} to plot the ATE in the \code{ATE} object. The other choices are
-\code{0}, \code{1}, and \code{c(0, 1)}, which plot the control, treatment, and both respectively.}
+\code{0}, \code{1}, and \code{c(0,1)}, which plot the control, treatment, and both respectively.}
 
 \item{col_ATE, col_0, col_1}{the colors for the ATE, control and treatment points and lines. The default are
 black, red, and blue respectively}
@@ -43,6 +43,16 @@ The default are semitransparent grey, red, and blue}
 This function displays the information stored in the \code{ATE} object: it can plot the marginal survival probability of
 a treatment option or overlay both, and it can plot the ATE estimated corresponding to the reference value,
 depending on the plotting choices user provided. It has some default plotting parameters if users don't specify otherwise.
+}
+\details{
+When the mode is \code{ATE}, this function plots the ATE and its 95\% CI, and the default color is black and grey.
+The default range of y-axis is from -1 to 1. The default title is \verb{ATE Estimated Over Time}.
+
+When the mode is \code{0} or \code{1}, this function plots the marginal survival probability of the control or treatment solely with
+the 95\% CI. The default colors are red and blue, and the default title is \verb{Marginal Survival Curve for ...}.
+
+When the mode is \code{c(0,1)} (or \code{c(1,0)}), this function plots the control and treatment together with a default legend.
+The default title is \verb{Marginal Survival Curves for Both Treatments}.
 }
 \examples{
 # example demo

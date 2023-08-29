@@ -6,12 +6,22 @@
 #' 
 #' @param ATE_object ATE_object an object of the class `ATE` created by the `ATE_estimation()` function
 #' @param mode Mode of the plot, the default is `"ATE"` to plot the ATE in the `ATE` object. The other choices are
-#' `0`, `1`, and `c(0, 1)`, which plot the control, treatment, and both respectively.  
+#' `0`, `1`, and `c(0,1)`, which plot the control, treatment, and both respectively.  
 #' @param col_ATE,col_0,col_1 the colors for the ATE, control and treatment points and lines. The default are
 #' black, red, and blue respectively
 #' @param col_CI_ATE,col_CI_0,col_CI_1 the colors for the confidence interval of ATE, control and treatment.
 #' The default are semitransparent grey, red, and blue
 #' @param ... other other graphical parameters for the plot function. Default ones will be used if not provided.
+#' @details
+#' When the mode is `ATE`, this function plots the ATE and its 95% CI, and the default color is black and grey.
+#' The default range of y-axis is from -1 to 1. The default title is `ATE Estimated Over Time`.
+#' 
+#' When the mode is `0` or `1`, this function plots the marginal survival probability of the control or treatment solely with
+#' the 95% CI. The default colors are red and blue, and the default title is `Marginal Survival Curve for ...`.
+#' 
+#' When the mode is `c(0,1)` (or `c(1,0)`), this function plots the control and treatment together with a default legend.
+#' The default title is `Marginal Survival Curves for Both Treatments`.
+#' 
 #' @examples
 #' # example demo
 ## usethis namespace: start
