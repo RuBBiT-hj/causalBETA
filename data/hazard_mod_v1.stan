@@ -49,7 +49,7 @@ transformed parameters{
 
 model {
 
-  eta ~ normal(0, 1);
+  //eta ~ normal(0, 1);
   haz_eps ~ normal(0, 1);
   beta ~ normal(0,3);
   
