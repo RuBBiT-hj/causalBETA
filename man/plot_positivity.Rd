@@ -14,10 +14,17 @@ plot_positivity(bayeshaz_object, formula = NULL, breaks = "Scott")
 \item{breaks}{the parameter set for breaks, default is \code{"Scott"}}
 }
 \description{
-Plot the histogram of the proprensity score of treatment assignment conditional on the observed treatment.
+Plot the histogram of the propensity score of treatment assignment conditional on the observed treatment.
 This plot can be used to check the positivity assumption for casual inference.
 If the assumption is met, the mirrored histogram should look similar.
 If there is an obvious shift in the distribution of histograms, the assumption is likely violated.
+}
+\details{
+If the formula is not given, this function will constructs the formula
+for propensity score model by removing all treatment related terms from
+the survival model formula, while the outcome should be the treatment variable.
+If users provide a formula, it should not contain treatment variable nor the variables
+that are not used in the survival model.
 }
 \examples{
 # example demo
