@@ -87,9 +87,10 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   
   covar_char = gsub(" ", "", as.character(reg_formula[3]))
   
-  # can use strsplit(covar_char, "[\\+]+")
-  # covar_names = c('age', 'ph.ecog', 'sex') ## need to get this from covar_char somehow.
-  covar_names = strsplit(covar_char, "[\\+]+")[[1]]
+  # consider * situations only
+  covar_names = as.character(attr(terms(reg_formula), "variables"))
+  covariates = covar_names[3:length(covar_names)]
+  covariates = covariates[covariates != trt_names]
   
   y = d[, y_name]
   delta = d[,delta_name]
@@ -192,7 +193,7 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   
   
   draws = create_bayeshaz(data = d, formula = reg_formula, treatment = A,
-                          covariates = covar_names,
+                          covariates = covariates,
                           time = y_name, outcome = delta_name,
                           model = model, sigma = sigma, 
                           partition = partition, midpoint = xv,
