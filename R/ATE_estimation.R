@@ -70,10 +70,13 @@ ATE_estimation = function(bayeshaz_object, ref, n = 1000){
   n_subject <- nrow(d)
   
   # make two datasets with two treatment values - ref and treatment
-  d_1 <- d[, c(trt, covariates)]
+  # variables to include
+  var_included <- c(trt, covariates)
+  
+  d_1 <- subset(d, select = var_included)
   d_1[, trt] <- ref
   
-  d_2 <- d[, c(trt, covariates)]
+  d_2 <- subset(d, select = var_included)
   d_2[, trt] <- trt_values[trt_values != ref]
   
   # the survival time for the first and the second treatment value
