@@ -18,13 +18,19 @@
 #' 
 #' @examples
 #' # example demo
+#' df_veteran <- survival::veteran
+#' df_veteran$trt <- ifelse(df_veteran$trt == 2, 1, 0)
+#' post_draws <- bayeshaz(d = df_veteran,
+#'    reg_formula = Surv(time, status) ~ trt,
+#'    A = 'trt')
+#' plot(post_draws)
 ## usethis namespace: start
 ## usethis namespace: end
 #' @export
 
 plot.bayeshaz = function(bayeshaz_object, col_hazard = "black", 
                          col_CI = rgb(0.5, 0.5, 0.5, 0.5), 
-                         type = 'o', pch = 20, xlim = NULL, ylim = NULL,
+                         type = 's', pch = 20, xlim = NULL, ylim = NULL,
                          xlab = "Time", ylab = NULL, main = NULL, cex = 0.5,
                          lwd = 1.5,
                          ...){

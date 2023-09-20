@@ -8,7 +8,7 @@
   bayeshaz_object,
   col_hazard = "black",
   col_CI = rgb(0.5, 0.5, 0.5, 0.5),
-  type = "o",
+  type = "s",
   pch = 20,
   xlim = NULL,
   ylim = NULL,
@@ -42,4 +42,10 @@ Plot the average baseline hazard rate from all posterior draws on all intervals 
 }
 \examples{
 # example demo
+df_veteran <- survival::veteran
+df_veteran$trt <- ifelse(df_veteran$trt == 2, 1, 0)
+post_draws <- bayeshaz(d = df_veteran,
+   reg_formula = Surv(time, status) ~ trt,
+   A = 'trt')
+plot(post_draws)
 }

@@ -51,6 +51,11 @@
 #' 
 #' @examples
 #' # example demo
+#' df_veteran <- survival::veteran
+#' df_veteran$trt <- ifelse(df_veteran$trt == 2, 1, 0)
+#' post_draws <- bayeshaz(d = df_veteran,
+#'    reg_formula = Surv(time, status) ~ trt,
+#'    A = 'trt')
 ## usethis namespace: start
 #' @import cmdstanr
 #' @importFrom survival survSplit
