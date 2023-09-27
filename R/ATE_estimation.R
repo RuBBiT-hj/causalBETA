@@ -83,7 +83,7 @@ ATE_estimation = function(bayeshaz_object, ref, n = 1000){
   #   then calculate the difference
   # each matrix is for one subject, and n_draws x n_partitions
   cat(paste0('Running g-comp procedure...','\n'))
-  cat(paste0('Calculating Posterior Draws of Survival Probability under reference value','\n'))
+  cat(paste0('Calculating Posterior Draws of Survival Probability under reference value...',Sys.time(),'\n'))
   surv_prob_1 <- lapply(1:n_subject, function(x){
     # call predict.haz as a helper function
     all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, n, func = list)
@@ -98,7 +98,7 @@ ATE_estimation = function(bayeshaz_object, ref, n = 1000){
     return(surv_prob)
   })
   
-  cat(paste0('Calculating Posterior Draws of Survival Probability under treatment...','\n'))
+  cat(paste0('Calculating Posterior Draws of Survival Probability under treatment...',Sys.time(),'\n'))
   surv_prob_2 <- lapply(1:n_subject, function(x){
     # call predict.haz as a helper function
     all_surv_time = predict.haz(d_2[x, ], beta_draws, haz_draws, partition, n, func = list)
@@ -113,7 +113,7 @@ ATE_estimation = function(bayeshaz_object, ref, n = 1000){
     return(surv_prob)
   })
   
-  cat(paste0('Calculating Posterior Draws of Surv. Prob. Difference...','\n'))
+  cat(paste0('Calculating Posterior Draws of Surv. Prob. Difference...',Sys.time(),'\n'))
   surv_prob_diff <- lapply(1:n_subject, function(i){
     return(surv_prob_2[[i]] - surv_prob_1[[i]])
   })
@@ -129,7 +129,7 @@ ATE_estimation = function(bayeshaz_object, ref, n = 1000){
   # alpha vector for rdirichlet
   alpha <- rep(1, n_subject)
   
-  cat(paste0('Computing Bayesian Bootstrap Weighted Average...','\n'))
+  cat(paste0('Computing Bayesian Bootstrap Weighted Average...',Sys.time(),'\n'))
   for (i in 1:nrow(beta_draws)){
 
     # draw Dirichlet for weighted sum
@@ -162,6 +162,8 @@ ATE_estimation = function(bayeshaz_object, ref, n = 1000){
   ATE_object = create_ATE(surv_ref = surv_1_post, surv_trt = surv_2_post, 
                           trt_values = c(ref, trt_values[trt_values != ref]), 
                           ref = ref, ATE = ATE, t = t)
+  
+  cat(paste0('g-comp complete...',Sys.time(),'\n'))
   
   return(ATE_object)
 }
