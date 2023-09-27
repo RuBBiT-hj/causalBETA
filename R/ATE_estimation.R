@@ -82,6 +82,8 @@ ATE_estimation = function(bayeshaz_object, ref, n = 1000){
   # the survival time for the first and the second treatment value
   #   then calculate the difference
   # each matrix is for one subject, and n_draws x n_partitions
+  cat(paste0('Running g-comp procedure...','\n'))
+  cat(paste0('Calculating Posterior Draws of Survival Probability under reference value','\n'))
   surv_prob_1 <- lapply(1:n_subject, function(x){
     # call predict.haz as a helper function
     all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, n, func = list)
@@ -96,6 +98,7 @@ ATE_estimation = function(bayeshaz_object, ref, n = 1000){
     return(surv_prob)
   })
   
+  cat(paste0('Calculating Posterior Draws of Survival Probability under treatment...','\n'))
   surv_prob_2 <- lapply(1:n_subject, function(x){
     # call predict.haz as a helper function
     all_surv_time = predict.haz(d_2[x, ], beta_draws, haz_draws, partition, n, func = list)
@@ -110,6 +113,7 @@ ATE_estimation = function(bayeshaz_object, ref, n = 1000){
     return(surv_prob)
   })
   
+  cat(paste0('Calculating Posterior Draws of Surv. Prob. Difference...','\n'))
   surv_prob_diff <- lapply(1:n_subject, function(i){
     return(surv_prob_2[[i]] - surv_prob_1[[i]])
   })
@@ -125,20 +129,9 @@ ATE_estimation = function(bayeshaz_object, ref, n = 1000){
   # alpha vector for rdirichlet
   alpha <- rep(1, n_subject)
   
-  cat(paste0('Running g-comp iteration for each posterior draw...',i,'\n'))
-  
+  cat(paste0('Computing Bayesian Bootstrap Weighted Average...','\n'))
   for (i in 1:nrow(beta_draws)){
-    if(i==1){ st = Sys.time() }
-    if(i==2){ 
-      et = Sys.time()
-      diff = et - st
-      cat("A single iteration is taking approximately ", diff, "", attributes(diff)$units)
-    }
-    
-    if( i %% 50 == 0 ){
-      cat(paste0('Iteration ',i,'\n'))
-    }
-    
+
     # draw Dirichlet for weighted sum
     weights_dir <- matrix(LaplacesDemon::rdirichlet(1, alpha = alpha), ncol = 1)
     
