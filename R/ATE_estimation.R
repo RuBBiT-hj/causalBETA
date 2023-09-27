@@ -125,9 +125,16 @@ ATE_estimation = function(bayeshaz_object, ref, n = 1000){
   # alpha vector for rdirichlet
   alpha <- rep(1, n_subject)
   
+  cat(paste0('Running g-comp iteration for each posterior draw...',i,'\n'))
+  
   for (i in 1:nrow(beta_draws)){
+    if(i==1){ st = Sys.time() }
+    if(i==2){ 
+      et = Sys.time()
+      diff = et - st
+      cat("A single iteration is taking approximately ", diff, "", attributes(diff)$units)
+    }
     
-    cat(paste0('Running G-comp. iteration for each posterior draw...',i,'\n'))
     if( i %% 50 == 0 ){
       cat(paste0('Iteration ',i,'\n'))
     }
