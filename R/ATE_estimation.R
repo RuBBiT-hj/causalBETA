@@ -127,6 +127,11 @@ ATE_estimation = function(bayeshaz_object, ref, n = 1000){
   
   for (i in 1:nrow(beta_draws)){
     
+    cat(paste0('Running G-comp. iteration for each posterior draw...',i,'\n'))
+    if( i %% 50 == 0 ){
+      cat(paste0('Iteration ',i,'\n'))
+    }
+    
     # draw Dirichlet for weighted sum
     weights_dir <- matrix(LaplacesDemon::rdirichlet(1, alpha = alpha), ncol = 1)
     
