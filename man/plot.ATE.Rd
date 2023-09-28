@@ -26,7 +26,7 @@
 )
 }
 \arguments{
-\item{ATE_object}{ATE_object an object of the class \code{ATE} created by the \code{ATE_estimation()} function}
+\item{ATE_object}{ATE_object an object of the class \code{ATE} created by the \code{bayesgcomp()} function}
 
 \item{mode}{Mode of the plot, the default is \code{"ATE"} to plot the ATE in the \code{ATE} object. The other choices are
 \code{0}, \code{1}, and \code{c(0,1)}, which plot the control, treatment, and both respectively.}
