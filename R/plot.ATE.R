@@ -4,7 +4,7 @@
 #' a treatment option or overlay both, and it can plot the ATE estimated corresponding to the reference value,
 #' depending on the plotting choices user provided. It has some default plotting parameters if users don't specify otherwise.
 #' 
-#' @param ATE_object ATE_object an object of the class `ATE` created by the `ATE_estimation()` function
+#' @param ATE_object ATE_object an object of the class `ATE` created by the `bayesgcomp()` function
 #' @param mode Mode of the plot, the default is `"ATE"` to plot the ATE in the `ATE` object. The other choices are
 #' `0`, `1`, and `c(0,1)`, which plot the control, treatment, and both respectively.  
 #' @param col_ATE,col_0,col_1 the colors for the ATE, control and treatment points and lines. The default are
