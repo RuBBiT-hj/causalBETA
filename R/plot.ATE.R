@@ -46,48 +46,27 @@ plot.ATE = function(ATE_object, mode = "ATE",
   
   # if ATE is selected
   if (!is.vector(mode)) stop("Mode provided is not valid")
-  if (length(mode) == 1){
-    if (mode == "ATE") {
-      # Upper and lower quantiles
-      lwr <- apply(ATE, 2, quantile, probs=.025)
-      upr <- apply(ATE, 2, quantile, probs=.975)
-      
+  
+  # Upper and lower quantiles
+  lwr <- apply(ATE, 2, quantile, probs=.025)
+  upr <- apply(ATE, 2, quantile, probs=.975)
+  
+  lwr_1 <- apply(surv_1, 2, quantile, probs=.025)
+  upr_1 <- apply(surv_1, 2, quantile, probs=.975)
+  
+  lwr_2 <- apply(surv_2, 2, quantile, probs=.025)
+  upr_2 <- apply(surv_2, 2, quantile, probs=.975)
+  
+  if (length(mode) == 2) {
+    if (all(mode %in% c(0, 1))) { # if two treatment are selected
+
       # set necessary parameters if not specified
       if (is.null(xlim)) xlim = c(0, max(t))
-      if (is.null(ylim)) ylim = c(-1, 1)
-      if (is.null(main)) main = "ATE Estimated Over Time"
+      if (is.null(ylim)) ylim = c(0, 1)
       if (is.null(xlab)) xlab = "Time"
-      if (is.null(ylab)) ylab = "ATE Estimated" 
-      
-      message(paste0("The current reference is ", ref))
-      
-      plot(t, colMeans(ATE), pch = pch, col = col_ATE, 
-           xlim = xlim, ylim=ylim,
-           type = type, cex = cex,
-           xlab = xlab, ylab = ylab, main = main,
-           ...)
-      segments(x0 = t, y0 = lwr,
-               x1 = t, y1 = upr,
-               lwd = lwd, col = col_CI_ATE)
-    }
-  }
-  
-  if (all(mode %in% c(0, 1))) { # if one or two treatment are selected
-    
-    lwr_1 <- apply(surv_1, 2, quantile, probs=.025)
-    upr_1 <- apply(surv_1, 2, quantile, probs=.975)
-    
-    lwr_2 <- apply(surv_2, 2, quantile, probs=.025)
-    upr_2 <- apply(surv_2, 2, quantile, probs=.975)
-    
-    # set necessary parameters if not specified
-    if (is.null(xlim)) xlim = c(0, max(t))
-    if (is.null(ylim)) ylim = c(0, 1)
-    if (is.null(xlab)) xlab = "Time"
-    if (is.null(ylab)) ylab = "Marginal Survival Probability" 
-    
-    if (all(c(0,1) %in% mode)){
+      if (is.null(ylab)) ylab = "Marginal Survival Probability" 
       if (is.null(main)) main = paste0("Marginal Survival Curves for Both Treatments")
+      
       plot(t, colMeans(surv_1), pch = pch, 
            xlim = xlim, ylim = ylim,
            type = type, cex = cex, col = col_0,
@@ -107,8 +86,29 @@ plot.ATE = function(ATE_object, mode = "ATE",
              legend = c(paste0(trt_values[1]), paste0(trt_values[2])),
              lty = c(1,1),
              col = c(col_0, col_1))
+    } else {
+      stop("Mode provided is not valid.")
     }
-    else if (mode == 0){
+  } else if (length(mode) == 1) {
+    if (mode == "ATE") {
+      # set necessary parameters if not specified
+      if (is.null(xlim)) xlim = c(0, max(t))
+      if (is.null(ylim)) ylim = c(-1, 1)
+      if (is.null(main)) main = "ATE Estimated Over Time"
+      if (is.null(xlab)) xlab = "Time"
+      if (is.null(ylab)) ylab = "ATE Estimated" 
+      
+      message(paste0("The current reference is ", ref))
+      
+      plot(t, colMeans(ATE), pch = pch, col = col_ATE, 
+           xlim = xlim, ylim=ylim,
+           type = type, cex = cex,
+           xlab = xlab, ylab = ylab, main = main,
+           ...)
+      segments(x0 = t, y0 = lwr,
+               x1 = t, y1 = upr,
+               lwd = lwd, col = col_CI_ATE)
+    } else if (mode == 0){
       if (is.null(main)) main = paste0("Marginal Survival Curve for ", trt_values[1])
       plot(t, colMeans(surv_1), pch = pch, 
            xlim = xlim, ylim = ylim,
@@ -117,8 +117,7 @@ plot.ATE = function(ATE_object, mode = "ATE",
       segments(x0 = t, y0 = lwr_1,
                x1 = t, y1 = upr_1,
                lwd = lwd, col = col_CI_0)
-    } 
-    else if (mode == 1){
+    } else if (mode == 1){
       if (is.null(main)) main = paste0("Marginal Survival Curve for ", trt_values[2])
       plot(t, colMeans(surv_2), pch = pch, 
            xlim = xlim, ylim = ylim,
@@ -127,8 +126,10 @@ plot.ATE = function(ATE_object, mode = "ATE",
       segments(x0 = t, y0 = lwr_2,
                x1 = t, y1 = upr_2,
                lwd = lwd, col = col_CI_1)
-    }
+    } else {
+      stop("Mode provided is not valid.")
+    } 
   } else {
     stop("Mode provided is not valid.")
-  } 
+  }
 }
