@@ -81,6 +81,14 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   # the address of the stan files
   path_stan <- paste0(.libPaths(), "/BayesSurvival/data/")
   
+  # check for sigma value
+  if (sigma > 3 | sigma <= 0) {
+    warning("sigma must be not less than 0 and less than 3. Forced to be 3\n")
+    ## force sigma to be 3
+    sigma <- 3
+  }
+  
+  
   ## user-specified intervention variable
   trt_names = A
   
@@ -130,12 +138,8 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
                  interval_num = dsplit$interval_num,
                  xmat = xmat)
     mod = cmdstan_model(paste0(path_stan, "hazard_mod_v1.stan"))
-  } else if (model == "beta"){ # a different variance for beta coefficients
-    if (sigma > 3 | sigma <= 0) {
-      warning("B must be not less than 0 and less than 3. Forced to be 3")
-      ## force B to be 3
-      sigma <- 3
-    }
+  } else if (model == "AR1"){ # a different variance for beta coefficients
+
     dlist = list(N=nrow(dsplit),
                  P = ncol(xmat),
                  n_pieces = length( unique(dsplit$interval_num) ),
@@ -145,17 +149,6 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
                  xmat = xmat,
                  sigma_beta = sigma)
     mod = cmdstan_model(paste0(path_stan, "hazard_mod_v2.stan"))
-    
-  } else if (model == "AR1"){ # the original version
-    dlist = list(N=nrow(dsplit),
-                 P = ncol(xmat),
-                 n_pieces = length( unique(dsplit$interval_num) ),
-                 delta = dsplit[, delta_name], 
-                 offset  = dsplit$offset, 
-                 interval_num = dsplit$interval_num,
-                 xmat = xmat)
-    
-    mod = cmdstan_model(paste0(path_stan, "hazard_mod.stan"))
   } else { # the model input is not correct
     stop("The model input is not valid")
   }
