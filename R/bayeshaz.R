@@ -8,8 +8,9 @@
 #' @param reg_formula a formula object that specifies the formula for the poisson regression.
 #' This also decides the formula will be used the function to check positivity overlap.
 #' @param A a character variable that specifies the name of the treatment
-#' @param model a character variable that tells the stan model used to implement the bayesian piece-wise exponential model, default is "AR1", other options are "independent" and "beta"
-#' @param sigma a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3, the same as the default model
+#' @param model a character variable that tells the stan model used to implement the Bayesian piece-wise exponential model, 
+#' default is "AR1" and the other option is "independent"
+#' @param sigma a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3
 #' @param num_partitions a numeric variable as the number of partitions of the study time, the default is 100
 #' @param warmup a numeric variable as the number of warmup in MCMC, the default is 1000
 #' @param post_iter a numeric variable as the number of iterations to draw from the posterior, the default is 1000
@@ -23,9 +24,8 @@
 #' It uses a beta prior to generate the correlation from -1 to 1 for hazard rate.
 #' For more details, users can check the full model listed in the reference.
 #' 
-#' Under the `beta` model, user can specify the standard deviation for the normal prior of the beta coefficients.
-#' The default is 3, which is used in the default `AR1` model,
-#' and only values between 0 and 3 are accepted since 3 is already a relatively weak prior. 
+#' Under the `AR1` model, user can specify the standard deviation for the normal prior of the beta coefficients.
+#' The default is 3, and only values between 0 and 3 are accepted since 3 is already a relatively weak prior. 
 #' 
 #' @return It returns an object of class `bayeshaz` that contains the information about the data, model, etc.
 #' This serves as the basis for the extended functions in this package.
