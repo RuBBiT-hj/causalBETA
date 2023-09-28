@@ -134,7 +134,7 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
                  P = ncol(xmat),
                  n_pieces = length( unique(dsplit$interval_num) ),
                  delta = dsplit[, delta_name], 
-                 offset  = dsplit$offset, 
+                 off_set  = dsplit$offset, 
                  interval_num = dsplit$interval_num,
                  xmat = xmat)
     mod = cmdstan_model(paste0(path_stan, "hazard_mod_v1.stan"))
@@ -144,7 +144,7 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
                  P = ncol(xmat),
                  n_pieces = length( unique(dsplit$interval_num) ),
                  delta = dsplit[, delta_name], 
-                 offset  = dsplit$offset, 
+                 off_set  = dsplit$offset, 
                  interval_num = dsplit$interval_num,
                  xmat = xmat,
                  sigma_beta = sigma)
