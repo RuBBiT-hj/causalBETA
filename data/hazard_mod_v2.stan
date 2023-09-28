@@ -12,7 +12,7 @@ data {
 parameters {
   vector[n_pieces] haz_eps;
   real eta;
-  real<lower=0> sigma_haz [n_pieces];
+  array[n_pieces] real<lower=0> sigma_haz;
   real<lower=0, upper=1> rho_eps;
   vector[P] beta;
 }
