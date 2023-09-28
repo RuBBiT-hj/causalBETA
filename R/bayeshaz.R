@@ -79,7 +79,7 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   }
   
   # the address of the stan files
-  path_stan <- paste0(.libPaths(), "/BayesSurvival/data/")
+  path_stan <- paste0(.libPaths(), "/causalBETA/data/")
   
   # check for sigma value
   if (sigma > 3 | sigma <= 0) {
@@ -134,9 +134,10 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
                  P = ncol(xmat),
                  n_pieces = length( unique(dsplit$interval_num) ),
                  delta = dsplit[, delta_name], 
-                 offset  = dsplit$offset, 
+                 off_set  = dsplit$offset, 
                  interval_num = dsplit$interval_num,
-                 xmat = xmat)
+                 xmat = xmat,
+                 sigma_beta = sigma)
     mod = cmdstan_model(paste0(path_stan, "hazard_mod_v1.stan"))
   } else if (model == "AR1"){ # a different variance for beta coefficients
 
@@ -144,13 +145,13 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
                  P = ncol(xmat),
                  n_pieces = length( unique(dsplit$interval_num) ),
                  delta = dsplit[, delta_name], 
-                 offset  = dsplit$offset, 
+                 off_set  = dsplit$offset, 
                  interval_num = dsplit$interval_num,
                  xmat = xmat,
                  sigma_beta = sigma)
     mod = cmdstan_model(paste0(path_stan, "hazard_mod_v2.stan"))
   } else { # the model input is not correct
-    stop("The model input is not valid")
+    stop("The model input is not valid. Must be either `independent' or 'AR1' ")
   }
   
   
