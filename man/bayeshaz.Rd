@@ -16,7 +16,8 @@ bayeshaz(
 )
 }
 \arguments{
-\item{d}{data, a data frame in survival format, i.e. processed by Surv function}
+\item{d}{data, a data frame in survival format. Categorical variables should be
+transformed into dummy variables}
 
 \item{reg_formula}{a formula object that specifies the formula for the poisson regression.
 This also decides the formula will be used the function to check positivity overlap.}
