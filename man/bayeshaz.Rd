@@ -16,7 +16,8 @@ bayeshaz(
 )
 }
 \arguments{
-\item{d}{data, a data frame in survival format, i.e. processed by Surv function}
+\item{d}{data, a data frame in survival format. Categorical variables should be
+transformed into dummy variables}
 
 \item{reg_formula}{a formula object that specifies the formula for the poisson regression.
 This also decides the formula will be used the function to check positivity overlap.}
@@ -72,6 +73,11 @@ and only values between 0 and 3 are accepted since 3 is already a relatively wea
 }
 \examples{
 # example demo
+df_veteran <- survival::veteran
+df_veteran$trt <- ifelse(df_veteran$trt == 2, 1, 0)
+post_draws <- bayeshaz(d = df_veteran,
+   reg_formula = Surv(time, status) ~ trt,
+   A = 'trt')
 }
 \references{
 Oganisian, Arman, Anthony Girard, Jon A. Steingrimsson, and Patience Moyo.

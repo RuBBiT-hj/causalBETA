@@ -28,7 +28,7 @@
 #' @export
 
 
-predict.bayeshaz = function(bayeshaz_object, x, n=1000, func){
+predict.bayeshaz = function(bayeshaz_object, x, n = 1000, func){
   
   beta_draws = bayeshaz_object$beta_draws
   haz_draws = bayeshaz_object$haz_draws
@@ -40,12 +40,11 @@ predict.bayeshaz = function(bayeshaz_object, x, n=1000, func){
   post_iter = nrow(haz_draws)
   
   res = apply(x, MARGIN = 1, function(y) {
-    res_single = numeric(length = post_iter)
-    for(j in 1:post_iter){
-      hazv = haz_draws[j, ]*exp( sum( beta_draws[j,] * y  ) )
-      simv = mets::rpch(n, hazv, partition)
-      res_single[j] = func(simv) # get the result from the function specified
-    }
+    res_single = predict.haz(x = y,
+                             beta_draws = beta_draws,
+                             haz_draws = haz_draws,
+                             partition = partition,
+                             n = n, func = func)
     return(res_single)
   })
   
