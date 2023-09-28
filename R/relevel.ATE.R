@@ -2,7 +2,7 @@
 #' 
 #' The reference value of the `ATE` class object is changed to be the argument `ref`. If the new value provided is the
 #' other treatment, then this function will exchange the marginal survival probability between reference and treatment.
-#' @param ATE_object an object of the class `ATE` created by the `ATE_estimation()` function
+#' @param ATE_object an object of the class `ATE` created by the `bayesgcomp()` function
 #' @param ref the new reference value, so it should be one of the treatment values
 #' @details
 #' When the reference provided is the other treatment than the current `ref` in the `ATE` object,

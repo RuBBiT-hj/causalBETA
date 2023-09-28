@@ -16,16 +16,18 @@ bayeshaz(
 )
 }
 \arguments{
-\item{d}{data, a data frame in survival format, i.e. processed by Surv function}
+\item{d}{data, a data frame in survival format. Categorical variables should be
+transformed into dummy variables}
 
 \item{reg_formula}{a formula object that specifies the formula for the poisson regression.
 This also decides the formula will be used the function to check positivity overlap.}
 
 \item{A}{a character variable that specifies the name of the treatment}
 
-\item{model}{a character variable that tells the stan model used to implement the bayesian piece-wise exponential model, default is "AR1", other options are "independent" and "beta"}
+\item{model}{a character variable that tells the stan model used to implement the Bayesian piece-wise exponential model,
+default is "AR1" and the other option is "independent"}
 
-\item{sigma}{a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3, the same as the default model}
+\item{sigma}{a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3}
 
 \item{num_partitions}{a numeric variable as the number of partitions of the study time, the default is 100}
 
@@ -66,12 +68,16 @@ beta coefficients, and the error term for baseline hazard rate to form the first
 It uses a beta prior to generate the correlation from -1 to 1 for hazard rate.
 For more details, users can check the full model listed in the reference.
 
-Under the \code{beta} model, user can specify the standard deviation for the normal prior of the beta coefficients.
-The default is 3, which is used in the default \code{AR1} model,
-and only values between 0 and 3 are accepted since 3 is already a relatively weak prior.
+Under the \code{AR1} model, user can specify the standard deviation for the normal prior of the beta coefficients.
+The default is 3, and only values between 0 and 3 are accepted since 3 is already a relatively weak prior.
 }
 \examples{
 # example demo
+df_veteran <- survival::veteran
+df_veteran$trt <- ifelse(df_veteran$trt == 2, 1, 0)
+post_draws <- bayeshaz(d = df_veteran,
+   reg_formula = Surv(time, status) ~ trt,
+   A = 'trt')
 }
 \references{
 Oganisian, Arman, Anthony Girard, Jon A. Steingrimsson, and Patience Moyo.

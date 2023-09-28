@@ -7,7 +7,7 @@
 \method{relevel}{ATE}(ATE_object, ref)
 }
 \arguments{
-\item{ATE_object}{an object of the class \code{ATE} created by the \code{ATE_estimation()} function}
+\item{ATE_object}{an object of the class \code{ATE} created by the \code{bayesgcomp()} function}
 
 \item{ref}{the new reference value, so it should be one of the treatment values}
 }

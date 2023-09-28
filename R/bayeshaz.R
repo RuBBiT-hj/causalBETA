@@ -3,12 +3,14 @@
 #' Perform a bayesian piece-wise exponential model on the given survival data, 
 #' and this function implements it by an equivalent poisson regression in MCMC.
 #' 
-#' @param d data, a data frame in survival format, i.e. processed by Surv function
+#' @param d data, a data frame in survival format. Categorical variables should be
+#' transformed into dummy variables
 #' @param reg_formula a formula object that specifies the formula for the poisson regression.
 #' This also decides the formula will be used the function to check positivity overlap.
 #' @param A a character variable that specifies the name of the treatment
-#' @param model a character variable that tells the stan model used to implement the bayesian piece-wise exponential model, default is "AR1", other options are "independent" and "beta"
-#' @param sigma a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3, the same as the default model
+#' @param model a character variable that tells the stan model used to implement the Bayesian piece-wise exponential model, 
+#' default is "AR1" and the other option is "independent"
+#' @param sigma a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3
 #' @param num_partitions a numeric variable as the number of partitions of the study time, the default is 100
 #' @param warmup a numeric variable as the number of warmup in MCMC, the default is 1000
 #' @param post_iter a numeric variable as the number of iterations to draw from the posterior, the default is 1000
@@ -22,9 +24,8 @@
 #' It uses a beta prior to generate the correlation from -1 to 1 for hazard rate.
 #' For more details, users can check the full model listed in the reference.
 #' 
-#' Under the `beta` model, user can specify the standard deviation for the normal prior of the beta coefficients.
-#' The default is 3, which is used in the default `AR1` model,
-#' and only values between 0 and 3 are accepted since 3 is already a relatively weak prior. 
+#' Under the `AR1` model, user can specify the standard deviation for the normal prior of the beta coefficients.
+#' The default is 3, and only values between 0 and 3 are accepted since 3 is already a relatively weak prior. 
 #' 
 #' @return It returns an object of class `bayeshaz` that contains the information about the data, model, etc.
 #' This serves as the basis for the extended functions in this package.
@@ -51,6 +52,11 @@
 #' 
 #' @examples
 #' # example demo
+#' df_veteran <- survival::veteran
+#' df_veteran$trt <- ifelse(df_veteran$trt == 2, 1, 0)
+#' post_draws <- bayeshaz(d = df_veteran,
+#'    reg_formula = Surv(time, status) ~ trt,
+#'    A = 'trt')
 ## usethis namespace: start
 #' @import cmdstanr
 #' @importFrom survival survSplit
@@ -73,7 +79,15 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   }
   
   # the address of the stan files
-  path_stan <- paste0(.libPaths(), "/BayesSurvival/data/")
+  path_stan <- paste0(.libPaths(), "/causalBETA/data/")
+  
+  # check for sigma value
+  if (sigma > 3 | sigma <= 0) {
+    warning("sigma must be not less than 0 and less than 3. Forced to be 3\n")
+    ## force sigma to be 3
+    sigma <- 3
+  }
+  
   
   ## user-specified intervention variable
   trt_names = A
@@ -120,36 +134,21 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
                  P = ncol(xmat),
                  n_pieces = length( unique(dsplit$interval_num) ),
                  delta = dsplit[, delta_name], 
-                 offset  = dsplit$offset, 
+                 off_set  = dsplit$offset, 
                  interval_num = dsplit$interval_num,
                  xmat = xmat)
     mod = cmdstan_model(paste0(path_stan, "hazard_mod_v1.stan"))
-  } else if (model == "beta"){ # a different variance for beta coefficients
-    if (sigma > 3 | sigma <= 0) {
-      warning("B must be not less than 0 and less than 3. Forced to be 3")
-      ## force B to be 3
-      sigma <- 3
-    }
+  } else if (model == "AR1"){ # a different variance for beta coefficients
+
     dlist = list(N=nrow(dsplit),
                  P = ncol(xmat),
                  n_pieces = length( unique(dsplit$interval_num) ),
                  delta = dsplit[, delta_name], 
-                 offset  = dsplit$offset, 
+                 off_set  = dsplit$offset, 
                  interval_num = dsplit$interval_num,
                  xmat = xmat,
                  sigma_beta = sigma)
     mod = cmdstan_model(paste0(path_stan, "hazard_mod_v2.stan"))
-    
-  } else if (model == "AR1"){ # the original version
-    dlist = list(N=nrow(dsplit),
-                 P = ncol(xmat),
-                 n_pieces = length( unique(dsplit$interval_num) ),
-                 delta = dsplit[, delta_name], 
-                 offset  = dsplit$offset, 
-                 interval_num = dsplit$interval_num,
-                 xmat = xmat)
-    
-    mod = cmdstan_model(paste0(path_stan, "hazard_mod.stan"))
   } else { # the model input is not correct
     stop("The model input is not valid")
   }
@@ -162,35 +161,6 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   beta_draws = res$draws("beta", format = 'matrix')
   
   xv = (partition[-1] - .5*mean(diff(partition)) ) ## midpoint of each interval
-  
-  # construct the model object
-  # the constructor function - hidden from user as it is embedded in bayeshaz function
-  create_bayeshaz <- function(data, formula, treatment, covariates, time, outcome,
-                              model, sigma, partition,
-                              midpoint, haz_draws, beta_draws) {
-    #  data the data
-    #  formula the regression formula
-    #  treatment the name of the treatment variable
-    #  covariates the name of the covariate(s)
-    #  ref the reference level for treatment
-    #  time the name of the time variable
-    #  outcome the name of the outcome varibale
-    #  model the type of the model used
-    #  sigma the sigma specified
-    #  partition the partition vector
-    #  midpoint the midpoints of intervals
-    #  haz_draws the baseline hazard rate from each posterior draws
-    #  beta_draws the beta coefficients estimated from each posterior draws
-    #  return an object of class 'bayeshaz'
-    my_object <- structure(list(
-      data = data, formula = formula, treatment = treatment, covariates = covariates,
-      time = time, outcome = outcome,
-      model = model, sigma = sigma, partition = partition, midpoint = midpoint,
-      haz_draws = haz_draws, beta_draws = beta_draws
-    ), class = "bayeshaz")
-    return(my_object)
-  }
-  
   
   draws = create_bayeshaz(data = d, formula = reg_formula, treatment = A,
                           covariates = covariates,

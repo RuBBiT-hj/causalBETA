@@ -2,7 +2,7 @@
 % Please edit documentation in R/predict.haz.R
 \name{predict.haz}
 \alias{predict.haz}
-\title{Piecewise Constant Hazard Distribution Prediction}
+\title{Prediction helper function}
 \usage{
 \method{predict}{haz}(x, beta_draws, haz_draws, partition, n = 1000, func)
 }
@@ -19,9 +19,9 @@
 
 \item{func}{the function specified to get the quantities of interest; a common choice is \code{mean} to get the posterior distribution of the expectation of survival time}
 }
-\description{
-Predict quantities of interest using the posterior draws from the piecewise exponential model
+\value{
+The posterior predictive quantity in interest
 }
-\examples{
-# example demo
+\description{
+Predict quantities of interest using the posterior draws from the piece-wise exponential model
 }
