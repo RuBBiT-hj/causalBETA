@@ -79,7 +79,7 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   }
   
   # the address of the stan files
-  path_stan <- paste0(.libPaths(), "/BayesSurvival/data/")
+  path_stan <- paste0(.libPaths(), "/causalBETA/data/")
   
   # check for sigma value
   if (sigma > 3 | sigma <= 0) {
