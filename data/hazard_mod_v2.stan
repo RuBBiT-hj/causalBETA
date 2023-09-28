@@ -2,9 +2,9 @@ data {
   int<lower=0> N;
   int<lower=0> P;
   int<lower=0> n_pieces;
-  int delta[N];
-  real offset[N];
-  int interval_num[N];
+  array[N] int delta;
+  array[N] real off_set;
+  array[N] int interval_num;
   matrix[N, P] xmat;
   real<lower=0> sigma_beta;
 }
@@ -12,7 +12,7 @@ data {
 parameters {
   vector[n_pieces] haz_eps;
   real eta;
-  real<lower=0> sigma_haz[n_pieces];
+  array[n_pieces] real<lower=0> sigma_haz;
   real<lower=0, upper=1> rho_eps;
   vector[P] beta;
 }
@@ -45,7 +45,7 @@ model {
   
   // likelihood contributions
   for(i in 1:N){
-    delta[i] ~ poisson( exp( log_haz[ interval_num[i] ] + lin_comb[i] + log(offset[i]) ) );  
+    delta[i] ~ poisson( exp( log_haz[ interval_num[i] ] + lin_comb[i] + log(off_set[i]) ) );  
   }
   
   
