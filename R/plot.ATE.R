@@ -65,7 +65,7 @@ plot.ATE = function(ATE_object, mode = "ATE",
       if (is.null(ylim)) ylim = c(0, 1)
       if (is.null(xlab)) xlab = "Time"
       if (is.null(ylab)) ylab = "Marginal Survival Probability" 
-      if (is.null(main)) main = paste0("Marginal Survival Curves for Both Treatments")
+      if (is.null(main)) main = paste0("Marginal Survival Curves under Both Treatments")
       
       plot(t, colMeans(surv_1), pch = pch, 
            xlim = xlim, ylim = ylim,
@@ -105,11 +105,16 @@ plot.ATE = function(ATE_object, mode = "ATE",
            type = type, cex = cex,
            xlab = xlab, ylab = ylab, main = main,
            ...)
+      
       segments(x0 = t, y0 = lwr,
                x1 = t, y1 = upr,
                lwd = lwd, col = col_CI_ATE)
+      
     } else if (mode == 0){
-      if (is.null(main)) main = paste0("Marginal Survival Curve for ", trt_values[1])
+      if (is.null(main)) main = paste0("Marginal Survival Curve under Treatment ", trt_values[1])
+      if (is.null(ylab)) ylab = 'Survival Probability'
+      if (is.null(ylab)) xlab = 'Time'
+      
       plot(t, colMeans(surv_1), pch = pch, 
            xlim = xlim, ylim = ylim,
            type = type, cex = cex,  col = col_0,
@@ -118,7 +123,10 @@ plot.ATE = function(ATE_object, mode = "ATE",
                x1 = t, y1 = upr_1,
                lwd = lwd, col = col_CI_0)
     } else if (mode == 1){
-      if (is.null(main)) main = paste0("Marginal Survival Curve for ", trt_values[2])
+      if (is.null(main)) main = paste0("Marginal Survival Curve under Treatment ", trt_values[2])
+      if (is.null(ylab)) ylab = 'Survival Probability'
+      if (is.null(ylab)) xlab = 'Time'
+      
       plot(t, colMeans(surv_2), pch = pch, 
            xlim = xlim, ylim = ylim,
            type = type, cex = cex,  col = col_1,
