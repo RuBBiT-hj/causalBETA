@@ -167,6 +167,7 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   
   haz_draws = exp(res$draws("log_haz", format = 'matrix') )
   beta_draws = res$draws("beta", format = 'matrix')
+  colnames(beta_draws) = colnames(xmat)
   
   ## give haz_draws, beta_draws mcmc class for compatability w/ coda functions
   haz_draws = coda::mcmc(haz_draws, start = 1, end = post_iter, thin = 1)
