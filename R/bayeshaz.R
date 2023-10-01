@@ -163,7 +163,7 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
                    chains = 1,  
                    iter_warmup = warmup, 
                    iter_sampling = post_iter,
-                   show_messagew=FALSE)
+                   show_messages=FALSE)
   
   haz_draws = exp(res$draws("log_haz", format = 'matrix') )
   beta_draws = res$draws("beta", format = 'matrix')
