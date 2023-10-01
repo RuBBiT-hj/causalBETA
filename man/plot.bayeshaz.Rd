@@ -8,6 +8,7 @@
   bayeshaz_object,
   col_hazard = "black",
   col_CI = rgb(0.5, 0.5, 0.5, 0.5),
+  level_CI,
   type = "s",
   pch = 20,
   xlim = NULL,
@@ -26,6 +27,8 @@
 \item{col_hazard}{the color parameter for the baseline hazard points, default is \code{black}}
 
 \item{col_CI}{the color parameter for the confidence intervals of the baseline hazard, default is semitransparent-grey}
+
+\item{level_CI}{Credible interval level, for a specified value an equal-tailed, level_CI\% credible interval will be plotted which has ((1-level_CI*100)/2)\% posterior probability below and above the interval. E.g. level_CI=.95 (the default) plots a 95\\% credible interval.}
 
 \item{...}{other graphical parameters for the plot function. Default ones will be used if not provided.}
 }

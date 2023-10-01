@@ -38,6 +38,7 @@
 #' @import survival
 #' @importFrom mets rpch
 #' @importFrom LaplacesDemon rdirichlet
+#' @importFrom coda mcmc
 ## usethis namespace: end
 #' @export
 
@@ -158,6 +159,10 @@ bayesgcomp = function(bayeshaz_object, ref, t = NULL, B = 1000){
     surv_2_post[i, ] <- surv_2_matrix %*% weights_dir
     ATE[i, ] <- diff_matrix %*% weights_dir
   }
+  
+  surv_1_post = mcmc(surv_1_post, start = 1, end = 1000, thin = 1)
+  surv_2_post = mcmc(surv_2_post, start = 1, end = 1000, thin = 1)
+  ATE = mcmc(ATE, start = 1, end = 1000, thin = 1)
   
   ATE_object = create_ATE(surv_ref = surv_1_post, surv_trt = surv_2_post, 
                           trt_values = c(ref, trt_values[trt_values != ref]), 

@@ -59,6 +59,7 @@
 #'    A = 'trt')
 ## usethis namespace: start
 #' @import cmdstanr
+#' @importFrom coda mcmc
 #' @importFrom survival survSplit
 ## usethis namespace: end
 #' @export
@@ -88,6 +89,9 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
     sigma <- 3
   }
   
+  ## num_partitions actually creates num_partitions - 1 intervals
+  ## add one to adjust
+  num_partitions = num_partitions + 1
   
   ## user-specified intervention variable
   trt_names = A
@@ -156,10 +160,17 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   
   
   res = mod$sample(data= dlist,
-                   chains = 1,  iter_warmup = warmup, iter_sampling = post_iter)
+                   chains = 1,  
+                   iter_warmup = warmup, 
+                   iter_sampling = post_iter,
+                   show_messagew=FALSE)
   
   haz_draws = exp(res$draws("log_haz", format = 'matrix') )
   beta_draws = res$draws("beta", format = 'matrix')
+  
+  ## give haz_draws, beta_draws mcmc class for compatability w/ coda functions
+  haz_draws = coda::mcmc(haz_draws, start = 1, end = post_iter, thin = 1)
+  beta_draws = coda::mcmc(beta_draws, start = 1, end = post_iter, thin = 1)
   
   xv = (partition[-1] - .5*mean(diff(partition)) ) ## midpoint of each interval
   

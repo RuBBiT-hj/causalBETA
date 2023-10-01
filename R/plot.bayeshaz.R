@@ -5,6 +5,7 @@
 #' @param bayeshaz_object an object of the class `bayeshaz` created by the `bayeshaz()` function
 #' @param col_hazard the color parameter for the baseline hazard points, default is `black`
 #' @param col_CI the color parameter for the confidence intervals of the baseline hazard, default is semitransparent-grey
+#' @param level_CI Credible interval level, for a specified value an equal-tailed, level_CI% credible interval will be plotted which has ((1-level_CI*100)/2)% posterior probability below and above the interval. E.g. level_CI=.95 (the default) plots a 95\% credible interval.
 #' @param ... other graphical parameters for the plot function. Default ones will be used if not provided.
 #' 
 #' @description
@@ -29,7 +30,7 @@
 #' @export
 
 plot.bayeshaz = function(bayeshaz_object, col_hazard = "black", 
-                         col_CI = rgb(0.5, 0.5, 0.5, 0.5), 
+                         col_CI = rgb(0.5, 0.5, 0.5, 0.5), level_CI,
                          type = 's', pch = 20, xlim = NULL, ylim = NULL,
                          xlab = "Time", ylab = NULL, main = NULL, cex = 0.5,
                          lwd = 1.5,
@@ -55,8 +56,10 @@ plot.bayeshaz = function(bayeshaz_object, col_hazard = "black",
   
   ## posterior mean/ 95% interval
   bslhaz_mean = colMeans(hazard)
-  bslhaz_lwr = apply(hazard, 2, quantile, probs=.025)
-  bslhaz_upr = apply(hazard, 2, quantile, probs=.975)
+  
+  tail_prob = (1-level_CI) / 2
+  bslhaz_lwr = apply(hazard, 2, quantile, probs= tail_prob )
+  bslhaz_upr = apply(hazard, 2, quantile, probs= 1 - tail_prob )
   
   # graphic parameters checking for necessary ones
   if (is.null(xlim)) xlim = c(0, endpoint)
