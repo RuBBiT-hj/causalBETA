@@ -56,6 +56,7 @@ bayesgcomp = function(bayeshaz_object, ref, t = NULL, B = 1000){
   haz_draws <- bayeshaz_object$haz_draws
   partition <- bayeshaz_object$partition
   covariates <- bayeshaz_object$covariates
+  n_draws = nrow(beta_draws)
   
   # check if users provided valid t values
   if (is.null(t)) {
@@ -135,18 +136,18 @@ bayesgcomp = function(bayeshaz_object, ref, t = NULL, B = 1000){
   })
   
   # calculate the posterior surv_prob for each treatment and posterior ATE
-  surv_1_post <- matrix(nrow = nrow(beta_draws),
+  surv_1_post <- matrix(nrow = n_draws,
                         ncol = length(t))
-  surv_2_post <- matrix(nrow = nrow(beta_draws),
+  surv_2_post <- matrix(nrow = n_draws,
                         ncol = length(t))
-  ATE <- matrix(nrow = nrow(beta_draws),
+  ATE <- matrix(nrow = n_draws,
                 ncol = length(t))
   
   # alpha vector for rdirichlet
   alpha <- rep(1, n_subject)
   
   cat(paste0('Computing Bayesian Bootstrap Weighted Average...',Sys.time(),'\n'))
-  for (i in 1:nrow(beta_draws)){
+  for (i in 1:n_draws){
 
     # draw Dirichlet for weighted sum
     weights_dir <- matrix(LaplacesDemon::rdirichlet(1, alpha = alpha), ncol = 1)
@@ -160,9 +161,9 @@ bayesgcomp = function(bayeshaz_object, ref, t = NULL, B = 1000){
     ATE[i, ] <- diff_matrix %*% weights_dir
   }
   
-  surv_1_post = mcmc(surv_1_post, start = 1, end = 1000, thin = 1)
-  surv_2_post = mcmc(surv_2_post, start = 1, end = 1000, thin = 1)
-  ATE = mcmc(ATE, start = 1, end = 1000, thin = 1)
+  surv_1_post = mcmc(surv_1_post, start = 1, end = n_draws, thin = 1)
+  surv_2_post = mcmc(surv_2_post, start = 1, end = n_draws, thin = 1)
+  ATE = mcmc(ATE, start = 1, end = n_draws, thin = 1)
   
   ATE_object = create_ATE(surv_ref = surv_1_post, surv_trt = surv_2_post, 
                           trt_values = c(ref, trt_values[trt_values != ref]), 
