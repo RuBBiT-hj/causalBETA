@@ -5,7 +5,7 @@
 #' @param bayeshaz_object an object of the class `bayeshaz` created by the `bayeshaz()` function
 #' @param col_hazard the color parameter for the baseline hazard points, default is `black`
 #' @param col_CI the color parameter for the confidence intervals of the baseline hazard, default is semitransparent-grey
-#' @param level_CI Credible interval level, for a specified value an equal-tailed, level_CI% credible interval will be plotted which has ((1-level_CI*100)/2)% posterior probability below and above the interval. E.g. level_CI=.95 (the default) plots a 95\% credible interval.
+#' @param level_CI Credible interval level, for a specified value an equal-tailed, level_CI% credible interval will be plotted which has ((1-level_CI*100)/2)% posterior probability below and above the interval. E.g. level_CI=.95 (the default) plots a 95% credible interval.
 #' @param ... other graphical parameters for the plot function. Default ones will be used if not provided.
 #' 
 #' @description
