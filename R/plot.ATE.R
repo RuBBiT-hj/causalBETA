@@ -11,6 +11,7 @@
 #' black, red, and blue respectively
 #' @param col_CI_ATE,col_CI_0,col_CI_1 the colors for the confidence interval of ATE, control and treatment.
 #' The default are semitransparent grey, red, and blue
+#' @param level_CI Credible interval level, for a specified value an equal-tailed, level_CI% credible interval will be plotted which has ((1-level_CI*100)/2)% posterior probability below and above the interval. E.g. level_CI=.95 (the default) plots a 95\% credible interval.
 #' @param ... other other graphical parameters for the plot function. Default ones will be used if not provided.
 #' @details
 #' When the mode is `ATE`, this function plots the ATE and its 95% CI, and the default color is black and grey.
@@ -32,6 +33,7 @@ plot.ATE = function(ATE_object, mode = "ATE",
                     col_ATE = "black", col_0 = rgb(0.9, 0.1, 0.1, 0.9), col_1 = rgb(0.1, 0.1, 0.9, 0.9),
                     col_CI_ATE = rgb(0.5, 0.5, 0.5, 0.5), col_CI_0 = rgb(0.9, 0.5, 0.5, 0.4),
                     col_CI_1 = rgb(0.5, 0.5, 0.9, 0.4),
+                    level_CI=.95,
                     xlim = NULL, ylim = NULL, type = "o",
                     pch = 20, cex = 0.5, lwd = 1.5,
                     main = NULL, xlab = NULL, ylab = NULL,
@@ -48,14 +50,16 @@ plot.ATE = function(ATE_object, mode = "ATE",
   if (!is.vector(mode)) stop("Mode provided is not valid")
   
   # Upper and lower quantiles
-  lwr <- apply(ATE, 2, quantile, probs=.025)
-  upr <- apply(ATE, 2, quantile, probs=.975)
+  tail_prob = (1-level_CI) / 2
   
-  lwr_1 <- apply(surv_1, 2, quantile, probs=.025)
-  upr_1 <- apply(surv_1, 2, quantile, probs=.975)
+  lwr <- apply(ATE, 2, quantile, probs = tail_prob)
+  upr <- apply(ATE, 2, quantile, probs = 1 - tail_prob)
   
-  lwr_2 <- apply(surv_2, 2, quantile, probs=.025)
-  upr_2 <- apply(surv_2, 2, quantile, probs=.975)
+  lwr_1 <- apply(surv_1, 2, quantile, probs = tail_prob)
+  upr_1 <- apply(surv_1, 2, quantile, probs = 1 - tail_prob)
+  
+  lwr_2 <- apply(surv_2, 2, quantile, probs = tail_prob)
+  upr_2 <- apply(surv_2, 2, quantile, probs = 1 - tail_prob)
   
   if (length(mode) == 2) {
     if (all(mode %in% c(0, 1))) { # if two treatment are selected
@@ -65,7 +69,7 @@ plot.ATE = function(ATE_object, mode = "ATE",
       if (is.null(ylim)) ylim = c(0, 1)
       if (is.null(xlab)) xlab = "Time"
       if (is.null(ylab)) ylab = "Marginal Survival Probability" 
-      if (is.null(main)) main = paste0("Marginal Survival Curves for Both Treatments")
+      if (is.null(main)) main = paste0("Marginal Survival Curves under Both Treatments")
       
       plot(t, colMeans(surv_1), pch = pch, 
            xlim = xlim, ylim = ylim,
@@ -105,11 +109,16 @@ plot.ATE = function(ATE_object, mode = "ATE",
            type = type, cex = cex,
            xlab = xlab, ylab = ylab, main = main,
            ...)
+      
       segments(x0 = t, y0 = lwr,
                x1 = t, y1 = upr,
                lwd = lwd, col = col_CI_ATE)
+      
     } else if (mode == 0){
-      if (is.null(main)) main = paste0("Marginal Survival Curve for ", trt_values[1])
+      if (is.null(main)) main = paste0("Marginal Survival Curve under Treatment ", trt_values[1])
+      if (is.null(ylab)) ylab = 'Survival Probability'
+      if (is.null(ylab)) xlab = 'Time'
+      
       plot(t, colMeans(surv_1), pch = pch, 
            xlim = xlim, ylim = ylim,
            type = type, cex = cex,  col = col_0,
@@ -118,7 +127,10 @@ plot.ATE = function(ATE_object, mode = "ATE",
                x1 = t, y1 = upr_1,
                lwd = lwd, col = col_CI_0)
     } else if (mode == 1){
-      if (is.null(main)) main = paste0("Marginal Survival Curve for ", trt_values[2])
+      if (is.null(main)) main = paste0("Marginal Survival Curve under Treatment ", trt_values[2])
+      if (is.null(ylab)) ylab = 'Survival Probability'
+      if (is.null(ylab)) xlab = 'Time'
+      
       plot(t, colMeans(surv_2), pch = pch, 
            xlim = xlim, ylim = ylim,
            type = type, cex = cex,  col = col_1,

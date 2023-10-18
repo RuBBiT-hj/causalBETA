@@ -4,7 +4,7 @@
 \alias{bayesgcomp}
 \title{Average Treatment Effect Estimation}
 \usage{
-bayesgcomp(bayeshaz_object, ref, t = NULL, V = 1000)
+bayesgcomp(bayeshaz_object, ref, t = NULL, B = 1000)
 }
 \arguments{
 \item{bayeshaz_object}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
@@ -14,7 +14,7 @@ bayesgcomp(bayeshaz_object, ref, t = NULL, V = 1000)
 \item{t}{optional; a numeric vector of time points at which users want to compute marginal
 survival probabilities}
 
-\item{V}{the number of prediction for each posterior draw; the default is 1000}
+\item{B}{the number of prediction for each posterior draw; the default is 1000}
 }
 \value{
 This function returns an object of class \code{ATE} that stores the following information:
