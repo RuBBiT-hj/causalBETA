@@ -27,13 +27,17 @@
 #' @returns
 #' This function returns an object of class `ATE` that stores the following information:
 #' 
-#' * `surv_ref`, the marginal survival probability for the reference
-#' * `surv_trt`, the marginal survival probability for the treatment
+#' * `surv_ref`, an `mcmc` object storing the marginal survival probability for the reference
+#' * `surv_trt`, an `mcmc` object storing the marginal survival probability for the treatment
 #' * `ref`, the value of the reference treatment
 #' * `trt_values`, the possible values of the treatment
 #' * `ATE`, the difference between the marginal survival probability of the treatment and the reference
 #' @examples
 #' # example demo
+#' ## Continued from ?bayeshaz
+#' gcomp_res = bayesgcomp(post_draws_ar1_adj, ## bayeshaz output 
+#'                        ref = 0, ## treatment reference group
+#'                        B = 1000) ## monte carlo iterations in g-comp
 ## usethis namespace: start
 #' @import survival
 #' @importFrom mets rpch

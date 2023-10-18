@@ -5,7 +5,10 @@
 #' @param bayeshaz_object an object of the class `bayeshaz` created by the `bayeshaz()` function
 #' @param col_hazard the color parameter for the baseline hazard points, default is `black`
 #' @param col_CI the color parameter for the confidence intervals of the baseline hazard, default is semitransparent-grey
-#' @param level_CI Credible interval level, for a specified value an equal-tailed, level_CI% credible interval will be plotted which has ((1-level_CI*100)/2)% posterior probability below and above the interval. E.g. level_CI=.95 (the default) plots a 95% credible interval.
+#' @param level_CI Credible interval level, for a specified value an equal-tailed, 
+#' level_CI% credible interval will be plotted which has ((1-level_CI*100)/2)% 
+#' posterior probability below and above the interval. 
+#' E.g. level_CI=.95 (the default) plots a 95% credible interval.
 #' @param ... other graphical parameters for the plot function. Default ones will be used if not provided.
 #' 
 #' @description
@@ -19,12 +22,23 @@
 #' 
 #' @examples
 #' # example demo
-#' df_veteran <- survival::veteran
-#' df_veteran$trt <- ifelse(df_veteran$trt == 2, 1, 0)
-#' post_draws <- bayeshaz(d = df_veteran,
-#'    reg_formula = Surv(time, status) ~ trt,
-#'    A = 'trt')
-#' plot(post_draws)
+#' ## Continued from ?bayeshaz
+#' set.seed(1)
+#' post_draws_ind = bayeshaz(
+#'   d = data, ## data set
+#'   reg_formula = Surv(y, delta) ~ A,
+#'   num_partitions = 100, 
+#'   model = 'independent',
+#'   sigma = 3,
+#'   A = 'A',
+#'   warmup = 1000,
+#'   post_iter = 1000)
+#' plot(post_draws_ind, ylim=c(0,.11),
+#'   xlim=c(0, 900),
+#'   type='p',
+#'   main='Independent Prior Process',
+#'   ylab = 'Baseline Hazard Rate', 
+#'   xlab = 'Time (days)')
 ## usethis namespace: start
 ## usethis namespace: end
 #' @export

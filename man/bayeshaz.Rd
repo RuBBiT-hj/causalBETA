@@ -51,12 +51,12 @@ An object of class \code{bayeshaz} is a list containing at least the following c
 \item \code{sigma}, the sigma specified
 \item \code{partition}, the partition vector
 \item \code{midpoint}, the midpoints of intervals
-\item \code{haz_draws}, the baseline hazard rate from each posterior draws
-\item \code{beta_draws}, the beta coefficients estimated from each posterior draws
+\item \code{haz_draws}, the baseline hazard rate from each posterior draws (as an \code{mcmc} object)
+\item \code{beta_draws}, the beta coefficients estimated from each posterior draws (as an \code{mcmc} object)
 }
 }
 \description{
-Perform a bayesian piece-wise exponential model on the given survival data,
+Perform a Bayesian piece-wise exponential model on the given survival data,
 and this function implements it by an equivalent poisson regression in MCMC.
 }
 \details{
@@ -73,11 +73,22 @@ The default is 3, and only values between 0 and 3 are accepted since 3 is alread
 }
 \examples{
 # example demo
-df_veteran <- survival::veteran
-df_veteran$trt <- ifelse(df_veteran$trt == 2, 1, 0)
-post_draws <- bayeshaz(d = df_veteran,
-   reg_formula = Surv(time, status) ~ trt,
-   A = 'trt')
+data = survival :: veteran
+data$A = 1*(data$trt==2)
+## rename variables
+var_names = colnames(data)
+colnames(data)[var_names=='status'] = 'delta'
+colnames(data)[var_names=='time'] = 'y'
+## append one-hot encoded celltypes
+data = cbind(data, model.matrix(data=data, ~ -1 + celltype))
+formula1 = Surv(y, delta) ~ A + age + karno + 
+  celltypesquamous + celltypesmallcell + celltypeadeno
+post_draws_ar1_adj = bayeshaz(
+  d = data,
+  reg_formula = formula1 ,
+  model = 'AR1',
+  A = 'A',
+  warmup = 1000, post_iter = 1000)
 }
 \references{
 Oganisian, Arman, Anthony Girard, Jon A. Steingrimsson, and Patience Moyo.

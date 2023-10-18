@@ -13,10 +13,12 @@
 #' @param outcome a character variables that specifies the name of the outcome variable
 #' @param model a character variable recording which mode of model was used
 #' @param sigma a numeric variable as the user-defined standard deviation for beta coefficients prior
-#' @param partition a numeric vector for the paritition
+#' @param partition a numeric vector for the partition
 #' @param midpoint a numeric vector for the midpoints of intervals
-#' @param haz_draws a matrix for the baseline hazard rates from posterior draws
-#' @param beta_draws a matrix for the beta coefficients estimated from posterior draws
+#' @param haz_draws a `mcmc` object storing the numeric matrix for
+#' the baseline hazard rates from posterior draws
+#' @param beta_draws a `mcmc` object storing the numeric matrix for
+#' the beta coefficients estimated from posterior draws
 #' 
 #' @return It returns an object of class `bayeshaz`
 

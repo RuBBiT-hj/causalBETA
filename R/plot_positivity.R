@@ -17,6 +17,14 @@
 #' 
 #' @examples
 #' # example demo
+#' df_veteran == survival::veteran
+#' df_veteran$trt == ifelse(df_veteran$trt == 2, 1, 0)
+#' post_draws <- bayeshaz(
+#'   d = df_veteran,
+#'   reg_formula = Surv(time, status) ~ trt + age,
+#'   A = 'trt')
+#' plot_positivity(post_draws) ## bayeshaz output 
+#' plot_positivity(post_draws, formula = formula(trt ~ age)) ## equivalent in this case
 ## usethis namespace: start
 ## usethis namespace: end
 #' @export

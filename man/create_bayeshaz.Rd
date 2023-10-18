@@ -35,13 +35,15 @@ This also decides the formula will be used the function to check positivity over
 
 \item{sigma}{a numeric variable as the user-defined standard deviation for beta coefficients prior}
 
-\item{partition}{a numeric vector for the paritition}
+\item{partition}{a numeric vector for the partition}
 
 \item{midpoint}{a numeric vector for the midpoints of intervals}
 
-\item{haz_draws}{a matrix for the baseline hazard rates from posterior draws}
+\item{haz_draws}{a \code{mcmc} object storing the numeric matrix for
+the baseline hazard rates from posterior draws}
 
-\item{beta_draws}{a matrix for the beta coefficients estimated from posterior draws}
+\item{beta_draws}{a \code{mcmc} object storing the numeric matrix for
+the beta coefficients estimated from posterior draws}
 
 \item{d}{data, a data frame in survival format}
 }

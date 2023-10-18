@@ -24,6 +24,16 @@
 #' 
 #' @examples
 #' # example demo
+#' ## Continued from ?bayeshaz
+#' plot_survival(
+#'   post_draws_ar1_adj, 
+#'   data[1, c("A", "age", "karno", "celltypesquamous",
+#'             "celltypesmallcell", "celltypeadeno")])
+#' plot_survival(
+#'   post_draws_ar1_adj,
+#'   data[1, c("A", "age", "karno", "celltypesquamous",
+#'             "celltypesmallcell", "celltypeadeno")], 
+#'   xlab = "Time", ylab = "Survival Probability") ## add x,y label
 ## usethis namespace: start
 #' @import survival
 #' @importFrom mets rpch

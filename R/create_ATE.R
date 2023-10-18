@@ -1,7 +1,7 @@
 #' Construct an `ATE` object to store the results from g-computation
 #' 
-#' @param surv_ref a numeric matrix for the marginal survival probability for the reference
-#' @param surv_trt a numeric matrix for the marginal survival probability for the treatment
+#' @param surv_ref a `mcmc` object storing the marginal survival probability for the reference
+#' @param surv_trt a `mcmc` object storing the marginal survival probability for the treatment
 #' @param ref the value of the reference treatment
 #' @param trt_values a vector for the possible values of the treatment variable (binary)
 #' @param ATE a numeric matrix for the difference between the marginal survival probability 

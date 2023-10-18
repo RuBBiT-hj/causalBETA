@@ -26,4 +26,9 @@ the \code{ATE_estimation()} function.
 }
 \examples{
 # example demo
+## Continued from ?bayesgcomp
+## original reference is 0
+gcomp_res_relevel <- relevel(gcomp_res, ref = 1)
+plot(gcomp_res_relevel)
+plot(gcomp_res) ## comparison
 }

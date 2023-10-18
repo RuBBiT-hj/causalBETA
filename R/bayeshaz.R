@@ -1,6 +1,6 @@
 #' Bayesian Piece-Wise Exponential Model
 #' 
-#' Perform a bayesian piece-wise exponential model on the given survival data, 
+#' Perform a Bayesian piece-wise exponential model on the given survival data, 
 #' and this function implements it by an equivalent poisson regression in MCMC.
 #' 
 #' @param d data, a data frame in survival format. Categorical variables should be
@@ -42,8 +42,8 @@
 #' * `sigma`, the sigma specified
 #' * `partition`, the partition vector
 #' * `midpoint`, the midpoints of intervals
-#' * `haz_draws`, the baseline hazard rate from each posterior draws
-#' * `beta_draws`, the beta coefficients estimated from each posterior draws
+#' * `haz_draws`, the baseline hazard rate from each posterior draws (as an `mcmc` object)
+#' * `beta_draws`, the beta coefficients estimated from each posterior draws (as an `mcmc` object)
 #' 
 #' @references
 #' Oganisian, Arman, Anthony Girard, Jon A. Steingrimsson, and Patience Moyo.
@@ -52,11 +52,22 @@
 #' 
 #' @examples
 #' # example demo
-#' df_veteran <- survival::veteran
-#' df_veteran$trt <- ifelse(df_veteran$trt == 2, 1, 0)
-#' post_draws <- bayeshaz(d = df_veteran,
-#'    reg_formula = Surv(time, status) ~ trt,
-#'    A = 'trt')
+#' data = survival :: veteran
+#' data$A = 1*(data$trt==2)
+#' ## rename variables
+#' var_names = colnames(data)
+#' colnames(data)[var_names=='status'] = 'delta'
+#' colnames(data)[var_names=='time'] = 'y'
+#' ## append one-hot encoded celltypes
+#' data = cbind(data, model.matrix(data=data, ~ -1 + celltype))
+#' formula1 = Surv(y, delta) ~ A + age + karno + 
+#'   celltypesquamous + celltypesmallcell + celltypeadeno
+#' post_draws_ar1_adj = bayeshaz(
+#'   d = data,
+#'   reg_formula = formula1 ,
+#'   model = 'AR1',
+#'   A = 'A',
+#'   warmup = 1000, post_iter = 1000)
 ## usethis namespace: start
 #' @import cmdstanr
 #' @importFrom coda mcmc

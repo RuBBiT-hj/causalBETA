@@ -19,8 +19,8 @@ survival probabilities}
 \value{
 This function returns an object of class \code{ATE} that stores the following information:
 \itemize{
-\item \code{surv_ref}, the marginal survival probability for the reference
-\item \code{surv_trt}, the marginal survival probability for the treatment
+\item \code{surv_ref}, an \code{mcmc} object storing the marginal survival probability for the reference
+\item \code{surv_trt}, an \code{mcmc} object storing the marginal survival probability for the treatment
 \item \code{ref}, the value of the reference treatment
 \item \code{trt_values}, the possible values of the treatment
 \item \code{ATE}, the difference between the marginal survival probability of the treatment and the reference
@@ -48,4 +48,8 @@ binary variable before creating the \code{bayeshaz} object.
 }
 \examples{
 # example demo
+## Continued from ?bayeshaz
+gcomp_res = bayesgcomp(post_draws_ar1_adj, ## bayeshaz output 
+                       ref = 0, ## treatment reference group
+                       B = 1000) ## monte carlo iterations in g-comp
 }
