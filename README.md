@@ -31,9 +31,10 @@ Help documentation in R is also available, and it has example code for each func
 ```
 ?causalBETA::bayeshaz     # Construct the MCMC-based Bayesian piece-wise exponential model
 ?causalBETA::bayesgcomp   # Apply G-computation to obtain posterior draws of the average difference in survial probabilities between two treatments
+```
 
 The code for demostration in the paper is available in the folder [demo_code](https://github.com/RuBBiT-hj/causalBETA/tree/main/demo_code).
-```
+
 
 # Reporting Issues
 If you encounter any bugs or have feature requests, please [open an issue](https://github.com/RuBBiT-hj/causalBETA/issues) on GitHub.
