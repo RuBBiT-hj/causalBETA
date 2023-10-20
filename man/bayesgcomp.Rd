@@ -56,6 +56,6 @@ gcomp_res = bayesgcomp(post_draws_ar1_adj, ## bayeshaz output
 \references{
 Ji, Han, and Oganisian, Arman. 2023.
 "causalBETA: An R Package for Bayesian Semiparametric Casual Inference with
-Event-Time Outcomes.\ \emph{arXiv:2310.12358 [Stat]}, October.
-\link{http://arxiv.org/abs/2310.12358}.
+Event-Time Outcomes. \emph{arXiv:2310.12358 [Stat]}, October.
+\url{http://arxiv.org/abs/2310.12358}.
 }
