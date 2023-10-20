@@ -47,7 +47,7 @@
 #' 
 #' @references
 #' Ji, Han, and Oganisian, Arman. 2023. 
-#' "causalBETA: An R Package for Bayesian Semiparametric Casual Inference with 
+#' "causalBETA: An R Package for Bayesian Semiparametric Causal Inference with 
 #' Event-Time Outcomes. *arXiv:2310.12358 \[Stat\]*, October. 
 #' \url{http://arxiv.org/abs/2310.12358}.
 #' 
