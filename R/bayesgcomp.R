@@ -32,6 +32,13 @@
 #' * `ref`, the value of the reference treatment
 #' * `trt_values`, the possible values of the treatment
 #' * `ATE`, the difference between the marginal survival probability of the treatment and the reference
+#' 
+#' @references
+#' Ji, Han, and Oganisian, Arman. 2023. 
+#' "causalBETA: An R Package for Bayesian Semiparametric Casual Inference with 
+#' Event-Time Outcomes.\ *arXiv:2310.12358 \[Stat\]*, October. 
+#' [http://arxiv.org/abs/2310.12358].
+#' 
 #' @examples
 #' # example demo
 #' ## Continued from ?bayeshaz

@@ -46,9 +46,10 @@
 #' * `beta_draws`, the beta coefficients estimated from each posterior draws (as an `mcmc` object)
 #' 
 #' @references
-#' Oganisian, Arman, Anthony Girard, Jon A. Steingrimsson, and Patience Moyo.
-#' "A Bayesian Framework for Causal Analysis of Recurrent Events in Presence of Immortal Risk."
-#' arXiv preprint arXiv:2304.03247 (2023).
+#' Ji, Han, and Oganisian, Arman. 2023. 
+#' "causalBETA: An R Package for Bayesian Semiparametric Casual Inference with 
+#' Event-Time Outcomes.\ *arXiv:2310.12358 \[Stat\]*, October. 
+#' [http://arxiv.org/abs/2310.12358].
 #' 
 #' @examples
 #' # example demo

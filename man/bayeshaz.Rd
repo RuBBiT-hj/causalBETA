@@ -91,7 +91,8 @@ post_draws_ar1_adj = bayeshaz(
   warmup = 1000, post_iter = 1000)
 }
 \references{
-Oganisian, Arman, Anthony Girard, Jon A. Steingrimsson, and Patience Moyo.
-"A Bayesian Framework for Causal Analysis of Recurrent Events in Presence of Immortal Risk."
-arXiv preprint arXiv:2304.03247 (2023).
+Ji, Han, and Oganisian, Arman. 2023.
+"causalBETA: An R Package for Bayesian Semiparametric Casual Inference with
+Event-Time Outcomes.\ \emph{arXiv:2310.12358 [Stat]}, October.
+\link{http://arxiv.org/abs/2310.12358}.
 }
