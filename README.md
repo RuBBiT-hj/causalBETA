@@ -2,14 +2,14 @@
 The paper associated with this package is on arXiv: https://arxiv.org/abs/2310.12358.
 
 # About
-The R package `casualBETA` is an MCMC-based implementation of piecewise exponential model for survival data, and it uses G-computation to conduct causal inference for binary treatment on survival data. We provide generic plot functions to visualize estimates easily and allow users to run MCMC diagnostics by `coda` package.
+The R package `causalBETA` is an MCMC-based implementation of piecewise exponential model for survival data, and it uses G-computation to conduct causal inference for binary treatment on survival data. We provide generic plot functions to visualize estimates easily and allow users to run MCMC diagnostics by `coda` package.
 
 # Installation
 install using `devtools` package
 ```
 ## install.packages(devtools) ## make sure to have devtools installed 
 devtools::install_github("RuBBiT-hj/causalBETA")
-library(casualBETA)
+library(causalBETA)
 ```
 
 ## Dependency
@@ -43,7 +43,7 @@ If you encounter any bugs or have feature requests, please [open an issue](https
 Please use the following LaTex cite as follows:
 ```
 @misc{ji2023causalbeta,
-      title={causalBETA: An R Package for Bayesian Semiparametric Casual Inference with Event-Time Outcomes}, 
+      title={causalBETA: An R Package for Bayesian Semiparametric Causal Inference with Event-Time Outcomes}, 
       author={Han Ji and Arman Oganisian},
       year={2023},
       eprint={2310.12358},
