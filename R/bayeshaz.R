@@ -62,6 +62,7 @@
 #' @importFrom survival survSplit
 ## usethis namespace: end
 #' @export
+
 bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3, 
                     num_partitions=100, warmup=1000, post_iter=1000){
   ## dependency checkings

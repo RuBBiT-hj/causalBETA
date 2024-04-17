@@ -4,7 +4,16 @@
 \alias{bayesgcomp}
 \title{Average Treatment Effect Estimation}
 \usage{
-bayesgcomp(bayeshaz_object, ref, t = NULL, V = 1000)
+bayesgcomp(
+  bayeshaz_object,
+  ref,
+  t = NULL,
+  V = 1000,
+  func = function(x) {
+     mean(x > t[i])
+ },
+  ...
+)
 }
 \arguments{
 \item{bayeshaz_object}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
@@ -15,6 +24,11 @@ bayesgcomp(bayeshaz_object, ref, t = NULL, V = 1000)
 survival probabilities}
 
 \item{V}{the number of prediction for each posterior draw; the default is 1000}
+
+\item{func}{the function to calculate the statistics in interest; the default is the posterior survival
+probability at each value of t, \code{function(x){mean(x > t[i])}}}
+
+\item{...}{additional arguments required for func}
 }
 \value{
 This function returns an object of class \code{ATE} that stores the following information:
