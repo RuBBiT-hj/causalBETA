@@ -12,7 +12,8 @@ bayeshaz(
   sigma = 3,
   num_partitions = 100,
   warmup = 1000,
-  post_iter = 1000
+  post_iter = 1000,
+  chains = 1
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ default is "AR1" and the other option is "independent"}
 \item{warmup}{a numeric variable as the number of warmup in MCMC, the default is 1000}
 
 \item{post_iter}{a numeric variable as the number of iterations to draw from the posterior, the default is 1000}
+
+\item{chains}{the number of chains for sampling, the default is 1}
 }
 \value{
 It returns an object of class \code{bayeshaz} that contains the information about the data, model, etc.
@@ -51,9 +54,11 @@ An object of class \code{bayeshaz} is a list containing at least the following c
 \item \code{sigma}, the sigma specified
 \item \code{partition}, the partition vector
 \item \code{midpoint}, the midpoints of intervals
-\item \code{haz_draws}, the baseline hazard rate from each posterior draws
-\item \code{beta_draws}, the beta coefficients estimated from each posterior draws
+\item \code{haz_draws}, a \code{mcmc.list} object storing the baseline hazard rate from each posterior draws
+\item \code{beta_draws}, a \code{mcmc.list} object storing the beta coefficients estimated from each posterior draws
 }
+
+The \code{mcmc.list} is an object type from package \code{coda} and helps users check convergence.
 }
 \description{
 Perform a bayesian piece-wise exponential model on the given survival data,

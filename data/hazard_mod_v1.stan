@@ -6,6 +6,7 @@ data {
   array[N] real off_set;
   array[N] int interval_num;
   matrix[N, P] xmat;
+  real<lower=0> sigma_beta;
 }
 
 parameters {
@@ -36,7 +37,8 @@ model {
 
   eta ~ normal(0, 1);
   haz_eps ~ normal(0, 1);
-  beta ~ normal(0,3);
+  // user-defined odds ratio prior, B should be less than 3 but greater than 0
+  beta ~ normal(0,sigma_beta);
   sigma_haz ~ gamma(1,1);
   
   // likelihood contributions
@@ -46,4 +48,3 @@ model {
   
   
 }
-

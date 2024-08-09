@@ -30,12 +30,22 @@
 
 predict.bayeshaz = function(bayeshaz_object, x, n = 1000, func){
   
-  beta_draws = bayeshaz_object$beta_draws
-  haz_draws = bayeshaz_object$haz_draws
+  beta_draws = do.call(rbind, bayeshaz_object$beta_draws)
+  haz_draws = do.call(rbind, bayeshaz_object$haz_draws)
   partition = bayeshaz_object$partition
   
+  reg_formula = bayeshaz_object$formula
+  
+  # one hot encoding for the x
+  
+  
+  
   # check that the dimension matches
-  if (dim(x)[2] != dim(beta_draws)[2]) stop("The number of variables in the data frame doesn't match the model")
+  if (is.null(dim(beta_draws))) { # only trt
+    if (!is.null(dim(x))) stop("The number of variables in the data frame doesn't match the model")
+  } else {
+    if (dim(x)[2] != dim(beta_draws)[2]) stop("The number of variables in the data frame doesn't match the model")
+  }
   
   post_iter = nrow(haz_draws)
   

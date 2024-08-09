@@ -10,6 +10,7 @@
 #' @description
 #' This function plots the baseline hazard rate at the midpoint for each interval,
 #' and it also marks the number at risk at the bottom corresponding to the ticks of the time axis.
+#' It uses the posterior draws of hazard rate from all chains together.
 #' To enable the plot with two axes to show both time and the number at risk but also with a clean display,
 #' we limit the freedom of changing any graphical parameters, i.e. some will take the default values overriding `NULL`.
 #' If the users don't like the output format, they can extract the parameters from `bayeshaz` object directly
@@ -35,7 +36,8 @@ plot.bayeshaz = function(bayeshaz_object, col_hazard = "black",
                          lwd = 1.5,
                          ...){
   # extract the key components from the object
-  hazard <- bayeshaz_object$haz_draws
+  hazard <- do.call(rbind, bayeshaz_object$haz_draws)
+  
   partitions <- bayeshaz_object$partition
   xv <- bayeshaz_object$midpoint
   obs_time <- bayeshaz_object$data[, bayeshaz_object$time]

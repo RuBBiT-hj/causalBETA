@@ -40,11 +40,16 @@ The default are semitransparent grey, red, and blue}
 \item{...}{other other graphical parameters for the plot function. Default ones will be used if not provided.}
 }
 \description{
-This function displays the information stored in the \code{ATE} object: it can plot the marginal survival probability of
-a treatment option or overlay both, and it can plot the ATE estimated corresponding to the reference value,
-depending on the plotting choices user provided. It has some default plotting parameters if users don't specify otherwise.
+This function displays the information stored in the \code{ATE} object.
 }
 \details{
+When the estimand is the marginal survival probability, it can plot the posterior probability of
+a treatment option or overlay both, and it can plot the ATE estimated corresponding to the reference value,
+depending on the plotting choices user provided. It has some default plotting parameters if users don't specify otherwise.
+
+For other estimands median survival time and Restricted mean survival time,
+it will generate a single boxplot and print its summary.
+
 When the mode is \code{ATE}, this function plots the ATE and its 95\% CI, and the default color is black and grey.
 The default range of y-axis is from -1 to 1. The default title is \verb{ATE Estimated Over Time}.
 

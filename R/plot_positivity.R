@@ -18,6 +18,7 @@
 #' @examples
 #' # example demo
 ## usethis namespace: start
+#' @importFrom rlang is_empty
 ## usethis namespace: end
 #' @export
 
@@ -35,6 +36,12 @@ plot_positivity = function(bayeshaz_object, formula = NULL, breaks="Scott"){
     # remove the terms and interaction terms related to treatment
     variables <- attr(terms(reg_formula), "term.labels")
     variables <- variables[!grepl(treatment, variables, fixed = TRUE)]
+    
+    # if unadjusted analysis - then no need to check
+    if (rlang::is_empty(variables)){
+      stop("Unadjusted analysis doesn't have covariates to check")
+    }
+    
     # construct the formula
     formula = formula(
     paste0(treatment, "~", paste0(variables, collapse = "+"))

@@ -13,6 +13,7 @@ bayespipeline(
   num_partitions = 100,
   warmup = 1000,
   post_iter = 1000,
+  chains = 1,
   ref,
   t = NULL,
   V = 1000,

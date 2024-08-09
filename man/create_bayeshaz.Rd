@@ -39,9 +39,9 @@ This also decides the formula will be used the function to check positivity over
 
 \item{midpoint}{a numeric vector for the midpoints of intervals}
 
-\item{haz_draws}{a matrix for the baseline hazard rates from posterior draws}
+\item{haz_draws}{a \code{mcmc.list} for the baseline hazard rates from posterior draws}
 
-\item{beta_draws}{a matrix for the beta coefficients estimated from posterior draws}
+\item{beta_draws}{a \code{mcmc.list} for the beta coefficients estimated from posterior draws}
 
 \item{d}{data, a data frame in survival format}
 }

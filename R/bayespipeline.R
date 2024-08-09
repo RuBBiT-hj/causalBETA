@@ -41,6 +41,7 @@
 
 bayespipeline <- function(d, reg_formula, A, model = "AR1", sigma = 3, 
                           num_partitions=100, warmup=1000, post_iter=1000,
+                          chains = 1,
                           ref, t = NULL, V = 1000,
                           func = function(x){mean(x > t[i])}, ...){
   bayeshaz_object = bayeshaz(d = d,
@@ -50,7 +51,8 @@ bayespipeline <- function(d, reg_formula, A, model = "AR1", sigma = 3,
                              sigma = sigma,
                              num_partitions = num_partitions,
                              warmup = warmup,
-                             post_iter = post_iter)
+                             post_iter = post_iter,
+                             chains = chains)
   ATE_object = bayesgcomp(bayeshaz_object,
                           ref = ref,
                           t = t,
@@ -59,3 +61,4 @@ bayespipeline <- function(d, reg_formula, A, model = "AR1", sigma = 3,
   plot(ATE_object)
   return(list(bayeshaz_object, ATE_object))
 }
+

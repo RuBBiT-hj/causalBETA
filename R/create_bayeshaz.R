@@ -15,8 +15,8 @@
 #' @param sigma a numeric variable as the user-defined standard deviation for beta coefficients prior
 #' @param partition a numeric vector for the paritition
 #' @param midpoint a numeric vector for the midpoints of intervals
-#' @param haz_draws a matrix for the baseline hazard rates from posterior draws
-#' @param beta_draws a matrix for the beta coefficients estimated from posterior draws
+#' @param haz_draws a `mcmc.list` for the baseline hazard rates from posterior draws
+#' @param beta_draws a `mcmc.list` for the beta coefficients estimated from posterior draws
 #' 
 #' @return It returns an object of class `bayeshaz`
 

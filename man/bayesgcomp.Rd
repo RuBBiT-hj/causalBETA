@@ -7,11 +7,10 @@
 bayesgcomp(
   bayeshaz_object,
   ref,
-  t = NULL,
   V = 1000,
-  func = function(x) {
-     mean(x > t[i])
- },
+  estimand = "prob",
+  t = NULL,
+  threshold = NULL,
   ...
 )
 }
@@ -20,24 +19,33 @@ bayesgcomp(
 
 \item{ref}{the reference value of the treatment, so it should be one of the treatment values}
 
+\item{V}{the number of prediction for each posterior draw; the default is 1000}
+
+\item{estimand}{the statistics in interest; the default is the posterior survival
+probability at each value of t, \code{prob}. The other options are the median survival time, \code{median}, and
+the Restricted mean survival time, \code{rmean}.}
+
 \item{t}{optional; a numeric vector of time points at which users want to compute marginal
 survival probabilities}
 
-\item{V}{the number of prediction for each posterior draw; the default is 1000}
+\item{threshold}{optional; the threshold used for Restricted mean survival time. If not provided,
+it will use the maximum time of the study as the default
+survival time as a special case of Restricted mean survival time}
 
-\item{func}{the function to calculate the statistics in interest; the default is the posterior survival
-probability at each value of t, \code{function(x){mean(x > t[i])}}}
-
-\item{...}{additional arguments required for func}
+\item{...}{other parameters for estimand function}
 }
 \value{
 This function returns an object of class \code{ATE} that stores the following information:
 \itemize{
-\item \code{surv_ref}, the marginal survival probability for the reference
-\item \code{surv_trt}, the marginal survival probability for the treatment
+\item \code{surv_ref}, the posterior estimates for the reference
+\item \code{surv_trt}, the posterior estimates for the treatment
 \item \code{ref}, the value of the reference treatment
 \item \code{trt_values}, the possible values of the treatment
+\item \code{estimand}, the estimand for the ATE
 \item \code{ATE}, the difference between the marginal survival probability of the treatment and the reference
+\item \code{t}, the timepoints used for calculating the ATE, specifically for posterior survival probabilities
+\item \code{threshold}, the threshold used for calculating the Restricted mean survival time. It would be
+\code{null} if the estimand is not \code{rmean}.
 }
 }
 \description{
