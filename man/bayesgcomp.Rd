@@ -7,7 +7,7 @@
 bayesgcomp(
   bayeshaz_object,
   ref,
-  V = 1000,
+  B = 1000,
   estimand = "prob",
   t = NULL,
   threshold = NULL,
@@ -19,7 +19,7 @@ bayesgcomp(
 
 \item{ref}{the reference value of the treatment, so it should be one of the treatment values}
 
-\item{V}{the number of prediction for each posterior draw; the default is 1000}
+\item{B}{the number of prediction for each posterior draw; the default is 1000}
 
 \item{estimand}{the statistics in interest; the default is the posterior survival
 probability at each value of t, \code{prob}. The other options are the median survival time, \code{median}, and

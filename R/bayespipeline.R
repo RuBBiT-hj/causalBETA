@@ -13,7 +13,7 @@
 #' @param warmup a numeric variable as the number of warmup in MCMC, the default is 1000
 #' @param post_iter a numeric variable as the number of iterations to draw from the posterior, the default is 1000
 #' @param ref the reference value of the treatment, so it should be one of the treatment values
-#' @param V the number of prediction for each posterior draw; the default is 1000
+#' @param B the number of prediction for each posterior draw; the default is 1000
 #' @param estimand the statistics in interest; the default is the posterior survival
 #' probability at each value of t, `prob`. The other options are the median survival time, `median`, and
 #' the Restricted mean survival time, `rmean`.
@@ -44,7 +44,7 @@
 bayespipeline <- function(d, reg_formula, A, model = "AR1", sigma = 3, 
                           num_partitions=100, warmup=1000, post_iter=1000,
                           chains = 1,
-                          ref, V = 1000,
+                          ref, B = 1000,
                           estimand = "prob", 
                           t = NULL, 
                           threshold = NULL, ...){
@@ -59,7 +59,7 @@ bayespipeline <- function(d, reg_formula, A, model = "AR1", sigma = 3,
                              chains = chains)
   ATE_object = bayesgcomp(bayeshaz_object,
                           ref = ref,
-                          V = V,
+                          B = B,
                           estimand = estimand,
                           t = t, 
                           threshold = threshold,

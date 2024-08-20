@@ -4,7 +4,7 @@
 #' By default, survival probabilities and differences are calculated at the midpoints of each of the partitions specified in bayeshaz().
 #' @param bayeshaz_object an object of the class `bayeshaz` created by the `bayeshaz()` function
 #' @param ref the reference value of the treatment, so it should be one of the treatment values
-#' @param V the number of prediction for each posterior draw; the default is 1000
+#' @param B the number of prediction for each posterior draw; the default is 1000
 #' @param estimand the statistics in interest; the default is the posterior survival
 #' probability at each value of t, `prob`. The other options are the median survival time, `median`, and
 #' the Restricted mean survival time, `rmean`.
@@ -54,7 +54,7 @@
 #' @export
 
 
-bayesgcomp = function(bayeshaz_object, ref, V = 1000,
+bayesgcomp = function(bayeshaz_object, ref, B = 1000,
                       estimand = "prob",
                       t = NULL, 
                       threshold = NULL,
@@ -147,9 +147,9 @@ bayesgcomp = function(bayeshaz_object, ref, V = 1000,
     cat(paste0('Calculating Posterior Draws of ', phrase, ' under reference value...',Sys.time(),'\n'))
     surv_est_1 <- lapply(1:n_subject, function(x){
       # call predict.haz as a helper function
-      all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, V, func = list)
+      all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, B, func = list)
       # the number of the list - the number of posterior draws
-      # the length of each list - the number of predictions (V)
+      # the length of each list - the number of predictions (B)
       
       surv_prob <- matrix(nrow = length(all_surv_time),
                           ncol = length(t))
@@ -165,9 +165,9 @@ bayesgcomp = function(bayeshaz_object, ref, V = 1000,
     cat(paste0('Calculating Posterior Draws of ', phrase, ' under treatment...',Sys.time(),'\n'))
     surv_est_2 <- lapply(1:n_subject, function(x){
       # call predict.haz as a helper function
-      all_surv_time = predict.haz(d_2[x, ], beta_draws, haz_draws, partition, V, func = list)
+      all_surv_time = predict.haz(d_2[x, ], beta_draws, haz_draws, partition, B, func = list)
       # the number of the list - the number of posterior draws
-      # the length of each list - the number of predictions (V)
+      # the length of each list - the number of predictions (B)
       surv_prob <- matrix(nrow = length(all_surv_time),
                           ncol = length(t))
       # For each t, we calculate the proportion
@@ -215,9 +215,9 @@ bayesgcomp = function(bayeshaz_object, ref, V = 1000,
     cat(paste0('Calculating Posterior Draws of ', phrase, ' under reference value...',Sys.time(),'\n'))
     surv_est_1 <- lapply(1:n_subject, function(x){
       # call predict.haz as a helper function
-      all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, V, func = list)
+      all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, B, func = list)
       # the number of the list - the number of posterior draws
-      # the length of each list - the number of predictions (V)
+      # the length of each list - the number of predictions (B)
 
       surv_prob <- sapply(all_surv_time, func, ...)
       surv_prob <- matrix(surv_prob, nrow = length(all_surv_time))
@@ -228,9 +228,9 @@ bayesgcomp = function(bayeshaz_object, ref, V = 1000,
     cat(paste0('Calculating Posterior Draws of ', phrase, ' under treatment...',Sys.time(),'\n'))
     surv_est_2 <- lapply(1:n_subject, function(x){
       # call predict.haz as a helper function
-      all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, V, func = list)
+      all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, B, func = list)
       # the number of the list - the number of posterior draws
-      # the length of each list - the number of predictions (V)
+      # the length of each list - the number of predictions (B)
       
       surv_prob <- sapply(all_surv_time, func, ...)
       surv_prob <- matrix(surv_prob, nrow = length(all_surv_time))
@@ -272,9 +272,9 @@ bayesgcomp = function(bayeshaz_object, ref, V = 1000,
     cat(paste0('Calculating Posterior Draws of ', phrase, ' under reference value...',Sys.time(),'\n'))
     surv_est_1 <- lapply(1:n_subject, function(x){
       # call predict.haz as a helper function
-      all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, V, func = list)
+      all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, B, func = list)
       # the number of the list - the number of posterior draws
-      # the length of each list - the number of predictions (V)
+      # the length of each list - the number of predictions (B)
       
       surv_prob <- sapply(all_surv_time, func, ...)
       surv_prob <- matrix(surv_prob, nrow = length(all_surv_time))
@@ -285,9 +285,9 @@ bayesgcomp = function(bayeshaz_object, ref, V = 1000,
     cat(paste0('Calculating Posterior Draws of ', phrase, ' under treatment...',Sys.time(),'\n'))
     surv_est_2 <- lapply(1:n_subject, function(x){
       # call predict.haz as a helper function
-      all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, V, func = list)
+      all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, B, func = list)
       # the number of the list - the number of posterior draws
-      # the length of each list - the number of predictions (V)
+      # the length of each list - the number of predictions (B)
       
       surv_prob <- sapply(all_surv_time, func, ...)
       surv_prob <- matrix(surv_prob, nrow = length(all_surv_time))
