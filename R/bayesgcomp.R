@@ -265,7 +265,7 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
     }
     # Restricted Mean
   } else { 
-    func = function(y){mean(min(y, threshold))}
+    func = function(y){mean(pmin(y, threshold))}
     phrase = "Restricted Mean Survival Time"
     
     
