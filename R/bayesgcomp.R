@@ -141,7 +141,7 @@ bayesgcomp = function(bayeshaz_object, ref, V = 1000,
     
   ## Posterior survival probability
   if (estimand == "prob") {
-    func = function(x){mean(x > t[i])}
+    func = function(y, time_val){mean(y > time_val)}
     phrase = "Survival Probability"
     
     cat(paste0('Calculating Posterior Draws of ', phrase, ' under reference value...',Sys.time(),'\n'))
@@ -150,12 +150,14 @@ bayesgcomp = function(bayeshaz_object, ref, V = 1000,
       all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, V, func = list)
       # the number of the list - the number of posterior draws
       # the length of each list - the number of predictions (V)
+      
       surv_prob <- matrix(nrow = length(all_surv_time),
                           ncol = length(t))
       # For each t, we calculate the proportion
       for (i in 1:length(t)){
         # surv_prob[ ,i] <- sapply(all_surv_time, function(x) mean(x > t[i]))
-        surv_prob[ ,i] <- sapply(all_surv_time, func, ...)
+        # time_val <- t[i]
+        surv_prob[ ,i] <- sapply(all_surv_time, func, time_val = t[i], ...)
       }
       return(surv_prob)
     })
@@ -171,7 +173,8 @@ bayesgcomp = function(bayeshaz_object, ref, V = 1000,
       # For each t, we calculate the proportion
       for (i in 1:length(t)){
         # surv_prob[ ,i] <- sapply(all_surv_time, function(x) mean(x > t[i]))
-        surv_prob[ ,i] <- sapply(all_surv_time, func, ...)
+        # time_val <- t[i]
+        surv_prob[ ,i] <- sapply(all_surv_time, func, time_val = t[i], ...)
       }
       return(surv_prob)
     })
@@ -188,6 +191,7 @@ bayesgcomp = function(bayeshaz_object, ref, V = 1000,
                           ncol = length(t))
     ATE <- matrix(nrow = n_draws,
                   ncol = length(t))
+    
     # alpha vector for rdirichlet
     alpha <- rep(1, n_subject)
     
@@ -261,7 +265,7 @@ bayesgcomp = function(bayeshaz_object, ref, V = 1000,
     }
     # Restricted Mean
   } else { 
-    func = function(x){mean(min(x, threshold))}
+    func = function(y){mean(min(y, threshold))}
     phrase = "Restricted Mean Survival Time"
     
     

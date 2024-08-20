@@ -4,10 +4,12 @@
 \alias{plot_positivity}
 \title{Positivity Assumption Checking}
 \usage{
-plot_positivity(bayeshaz_object, formula = NULL, breaks = "Scott")
+plot_positivity(bayeshaz_object, data, formula = NULL, breaks = "Scott")
 }
 \arguments{
 \item{bayeshaz_object}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
+
+\item{data}{the data set used to generate \code{bayeshaz} object}
 
 \item{formula}{an optional formula variable used in fitting the propensity score model}
 

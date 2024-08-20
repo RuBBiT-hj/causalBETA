@@ -37,6 +37,12 @@ predict.bayeshaz = function(bayeshaz_object, x, n = 1000, func){
   reg_formula = bayeshaz_object$formula
   
   # one hot encoding for the x
+
+  # # model matrix (one hot encoding)
+  x =  model.matrix(formula(
+    paste(as.character(reg_formula[c(1,3)]), collapse = "")
+  ), data = x)
+  x = data.frame(x[, -1, drop = F])
   
   
   

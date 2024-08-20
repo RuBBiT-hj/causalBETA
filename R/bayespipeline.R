@@ -13,11 +13,13 @@
 #' @param warmup a numeric variable as the number of warmup in MCMC, the default is 1000
 #' @param post_iter a numeric variable as the number of iterations to draw from the posterior, the default is 1000
 #' @param ref the reference value of the treatment, so it should be one of the treatment values
+#' @param V the number of prediction for each posterior draw; the default is 1000
+#' @param estimand the statistics in interest; the default is the posterior survival
+#' probability at each value of t, `prob`. The other options are the median survival time, `median`, and
+#' the Restricted mean survival time, `rmean`.
 #' @param t optional; a numeric vector of time points at which users want to compute marginal
 #' survival probabilities
-#' @param V the number of prediction for each posterior draw; the default is 1000
-#' @param func the function to calculate the statistics in interest; the default is the posterior survival
-#' probability at each value of t, `function(x){mean(x > t[i])}`
+#' @param threshold optional; the threshold used for Restricted mean survival time.
 #' @param ... additional arguments required for func
 #' 
 #' @details
@@ -42,8 +44,10 @@
 bayespipeline <- function(d, reg_formula, A, model = "AR1", sigma = 3, 
                           num_partitions=100, warmup=1000, post_iter=1000,
                           chains = 1,
-                          ref, t = NULL, V = 1000,
-                          func = function(x){mean(x > t[i])}, ...){
+                          ref, V = 1000,
+                          estimand = "prob", 
+                          t = NULL, 
+                          threshold = NULL, ...){
   bayeshaz_object = bayeshaz(d = d,
                              reg_formula = reg_formula, 
                              A = A,
@@ -55,9 +59,11 @@ bayespipeline <- function(d, reg_formula, A, model = "AR1", sigma = 3,
                              chains = chains)
   ATE_object = bayesgcomp(bayeshaz_object,
                           ref = ref,
-                          t = t,
                           V = V,
-                          func = func, ...)
+                          estimand = estimand,
+                          t = t, 
+                          threshold = threshold,
+                          ...)
   plot(ATE_object)
   return(list(bayeshaz_object, ATE_object))
 }

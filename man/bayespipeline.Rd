@@ -15,11 +15,10 @@ bayespipeline(
   post_iter = 1000,
   chains = 1,
   ref,
-  t = NULL,
   V = 1000,
-  func = function(x) {
-     mean(x > t[i])
- },
+  estimand = "prob",
+  t = NULL,
+  threshold = NULL,
   ...
 )
 }
@@ -45,13 +44,16 @@ default is "AR1" and the other option is "independent"}
 
 \item{ref}{the reference value of the treatment, so it should be one of the treatment values}
 
+\item{V}{the number of prediction for each posterior draw; the default is 1000}
+
+\item{estimand}{the statistics in interest; the default is the posterior survival
+probability at each value of t, \code{prob}. The other options are the median survival time, \code{median}, and
+the Restricted mean survival time, \code{rmean}.}
+
 \item{t}{optional; a numeric vector of time points at which users want to compute marginal
 survival probabilities}
 
-\item{V}{the number of prediction for each posterior draw; the default is 1000}
-
-\item{func}{the function to calculate the statistics in interest; the default is the posterior survival
-probability at each value of t, \code{function(x){mean(x > t[i])}}}
+\item{threshold}{optional; the threshold used for Restricted mean survival time.}
 
 \item{...}{additional arguments required for func}
 }
