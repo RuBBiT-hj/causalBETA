@@ -45,6 +45,12 @@
 #' `null` if the estimand is not `rmean`.
 #' @examples
 #' # example demo
+#' ## Continued from ?bayeshaz
+#' gcomp_res = bayesgcomp(post_draws_ar1_adj, ## bayeshaz output 
+#'                        ref = 0, ## treatment reference group
+#'                        B = 1000, ## monte carlo iterations in g-comp
+#'                        estimand = "prob"
+#'                        )
 ## usethis namespace: start
 #' @import survival
 #' @importFrom mets rpch
@@ -72,6 +78,8 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
   partition <- bayeshaz_object$partition
   covariates <- bayeshaz_object$covariates
   n_draws = nrow(beta_draws)
+  
+  chains = bayeshaz_object$chains
   
   # check if estimand provided is valid
   if (is.null(estimand)) {
@@ -322,9 +330,27 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
     }
   }
   
-  surv_1_post = coda::mcmc(surv_1_post, start = 1, end = n_draws, thin = 1)
-  surv_2_post = coda::mcmc(surv_2_post, start = 1, end = n_draws, thin = 1)
-  ATE = coda::mcmc(ATE, start = 1, end = n_draws, thin = 1)
+  # # of draws per chain
+  n_draws_chain = n_draws/chains
+  surv_1_post_list = list(); surv_2_post_list = list(); ATE_list = list()
+  
+  # break into mcmc list
+  for (i in 1:chains){
+    start_index = (i-1)*n_draws_chain + 1
+    end_index = i*n_draws_chain
+    surv_1_post_list[[i]] = coda::mcmc(surv_1_post[start_index:end_index,], 
+                                       start = 1, end = n_draws_chain, thin = 1)
+    surv_2_post_list[[i]] = coda::mcmc(surv_2_post[start_index:end_index,], 
+                                       start = 1, end = n_draws_chain, thin = 1)
+    ATE_list[[i]] = coda::mcmc(ATE[start_index:end_index,], 
+                                       start = 1, end = n_draws_chain, thin = 1)
+  }
+  
+  
+  surv_1_post = do.call(coda::mcmc.list, surv_1_post_list)
+  surv_2_post = do.call(coda::mcmc.list, surv_2_post_list)
+  ATE = do.call(coda::mcmc.list, ATE_list)
+  
   
   
   ATE_object = create_ATE(surv_ref = surv_1_post, surv_trt = surv_2_post, 

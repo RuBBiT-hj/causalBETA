@@ -11,8 +11,6 @@
 #' @details
 #' This function uses `predict.bayeshaz` to obtain all predictions for an individual,
 #' and it generates a matrix contains the posterior predictive probability for each time interval.
-#' Thus, it is required that the number and the order of the variables matches the model for generating the
-#' `bayeshaz` object exactly.
 #' 
 #' It also makes a plot of survival curve, and the user can modify by providing plot parameters.
 #' The plot has the the mean survival probability and the 95% CI from bootstrapping.
@@ -24,6 +22,8 @@
 #' 
 #' @examples
 #' # example demo
+#' # after getting the posterior draw object
+#' pred_survival <- plot_survival(post_draws_ar1_adj, df_veteran[1, ])
 ## usethis namespace: start
 #' @import survival
 #' @importFrom mets rpch

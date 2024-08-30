@@ -42,8 +42,6 @@ Plot the survival curve based on the predictions from the posterior draws for th
 \details{
 This function uses \code{predict.bayeshaz} to obtain all predictions for an individual,
 and it generates a matrix contains the posterior predictive probability for each time interval.
-Thus, it is required that the number and the order of the variables matches the model for generating the
-\code{bayeshaz} object exactly.
 
 It also makes a plot of survival curve, and the user can modify by providing plot parameters.
 The plot has the the mean survival probability and the 95\% CI from bootstrapping.
@@ -51,4 +49,6 @@ If the users want to make their own new plot, they can utilizes the returned mat
 }
 \examples{
 # example demo
+# after getting the posterior draw object
+pred_survival <- plot_survival(post_draws, df_veteran[1, ])
 }

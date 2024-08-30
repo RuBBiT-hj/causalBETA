@@ -18,8 +18,11 @@
 #' 
 #' @examples
 #' # example demo
+#' ## Continued from ?bayeshaz
+#' plot_positivity(post_draws_ar1_adj, data) ## bayeshaz output 
+#' plot_positivity(post_draws, df_veteran, 
+#' formula = A ~ age + karno + celltype) ## equivalent in this case
 ## usethis namespace: start
-#' @importFrom rlang is_empty
 ## usethis namespace: end
 #' @export
 
@@ -55,8 +58,6 @@ plot_positivity = function(bayeshaz_object, data, formula = NULL, breaks="Scott"
     variables <- variables[3:length(variables)]
       
     if (treatment %in% variables) warning("Treatment varibale is in the formula given")
-    if ( !all(variables %in% covariates) ) warning("Formula has variables that are not
-                                                   listed in the survival model")
   }
   
   # output the formula

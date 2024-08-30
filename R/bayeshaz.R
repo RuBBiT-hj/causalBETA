@@ -11,7 +11,7 @@
 #' @param model a character variable that tells the stan model used to implement the Bayesian piece-wise exponential model, 
 #' default is "AR1" and the other option is "independent"
 #' @param sigma a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3
-#' @param num_partitions a numeric variable as the number of partitions of the study time, the default is 100
+#' @param num_partition a numeric variable as the number of intervals in the partition, the default is 100
 #' @param warmup a numeric variable as the number of warmup in MCMC, the default is 1000
 #' @param post_iter a numeric variable as the number of iterations to draw from the posterior, the default is 1000
 #' @param chains the number of chains for sampling, the default is 1
@@ -41,6 +41,7 @@
 #' * `outcome`, the name of the outcome variable
 #' * `model`, the type of the model used
 #' * `sigma`, the sigma specified
+#' * `chains`, the number of chains for sampling
 #' * `partition`, the partition vector
 #' * `midpoint`, the midpoints of intervals
 #' * `haz_draws`, a `mcmc.list` object storing the baseline hazard rate from each posterior draws
@@ -55,11 +56,21 @@
 #' 
 #' @examples
 #' # example demo
-#' df_veteran <- survival::veteran
-#' df_veteran$trt <- ifelse(df_veteran$trt == 2, 1, 0)
-#' post_draws <- bayeshaz(d = df_veteran,
-#'    reg_formula = Surv(time, status) ~ trt,
-#'    A = 'trt')
+#' data = survival :: veteran
+#' data$A = 1*(data$trt==2)
+#' ## rename variables
+#' var_names = colnames(data)
+#' colnames(data)[var_names=='status'] = 'delta'
+#' colnames(data)[var_names=='time'] = 'y'
+#' formula1 <- Surv(y, delta) ~ A + age + karno + celltype
+#' post_draws_ar1_adj = bayeshaz(
+#'   d = data,
+#'   reg_formula = formula1 ,
+#'   model = 'AR1',
+#'   A = 'A',
+#'   warmup = 1000, 
+#'   post_iter = 1000,
+#'   chains = 1)
 ## usethis namespace: start
 #' @import cmdstanr
 #' @importFrom survival survSplit
@@ -67,7 +78,7 @@
 #' @export
 
 bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3, 
-                    num_partitions=100, warmup=1000, post_iter=1000,
+                    num_partition=100, warmup=1000, post_iter=1000,
                     chains = 1){
   ## dependency checkings
   if (!requireNamespace("cmdstanr", quietly = TRUE)) {
@@ -118,11 +129,10 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   # covariates = covariates[covariates != trt_names]
 
   ## partition time interval
-  partition = seq(0, max(y)+.01,length.out=num_partitions)
+  partition = seq(0, max(y)+.01,length.out=num_partition+1)
   
   #outcome = paste0("Surv(", y_name,", ", delta_name,") ~ ")
   #reg_formula = as.formula(paste0(outcome, paste0(covar_names, collapse = "+"), "+", paste0(trt_names, collapse = "+") ) )
-  
   
   ## create long-form data set
   dsplit = survival::survSplit(data = d, formula = reg_formula, cut = partition, id='id')
@@ -200,6 +210,7 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
                           covariates = covariates,
                           time = y_name, outcome = delta_name,
                           model = model, sigma = sigma, 
+                          chains = chains,
                           partition = partition, midpoint = xv,
                           haz_draws = haz_draws, beta_draws=beta_draws)
   

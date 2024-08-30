@@ -29,4 +29,8 @@ that are not used in the survival model.
 }
 \examples{
 # example demo
+## Continued from ?bayeshaz
+plot_positivity(post_draws_ar1_adj, data) ## bayeshaz output 
+plot_positivity(post_draws, df_veteran, 
+formula = A ~ age + karno + celltype) ## equivalent in this case
 }

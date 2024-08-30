@@ -5,12 +5,15 @@
 #' @param bayeshaz_object an object of the class `bayeshaz` created by the `bayeshaz()` function
 #' @param col_hazard the color parameter for the baseline hazard points, default is `black`
 #' @param col_CI the color parameter for the confidence intervals of the baseline hazard, default is semitransparent-grey
+#' @param level_CI Credible interval level, for a specified value an equal-tailed, 
+#' level_CI% credible interval will be plotted which has ((1-level_CI*100)/2)% 
+#' posterior probability below and above the interval. 
+#' E.g. level_CI=.95 (the default) plots a 95% credible interval.
 #' @param ... other graphical parameters for the plot function. Default ones will be used if not provided.
 #' 
 #' @description
 #' This function plots the baseline hazard rate at the midpoint for each interval,
 #' and it also marks the number at risk at the bottom corresponding to the ticks of the time axis.
-#' It uses the posterior draws of hazard rate from all chains together.
 #' To enable the plot with two axes to show both time and the number at risk but also with a clean display,
 #' we limit the freedom of changing any graphical parameters, i.e. some will take the default values overriding `NULL`.
 #' If the users don't like the output format, they can extract the parameters from `bayeshaz` object directly
@@ -19,23 +22,34 @@
 #' 
 #' @examples
 #' # example demo
-#' df_veteran <- survival::veteran
-#' df_veteran$trt <- ifelse(df_veteran$trt == 2, 1, 0)
-#' post_draws <- bayeshaz(d = df_veteran,
-#'    reg_formula = Surv(time, status) ~ trt,
-#'    A = 'trt')
-#' plot(post_draws)
+#' ## Continued from ?bayeshaz
+#' set.seed(1)
+#' post_draws_ind = bayeshaz(
+#'   d = data, ## data set
+#'   reg_formula = Surv(y, delta) ~ A,
+#'   num_partitions = 100, 
+#'   model = 'independent',
+#'   sigma = 3,
+#'   A = 'A',
+#'   warmup = 1000,
+#'   post_iter = 1000)
+#' plot(post_draws_ind, ylim=c(0,.11),
+#'   xlim=c(0, 900),
+#'   type='p',
+#'   main='Independent Prior Process',
+#'   ylab = 'Baseline Hazard Rate', 
+#'   xlab = 'Time (days)')
 ## usethis namespace: start
 ## usethis namespace: end
 #' @export
 
 plot.bayeshaz = function(bayeshaz_object, col_hazard = "black", 
-                         col_CI = rgb(0.5, 0.5, 0.5, 0.5), 
+                         col_CI = rgb(0.5, 0.5, 0.5, 0.5), level_CI=.95,
                          type = 's', pch = 20, xlim = NULL, ylim = NULL,
                          xlab = "Time", ylab = NULL, main = NULL, cex = 0.5,
                          lwd = 1.5,
                          ...){
-  # extract the key components from the object
+ # extract the key components from the object
   hazard <- do.call(rbind, bayeshaz_object$haz_draws)
   
   partitions <- bayeshaz_object$partition
@@ -57,8 +71,10 @@ plot.bayeshaz = function(bayeshaz_object, col_hazard = "black",
   
   ## posterior mean/ 95% interval
   bslhaz_mean = colMeans(hazard)
-  bslhaz_lwr = apply(hazard, 2, quantile, probs=.025)
-  bslhaz_upr = apply(hazard, 2, quantile, probs=.975)
+  
+  tail_prob = (1-level_CI) / 2
+  bslhaz_lwr = apply(hazard, 2, quantile, probs= tail_prob )
+  bslhaz_upr = apply(hazard, 2, quantile, probs= 1 - tail_prob )
   
   # graphic parameters checking for necessary ones
   if (is.null(xlim)) xlim = c(0, endpoint)
@@ -86,4 +102,3 @@ plot.bayeshaz = function(bayeshaz_object, col_hazard = "black",
   par(mar = c(5.1, 4.1, 4.1, 2.1),
       mgp = c(3,1,0))
 }
-

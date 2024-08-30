@@ -70,4 +70,10 @@ binary variable before creating the \code{bayeshaz} object.
 }
 \examples{
 # example demo
+## Continued from ?bayeshaz
+gcomp_res = bayesgcomp(post_draws_ar1_adj, ## bayeshaz output 
+                       ref = 0, ## treatment reference group
+                       B = 1000, ## monte carlo iterations in g-comp
+                       estimand = "prob"
+                       )
 }

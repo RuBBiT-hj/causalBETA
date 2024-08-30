@@ -13,6 +13,7 @@ create_bayeshaz(
   outcome,
   model,
   sigma,
+  chains,
   partition,
   midpoint,
   haz_draws,
@@ -34,6 +35,8 @@ This also decides the formula will be used the function to check positivity over
 \item{model}{a character variable recording which mode of model was used}
 
 \item{sigma}{a numeric variable as the user-defined standard deviation for beta coefficients prior}
+
+\item{chains}{the number of chains for sampling, the default is 1}
 
 \item{partition}{a numeric vector for the paritition}
 

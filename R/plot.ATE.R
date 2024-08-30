@@ -43,10 +43,10 @@ plot.ATE = function(ATE_object, mode = "ATE",
                     ...){
   # extract
   t <- ATE_object$t
-  surv_1 <- ATE_object$surv_ref
-  surv_2 <- ATE_object$surv_trt
+  surv_1 <- do.call(rbind, ATE_object$surv_ref)
+  surv_2 <- do.call(rbind, ATE_object$surv_trt)
   ref <- ATE_object$ref
-  ATE <- ATE_object$ATE
+  ATE <- do.call(rbind, ATE_object$ATE)
   trt_values <- ATE_object$trt_values
   estimand <- ATE_object$estimand
   

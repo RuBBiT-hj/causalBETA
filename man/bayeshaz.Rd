@@ -10,7 +10,7 @@ bayeshaz(
   A,
   model = "AR1",
   sigma = 3,
-  num_partitions = 100,
+  num_partition = 100,
   warmup = 1000,
   post_iter = 1000,
   chains = 1
@@ -30,7 +30,7 @@ default is "AR1" and the other option is "independent"}
 
 \item{sigma}{a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3}
 
-\item{num_partitions}{a numeric variable as the number of partitions of the study time, the default is 100}
+\item{num_partition}{a numeric variable as the number of intervals in the partition, the default is 100}
 
 \item{warmup}{a numeric variable as the number of warmup in MCMC, the default is 1000}
 
@@ -52,6 +52,7 @@ An object of class \code{bayeshaz} is a list containing at least the following c
 \item \code{outcome}, the name of the outcome variable
 \item \code{model}, the type of the model used
 \item \code{sigma}, the sigma specified
+\item \code{chains}, the number of chains for sampling
 \item \code{partition}, the partition vector
 \item \code{midpoint}, the midpoints of intervals
 \item \code{haz_draws}, a \code{mcmc.list} object storing the baseline hazard rate from each posterior draws
@@ -78,11 +79,21 @@ The default is 3, and only values between 0 and 3 are accepted since 3 is alread
 }
 \examples{
 # example demo
-df_veteran <- survival::veteran
-df_veteran$trt <- ifelse(df_veteran$trt == 2, 1, 0)
-post_draws <- bayeshaz(d = df_veteran,
-   reg_formula = Surv(time, status) ~ trt,
-   A = 'trt')
+data = survival :: veteran
+data$A = 1*(data$trt==2)
+## rename variables
+var_names = colnames(data)
+colnames(data)[var_names=='status'] = 'delta'
+colnames(data)[var_names=='time'] = 'y'
+formula1 <- Surv(y, delta) ~ A + age + karno + celltype
+post_draws_ar1_adj = bayeshaz(
+  d = data,
+  reg_formula = formula1 ,
+  model = 'AR1',
+  A = 'A',
+  warmup = 1000, 
+  post_iter = 1000,
+  chains = 1)
 }
 \references{
 Oganisian, Arman, Anthony Girard, Jon A. Steingrimsson, and Patience Moyo.

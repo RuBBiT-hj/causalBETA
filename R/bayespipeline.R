@@ -9,7 +9,7 @@
 #' @param model a character variable that tells the stan model used to implement the Bayesian piece-wise exponential model, 
 #' default is "AR1" and the other option is "independent"
 #' @param sigma a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3
-#' @param num_partitions a numeric variable as the number of partitions of the study time, the default is 100
+#' @param num_partition a numeric variable as the number of intervals in the partition, the default is 100
 #' @param warmup a numeric variable as the number of warmup in MCMC, the default is 1000
 #' @param post_iter a numeric variable as the number of iterations to draw from the posterior, the default is 1000
 #' @param ref the reference value of the treatment, so it should be one of the treatment values
@@ -34,6 +34,17 @@
 #'
 #' @examples
 #' # example demo
+#' data = survival :: veteran
+#' data$A = 1*(data$trt==2)
+#' ## rename variables
+#' var_names = colnames(data)
+#' colnames(data)[var_names=='status'] = 'delta'
+#' colnames(data)[var_names=='time'] = 'y'
+#' results <- bayespipeline(data,
+#'   reg_formula = Surv(y, delta) ~ A,
+#'   A = 'A',
+#'   ref = 0
+#' )
 ## usethis namespace: start
 #' @import survival
 #' @importFrom mets rpch
@@ -42,7 +53,7 @@
 #' @export
 
 bayespipeline <- function(d, reg_formula, A, model = "AR1", sigma = 3, 
-                          num_partitions=100, warmup=1000, post_iter=1000,
+                          num_partition=100, warmup=1000, post_iter=1000,
                           chains = 1,
                           ref, B = 1000,
                           estimand = "prob", 
@@ -53,10 +64,11 @@ bayespipeline <- function(d, reg_formula, A, model = "AR1", sigma = 3,
                              A = A,
                              model = model,
                              sigma = sigma,
-                             num_partitions = num_partitions,
+                             num_partition = num_partition,
                              warmup = warmup,
                              post_iter = post_iter,
                              chains = chains)
+  
   ATE_object = bayesgcomp(bayeshaz_object,
                           ref = ref,
                           B = B,
@@ -64,6 +76,7 @@ bayespipeline <- function(d, reg_formula, A, model = "AR1", sigma = 3,
                           t = t, 
                           threshold = threshold,
                           ...)
+  
   plot(ATE_object)
   return(list(bayeshaz_object, ATE_object))
 }

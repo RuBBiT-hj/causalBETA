@@ -10,7 +10,7 @@ bayespipeline(
   A,
   model = "AR1",
   sigma = 3,
-  num_partitions = 100,
+  num_partition = 100,
   warmup = 1000,
   post_iter = 1000,
   chains = 1,
@@ -36,7 +36,7 @@ default is "AR1" and the other option is "independent"}
 
 \item{sigma}{a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3}
 
-\item{num_partitions}{a numeric variable as the number of partitions of the study time, the default is 100}
+\item{num_partition}{a numeric variable as the number of intervals in the partition, the default is 100}
 
 \item{warmup}{a numeric variable as the number of warmup in MCMC, the default is 1000}
 
@@ -72,4 +72,15 @@ part of the analysis. For details, check the documentation for these two functio
 }
 \examples{
 # example demo
+data = survival :: veteran
+data$A = 1*(data$trt==2)
+## rename variables
+var_names = colnames(data)
+colnames(data)[var_names=='status'] = 'delta'
+colnames(data)[var_names=='time'] = 'y'
+results <- bayespipeline(data,
+  reg_formula = Surv(y, delta) ~ A,
+  A = 'A',
+  ref = 0
+)
 }
