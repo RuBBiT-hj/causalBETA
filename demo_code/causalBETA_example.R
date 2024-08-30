@@ -23,7 +23,7 @@ colnames(data)[var_names=='time'] = 'y'
 set.seed(1) ## set seed so MCMC draws are reproducible
 post_draws_ind = bayeshaz(d = data, ## data set
                           reg_formula = Surv(y, delta) ~ A, ## hazard regression formula
-                          num_partitions = 100, ## number of partitions, K
+                          num_partition = 100, ## number of partitions, K
                           model = 'independent', ## prior on baseline hazard
                           sigma = 3, ## prior standard deviation for coefficients 
                           A = 'A', ## column name of treatment variable in d
