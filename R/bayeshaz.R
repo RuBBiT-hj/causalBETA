@@ -10,7 +10,7 @@
 #' @param A a character variable that specifies the name of the treatment
 #' @param model a character variable that tells the stan model used to implement the Bayesian piece-wise exponential model, 
 #' default is "AR1" and the other option is "independent"
-#' @param sigma a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3
+#' @param priorSD a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3
 #' @param num_partition a numeric variable as the number of intervals in the partition, the default is 100
 #' @param warmup a numeric variable as the number of warmup in MCMC, the default is 1000
 #' @param post_iter a numeric variable as the number of iterations to draw from the posterior, the default is 1000
@@ -40,7 +40,7 @@
 #' * `time`, the name of the time variable
 #' * `outcome`, the name of the outcome variable
 #' * `model`, the type of the model used
-#' * `sigma`, the sigma specified
+#' * `priorSD`, the prior standard deviation specified
 #' * `chains`, the number of chains for sampling
 #' * `partition`, the partition vector
 #' * `midpoint`, the midpoints of intervals
@@ -77,7 +77,7 @@
 ## usethis namespace: end
 #' @export
 
-bayeshaz = function(data, reg_formula, A, model = "AR1", sigma = 3, 
+bayeshaz = function(data, reg_formula, A, model = "AR1", priorSD = 3, 
                     num_partition=100, warmup=1000, post_iter=1000,
                     chains = 1){
   ## dependency checkings
@@ -97,11 +97,11 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", sigma = 3,
   # the address of the stan files
   path_stan <- paste0(.libPaths(), "/causalBETA/data/")
   
-  # check for sigma value
-  if (sigma > 3 | sigma <= 0) {
-    warning("sigma must be not less than 0 and less than 3. Forced to be 3\n")
-    ## force sigma to be 3
-    sigma <- 3
+  # check for priorSD value
+  if (priorSD > 3 | priorSD <= 0) {
+    warning("Prior SD must be not less than 0 and less than 3. Forced to be 3\n")
+    ## force priorSD to be 3
+    priorSD <- 3
   }
   
   
@@ -170,7 +170,7 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", sigma = 3,
                  off_set  = dsplit$offset, 
                  interval_num = dsplit$interval_num,
                  xmat = xmat,
-                 sigma_beta = sigma)
+                 sigma_beta = priorSD)
     mod = cmdstan_model(paste0(path_stan, "hazard_mod_v1.stan"))
   } else if (model == "AR1"){ # a different variance for beta coefficients
 
@@ -181,7 +181,7 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", sigma = 3,
                  off_set  = dsplit$offset, 
                  interval_num = dsplit$interval_num,
                  xmat = xmat,
-                 sigma_beta = sigma)
+                 sigma_beta = priorSD)
     mod = cmdstan_model(paste0(path_stan, "hazard_mod_v2.stan"))
   } else { # the model input is not correct
     stop("The model input is not valid")
@@ -209,7 +209,7 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", sigma = 3,
   draws = create_bayeshaz(data = data, formula = reg_formula, treatment = A,
                           covariates = covariates,
                           time = y_name, outcome = delta_name,
-                          model = model, sigma = sigma, 
+                          model = model, priorSD = priorSD, 
                           chains = chains,
                           partition = partition, midpoint = xv,
                           haz_draws = haz_draws, beta_draws=beta_draws)

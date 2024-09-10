@@ -9,7 +9,7 @@ bayespipeline(
   reg_formula,
   A,
   model = "AR1",
-  sigma = 3,
+  priorSD = 3,
   num_partition = 100,
   warmup = 1000,
   post_iter = 1000,
@@ -34,7 +34,7 @@ This also decides the formula will be used the function to check positivity over
 \item{model}{a character variable that tells the stan model used to implement the Bayesian piece-wise exponential model,
 default is "AR1" and the other option is "independent"}
 
-\item{sigma}{a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3}
+\item{priorSD}{a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3}
 
 \item{num_partition}{a numeric variable as the number of intervals in the partition, the default is 100}
 

@@ -12,7 +12,7 @@ create_bayeshaz(
   time,
   outcome,
   model,
-  sigma,
+  priorSD,
   chains,
   partition,
   midpoint,
@@ -36,7 +36,7 @@ This also decides the formula will be used the function to check positivity over
 
 \item{model}{a character variable recording which mode of model was used}
 
-\item{sigma}{a numeric variable as the user-defined standard deviation for beta coefficients prior}
+\item{priorSD}{a numeric variable as the user-defined standard deviation for beta coefficients prior}
 
 \item{chains}{the number of chains for sampling, the default is 1}
 

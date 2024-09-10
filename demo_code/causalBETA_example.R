@@ -25,7 +25,7 @@ post_draws_ind = bayeshaz(data = data, ## data set
                           reg_formula = Surv(y, delta) ~ A, ## hazard regression formula
                           num_partition = 100, ## number of partitions, K
                           model = 'independent', ## prior on baseline hazard
-                          sigma = 3, ## prior standard deviation for coefficients 
+                          priorSD = 3, ## prior standard deviation for coefficients 
                           A = 'A', ## column name of treatment variable in data
                           warmup = 1000, ## number of warmup/burnin iterations
                           post_iter = 1000, ## number of post-warmup iterations to output

@@ -8,7 +8,7 @@
 #' @param A a character variable that specifies the name of the treatment
 #' @param model a character variable that tells the stan model used to implement the Bayesian piece-wise exponential model, 
 #' default is "AR1" and the other option is "independent"
-#' @param sigma a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3
+#' @param priorSD a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3
 #' @param num_partition a numeric variable as the number of intervals in the partition, the default is 100
 #' @param warmup a numeric variable as the number of warmup in MCMC, the default is 1000
 #' @param post_iter a numeric variable as the number of iterations to draw from the posterior, the default is 1000
@@ -52,7 +52,7 @@
 ## usethis namespace: end
 #' @export
 
-bayespipeline <- function(data, reg_formula, A, model = "AR1", sigma = 3, 
+bayespipeline <- function(data, reg_formula, A, model = "AR1", priorSD = 3, 
                           num_partition=100, warmup=1000, post_iter=1000,
                           chains = 1,
                           ref, B = 1000,
@@ -63,7 +63,7 @@ bayespipeline <- function(data, reg_formula, A, model = "AR1", sigma = 3,
                              reg_formula = reg_formula, 
                              A = A,
                              model = model,
-                             sigma = sigma,
+                             priorSD = priorSD,
                              num_partition = num_partition,
                              warmup = warmup,
                              post_iter = post_iter,
