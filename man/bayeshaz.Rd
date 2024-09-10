@@ -5,7 +5,7 @@
 \title{Bayesian Piece-Wise Exponential Model}
 \usage{
 bayeshaz(
-  d,
+  data,
   reg_formula,
   A,
   model = "AR1",
@@ -17,7 +17,7 @@ bayeshaz(
 )
 }
 \arguments{
-\item{d}{data, a data frame in survival format. Categorical variables should be
+\item{data}{data, a data frame in survival format. Categorical variables should be
 transformed into dummy variables}
 
 \item{reg_formula}{a formula object that specifies the formula for the poisson regression.
@@ -87,7 +87,7 @@ colnames(data)[var_names=='status'] = 'delta'
 colnames(data)[var_names=='time'] = 'y'
 formula1 <- Surv(y, delta) ~ A + age + karno + celltype
 post_draws_ar1_adj = bayeshaz(
-  d = data,
+  data = data,
   reg_formula = formula1 ,
   model = 'AR1',
   A = 'A',

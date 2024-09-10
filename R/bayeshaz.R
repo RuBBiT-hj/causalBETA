@@ -3,7 +3,7 @@
 #' Perform a bayesian piece-wise exponential model on the given survival data, 
 #' and this function implements it by an equivalent poisson regression in MCMC.
 #' 
-#' @param d data, a data frame in survival format. Categorical variables should be
+#' @param data data, a data frame in survival format. Categorical variables should be
 #' transformed into dummy variables
 #' @param reg_formula a formula object that specifies the formula for the poisson regression.
 #' This also decides the formula will be used the function to check positivity overlap.
@@ -64,7 +64,7 @@
 #' colnames(data)[var_names=='time'] = 'y'
 #' formula1 <- Surv(y, delta) ~ A + age + karno + celltype
 #' post_draws_ar1_adj = bayeshaz(
-#'   d = data,
+#'   data = data,
 #'   reg_formula = formula1 ,
 #'   model = 'AR1',
 #'   A = 'A',
@@ -77,7 +77,7 @@
 ## usethis namespace: end
 #' @export
 
-bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3, 
+bayeshaz = function(data, reg_formula, A, model = "AR1", sigma = 3, 
                     num_partition=100, warmup=1000, post_iter=1000,
                     chains = 1){
   ## dependency checkings
@@ -117,8 +117,8 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   y_name =substr(outcome_char, 6, gregexpr(",", outcome_char)[[1]][1] - 1  )
   delta_name = substr(outcome_char, gregexpr(",", outcome_char)[[1]][1]+1 ,  gregexpr(")", outcome_char)[[1]][1]-1 )
   
-  y = d[, y_name]
-  delta = d[,delta_name]
+  y = data[, y_name]
+  delta = data[,delta_name]
   
   # covariates
   covar_char = gsub(" ", "", as.character(reg_formula[3]))
@@ -135,7 +135,7 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   #reg_formula = as.formula(paste0(outcome, paste0(covar_names, collapse = "+"), "+", paste0(trt_names, collapse = "+") ) )
   
   ## create long-form data set
-  dsplit = survival::survSplit(data = d, formula = reg_formula, cut = partition, id='id')
+  dsplit = survival::survSplit(data = data, formula = reg_formula, cut = partition, id='id')
   
   dsplit$offset = dsplit[,y_name] - dsplit$tstart ## amount of survival time in each interval
   dsplit$interval = as.factor(dsplit$tstart) ## factor interval
@@ -151,10 +151,10 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   covariates = covariates[covariates != trt_names]
   
   # # model matrix (one hot encoding)
-  d =  model.matrix(formula(
+  data =  model.matrix(formula(
     paste(paste(as.character(reg_formula[c(1,3)]), collapse = ""), "+", y_name, "+", delta_name)
-  ), data = d)
-  d = as.data.frame(d[, -1])
+  ), data = data)
+  data = as.data.frame(data[, -1])
   
   
   ## create list of data to pass to Stan model 
@@ -206,7 +206,7 @@ bayeshaz = function(d, reg_formula, A, model = "AR1", sigma = 3,
   
   xv = (partition[-1] - .5*mean(diff(partition)) ) ## midpoint of each interval
   
-  draws = create_bayeshaz(data = d, formula = reg_formula, treatment = A,
+  draws = create_bayeshaz(data = data, formula = reg_formula, treatment = A,
                           covariates = covariates,
                           time = y_name, outcome = delta_name,
                           model = model, sigma = sigma, 

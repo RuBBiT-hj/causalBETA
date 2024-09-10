@@ -1,7 +1,7 @@
 #' causaBETA pipeline
 #' 
 #' Conduct the causalBETA pipeline in a row: bayesian piece-wise exponential modeling and the following average treatment effect estimation
-#' @param d data, a data frame in survival format. Categorical variables should be
+#' @param data data, a data frame in survival format. Categorical variables should be
 #' transformed into dummy variables
 #' @param reg_formula a formula object that specifies the formula for the poisson regression.
 #' This also decides the formula will be used the function to check positivity overlap.
@@ -52,14 +52,14 @@
 ## usethis namespace: end
 #' @export
 
-bayespipeline <- function(d, reg_formula, A, model = "AR1", sigma = 3, 
+bayespipeline <- function(data, reg_formula, A, model = "AR1", sigma = 3, 
                           num_partition=100, warmup=1000, post_iter=1000,
                           chains = 1,
                           ref, B = 1000,
                           estimand = "prob", 
                           t = NULL, 
                           threshold = NULL, ...){
-  bayeshaz_object = bayeshaz(d = d,
+  bayeshaz_object = bayeshaz(data = data,
                              reg_formula = reg_formula, 
                              A = A,
                              model = model,

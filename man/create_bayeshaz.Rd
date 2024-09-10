@@ -21,6 +21,8 @@ create_bayeshaz(
 )
 }
 \arguments{
+\item{data}{data, a data frame in survival format}
+
 \item{formula}{a formula object that specifies the formula for the poisson regression.
 This also decides the formula will be used the function to check positivity overlap.}
 
@@ -45,8 +47,6 @@ This also decides the formula will be used the function to check positivity over
 \item{haz_draws}{a \code{mcmc.list} for the baseline hazard rates from posterior draws}
 
 \item{beta_draws}{a \code{mcmc.list} for the beta coefficients estimated from posterior draws}
-
-\item{d}{data, a data frame in survival format}
 }
 \value{
 It returns an object of class \code{bayeshaz}

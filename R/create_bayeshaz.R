@@ -4,7 +4,7 @@
 #' exponential model and the posterior parameters. This constructor function is hidden
 #' from the users
 #' 
-#' @param d data, a data frame in survival format
+#' @param data data, a data frame in survival format
 #' @param formula a formula object that specifies the formula for the poisson regression.
 #' This also decides the formula will be used the function to check positivity overlap.
 #' @param treatment a character variable that specifies the name of the treatment

@@ -5,7 +5,7 @@
 \title{causaBETA pipeline}
 \usage{
 bayespipeline(
-  d,
+  data,
   reg_formula,
   A,
   model = "AR1",
@@ -23,7 +23,7 @@ bayespipeline(
 )
 }
 \arguments{
-\item{d}{data, a data frame in survival format. Categorical variables should be
+\item{data}{data, a data frame in survival format. Categorical variables should be
 transformed into dummy variables}
 
 \item{reg_formula}{a formula object that specifies the formula for the poisson regression.

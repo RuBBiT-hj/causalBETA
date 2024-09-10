@@ -21,12 +21,12 @@ colnames(data)[var_names=='time'] = 'y'
 ###       Run Model with independent hazards across increments               ###
 #------------------------------------------------------------------------------#
 set.seed(1) ## set seed so MCMC draws are reproducible
-post_draws_ind = bayeshaz(d = data, ## data set
+post_draws_ind = bayeshaz(data = data, ## data set
                           reg_formula = Surv(y, delta) ~ A, ## hazard regression formula
                           num_partition = 100, ## number of partitions, K
                           model = 'independent', ## prior on baseline hazard
                           sigma = 3, ## prior standard deviation for coefficients 
-                          A = 'A', ## column name of treatment variable in d
+                          A = 'A', ## column name of treatment variable in data
                           warmup = 1000, ## number of warmup/burnin iterations
                           post_iter = 1000, ## number of post-warmup iterations to output
                           chains = 1)
@@ -35,7 +35,7 @@ post_draws_ind = bayeshaz(d = data, ## data set
 ###          Run Model with Smoothed hazards across increments               ###
 #------------------------------------------------------------------------------#
 set.seed(122132)
-post_draws_ar1 = bayeshaz(d = data, ## data set
+post_draws_ar1 = bayeshaz(data = data, ## data set
                           reg_formula = Surv(y, delta) ~ A,
                           model = 'AR1', ## choice of smoothing prior - independent or AR1 smoothing
                           A = 'A', ## which variable is treatment
@@ -79,7 +79,7 @@ set.seed(123) ## set seed so MCMC draws are reproducible
 
 formula1 = Surv(y, delta) ~ A + age + karno + celltype
 
-post_draws_ar1_adj = bayeshaz(d = data, 
+post_draws_ar1_adj = bayeshaz(data = data, 
                                reg_formula = formula1,
                                model = 'AR1',
                                A = 'A', 
@@ -137,7 +137,7 @@ dev.off()
 n_chains = 3
 
 set.seed(1)
-post_draws = bayeshaz(d = data, 
+post_draws = bayeshaz(data = data, 
                       reg_formula = formula1,
                       model = 'AR1',
                       A = 'A', 

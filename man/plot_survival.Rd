@@ -50,5 +50,5 @@ If the users want to make their own new plot, they can utilizes the returned mat
 \examples{
 # example demo
 # after getting the posterior draw object
-pred_survival <- plot_survival(post_draws, df_veteran[1, ])
+pred_survival <- plot_survival(post_draws_ar1_adj, df_veteran[1, ])
 }
