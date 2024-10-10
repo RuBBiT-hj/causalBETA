@@ -9,3 +9,5 @@ run_survival_model.R
 .Rproj.user/*
 backup
 Backup/
+.Rhistory
+.RData
