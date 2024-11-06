@@ -1,6 +1,6 @@
 #' Bayesian Piece-Wise Exponential Model
 #' 
-#' Perform a bayesian piece-wise exponential model on the given survival data, 
+#' Perform a Bayesian piece-wise exponential model on the given survival data, 
 #' and this function implements it by an equivalent poisson regression in MCMC.
 #' 
 #' @param data data, a data frame in survival format. Categorical variables should be
@@ -48,11 +48,13 @@
 #' * `beta_draws`, a `mcmc.list` object storing the beta coefficients estimated from each posterior draws
 #' 
 #' The `mcmc.list` is an object type from package `coda` and helps users check convergence.
+
 #' 
 #' @references
-#' Oganisian, Arman, Anthony Girard, Jon A. Steingrimsson, and Patience Moyo.
-#' "A Bayesian Framework for Causal Analysis of Recurrent Events in Presence of Immortal Risk."
-#' arXiv preprint arXiv:2304.03247 (2023).
+#' Ji, Han, and Oganisian, Arman. 2023. 
+#' "causalBETA: An R Package for Bayesian Semiparametric Causal Inference with 
+#' Event-Time Outcomes. *arXiv:2310.12358 \[Stat\]*, October. 
+#' \url{http://arxiv.org/abs/2310.12358}.
 #' 
 #' @examples
 #' # example demo
@@ -71,8 +73,10 @@
 #'   warmup = 1000, 
 #'   post_iter = 1000,
 #'   chains = 1)
+
 ## usethis namespace: start
 #' @import cmdstanr
+#' @importFrom coda mcmc
 #' @importFrom survival survSplit
 ## usethis namespace: end
 #' @export
@@ -104,6 +108,9 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", priorSD = 3,
     priorSD <- 3
   }
   
+  ## num_partitions actually creates num_partitions - 1 intervals
+  ## add one to adjust
+  num_partitions = num_partitions + 1
   
   ## user-specified intervention variable
   trt_names = A
@@ -178,6 +185,7 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", priorSD = 3,
                  interval_num = dsplit$interval_num,
                  xmat = xmat,
                  sigma_beta = priorSD)
+
     mod = cmdstan_model(paste0(path_stan, "hazard_mod_v1.stan"))
   } else if (model == "AR1"){ # a different variance for beta coefficients
 
@@ -191,7 +199,7 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", priorSD = 3,
                  sigma_beta = priorSD)
     mod = cmdstan_model(paste0(path_stan, "hazard_mod_v2.stan"))
   } else { # the model input is not correct
-    stop("The model input is not valid")
+    stop("The model input is not valid. Must be either `independent' or 'AR1' ")
   }
   
   # stacking chains

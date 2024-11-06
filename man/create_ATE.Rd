@@ -7,9 +7,9 @@
 create_ATE(surv_ref, surv_trt, ref, trt_values, ATE, estimand, t, threshold)
 }
 \arguments{
-\item{surv_ref}{a numeric matrix for the posterior estimates for the reference}
+\item{surv_ref}{a \code{mcmc.list} object storing the marginal survival probability for the reference}
 
-\item{surv_trt}{a numeric matrix for the posterior estimates for the treatment}
+\item{surv_trt}{a \code{mcmc.list} object storing the marginal survival probability for the treatment}
 
 \item{ref}{the value of the reference treatment}
 

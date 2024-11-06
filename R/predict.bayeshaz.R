@@ -21,6 +21,13 @@
 #' 
 #' @examples
 #' # example demo
+#' ## Continued from ?bayeshaz
+#' predict(post_draws_ar1_adj,
+#'         x = data[1, c("A", "age", "karno", 
+#'                       "celltypesquamous",
+#'                       "celltypesmallcell",
+#'                       "celltypeadeno")],
+#'         func = mean)
 ## usethis namespace: start
 #' @import survival
 #' @importFrom mets rpch

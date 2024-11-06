@@ -62,7 +62,7 @@ An object of class \code{bayeshaz} is a list containing at least the following c
 The \code{mcmc.list} is an object type from package \code{coda} and helps users check convergence.
 }
 \description{
-Perform a bayesian piece-wise exponential model on the given survival data,
+Perform a Bayesian piece-wise exponential model on the given survival data,
 and this function implements it by an equivalent poisson regression in MCMC.
 }
 \details{
@@ -96,7 +96,8 @@ post_draws_ar1_adj = bayeshaz(
   chains = 1)
 }
 \references{
-Oganisian, Arman, Anthony Girard, Jon A. Steingrimsson, and Patience Moyo.
-"A Bayesian Framework for Causal Analysis of Recurrent Events in Presence of Immortal Risk."
-arXiv preprint arXiv:2304.03247 (2023).
+Ji, Han, and Oganisian, Arman. 2023.
+"causalBETA: An R Package for Bayesian Semiparametric Causal Inference with
+Event-Time Outcomes. \emph{arXiv:2310.12358 [Stat]}, October.
+\url{http://arxiv.org/abs/2310.12358}.
 }

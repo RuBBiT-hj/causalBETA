@@ -33,4 +33,11 @@ It is required that the number and the order of the variables matches the model 
 }
 \examples{
 # example demo
+## Continued from ?bayeshaz
+predict(post_draws_ar1_adj,
+        x = data[1, c("A", "age", "karno", 
+                      "celltypesquamous",
+                      "celltypesmallcell",
+                      "celltypeadeno")],
+        func = mean)
 }

@@ -13,6 +13,7 @@
   col_CI_ATE = rgb(0.5, 0.5, 0.5, 0.5),
   col_CI_0 = rgb(0.9, 0.5, 0.5, 0.4),
   col_CI_1 = rgb(0.5, 0.5, 0.9, 0.4),
+  level_CI = 0.95,
   xlim = NULL,
   ylim = NULL,
   type = "o",
@@ -36,6 +37,11 @@ black, red, and blue respectively}
 
 \item{col_CI_ATE, col_CI_0, col_CI_1}{the colors for the confidence interval of ATE, control and treatment.
 The default are semitransparent grey, red, and blue}
+
+\item{level_CI}{Credible interval level, for a specified value an equal-tailed,
+level_CI\% credible interval will be plotted which has ((1-level_CI*100)/2)\%
+posterior probability below and above the interval.
+E.g. level_CI=.95 (the default) plots a 95\% credible interval.}
 
 \item{...}{other other graphical parameters for the plot function. Default ones will be used if not provided.}
 }
@@ -61,4 +67,6 @@ The default title is \verb{Marginal Survival Curves for Both Treatments}.
 }
 \examples{
 # example demo
+## Continued from ?bayesgcomp
+plot(gcomp_res) ## ATE
 }
