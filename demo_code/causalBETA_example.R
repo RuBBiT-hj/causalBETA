@@ -13,10 +13,6 @@ var_names = colnames(data)
 colnames(data)[var_names=='status'] = 'delta'
 colnames(data)[var_names=='time'] = 'y'
 
-
-## append one-hot encoded celltypes
-data = cbind(data, model.matrix(data=data, ~ -1 + celltype))
-
 #------------------------------------------------------------------------------#
 ###       Run Unadjusted Analyses                                            ###
 #------------------------------------------------------------------------------#
@@ -25,20 +21,21 @@ data = cbind(data, model.matrix(data=data, ~ -1 + celltype))
 ###       Run Model with independent hazards across increments               ###
 #------------------------------------------------------------------------------#
 set.seed(1) ## set seed so MCMC draws are reproducible
-post_draws_ind = bayeshaz(d = data, ## data set
+post_draws_ind = bayeshaz(data = data, ## data set
                           reg_formula = Surv(y, delta) ~ A, ## hazard regression formula
-                          num_partitions = 100, ## number of partitions, K
+                          num_partition = 100, ## number of partitions, K
                           model = 'independent', ## prior on baseline hazard
-                          sigma = 3, ## prior standard deviation for coefficients 
-                          A = 'A', ## column name of treatment variable in d
+                          priorSD = 3, ## prior standard deviation for coefficients 
+                          A = 'A', ## column name of treatment variable in data
                           warmup = 1000, ## number of warmup/burnin iterations
-                          post_iter = 1000) ## number of post-warmup iterations to output
+                          post_iter = 1000, ## number of post-warmup iterations to output
+                          chains = 1)
 
 #------------------------------------------------------------------------------#
 ###          Run Model with Smoothed hazards across increments               ###
 #------------------------------------------------------------------------------#
 set.seed(122132)
-post_draws_ar1 = bayeshaz(d = data, ## data set
+post_draws_ar1 = bayeshaz(data = data, ## data set
                           reg_formula = Surv(y, delta) ~ A,
                           model = 'AR1', ## choice of smoothing prior - independent or AR1 smoothing
                           A = 'A', ## which variable is treatment
@@ -78,11 +75,11 @@ dev.off()
 #------------------------------------------------------------------------------#
 ###         Adjusted Hazard Models Curves                                    ###
 #------------------------------------------------------------------------------#
-set.seed(1123) ## set seed so MCMC draws are reproducible
+set.seed(123) ## set seed so MCMC draws are reproducible
 
-formula1 = Surv(y, delta) ~ A + age + karno + celltypesquamous + celltypesmallcell + celltypeadeno
+formula1 = Surv(y, delta) ~ A + age + karno + celltype
 
-post_draws_ar1_adj = bayeshaz(d = data, 
+post_draws_ar1_adj = bayeshaz(data = data, 
                                reg_formula = formula1,
                                model = 'AR1',
                                A = 'A', 
@@ -94,7 +91,8 @@ summary(eha::pchreg(data=data,cuts = post_draws_ar1_adj$partition,formula = form
 set.seed(32123)
 gcomp_res = bayesgcomp(post_draws_ar1_adj, ## posterior draws of hazard model
                        ref = 0, ## treatment reference group
-                       B = 1000) ## monte carlo iterations in g-comp
+                       B = 1000, ## monte carlo iterations in g-comp
+                       estimand = "prob") ## Posterior Survival Prob 
 
 summary( gcomp_res$ATE, quantiles = c(.025, .975) )
 
@@ -138,43 +136,38 @@ dev.off()
 ## run three chains:
 n_chains = 3
 
-## create an empty list which will contain the three chains/sets of draws
-ATE_chains = coda::mcmc.list()
-
 set.seed(1)
-for(chain in 1:n_chains){
-        ## obtain posterior draw of survival distribution parameters
-        post_draws = bayeshaz(d = data, 
-                              reg_formula = formula1,
-                              model = 'AR1',
-                              A = 'A', 
-                              warmup = 2000, 
-                              post_iter = 1000) ## output 1000 draws
-        
-        ## run g-computation to compute 1yr and 2yr survival rate difference
-        gcomp_res = bayesgcomp(post_draws_ar1_adj , ref = 0, t = c(365, 2*365) )
-        
-        ## store posterior draws (1000 by 2) matrix
-        ATE_chains[[chain]] = gcomp_res$ATE
-}
+post_draws = bayeshaz(data = data, 
+                      reg_formula = formula1,
+                      model = 'AR1',
+                      A = 'A', 
+                      warmup = 2000, 
+                      post_iter = 1000, ## output 1000 draws
+                      chains = n_chains)
+
+ATE_chains = bayesgcomp(post_draws,
+                        ref = 0,
+                        B = 1000,
+                        estimand = "prob",
+                        t = c(365, 2*365))
 
 ## summarize posterior draws of the three chains;
 ## compute posterior mean and 95% credible interval endpoints
 ## for 1-yr and 2-yr survival rate differences
-summary(ATE_chains, quantiles = c(.025, .975))
+summary(ATE_chains$ATE, quantiles = c(.025, .975))
 
 ## plot traceplots and density
 
 png(filename = "traceplots.png", width = 700, height = 500)
-plot(ATE_chains, ask = F)
+plot(ATE_chains$ATE, ask = F)
 dev.off()
 
 ## at each iteration, plot median, .025, and .975 percentiled 
 ## of previous iterations - these quantiles should stabilize over iterations.
-coda::cumuplot(ATE_chains)
+coda::cumuplot(ATE_chains$ATE)
 
 ## if converged, gelman-rubin diagnostic Upper C.I. should be near 1
-coda::gelman.diag(ATE_chains)
+coda::gelman.diag(ATE_chains$ATE)
 
 #------------------------------------------------------------------------------#
 ###         Monte Carlo Iterations Checks                                    ###
@@ -195,11 +188,11 @@ for(B in B_vec){
 
 png(filename = 'density.png', width = 700, height = 500)
 par(mfrow=c(1,1))
-plot(density(ATE_list[[1]]), ylim=c(0, 20), col='red', 
+plot(density(ATE_list[[1]][[1]]), ylim=c(0, 20), col='red', 
      main = latex2exp::TeX(paste0('Posterior Density of $\\Psi(t)$ for $t=365$') ) )
-lines(density(ATE_list[[2]]), col='black')
-lines(density(ATE_list[[3]]), col='blue')
-lines(density(ATE_list[[4]]), col='green')
+lines(density(ATE_list[[2]][[1]]), col='black')
+lines(density(ATE_list[[3]][[1]]), col='blue')
+lines(density(ATE_list[[4]][[1]]), col='green')
 legend('topleft', 
        legend = c('B=1', 'B=100', 'B=500', 'B=1000'), 
        col = c('red','black','blue','green'), 

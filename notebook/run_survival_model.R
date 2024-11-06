@@ -18,7 +18,8 @@ d$age = ( d$age - mean(d$age) )/ sd(d$age) ## standardize age
 
 post_draws = bayeshaz(d = d, 
                       reg_formula = Surv(time, status) ~ age + ph.ecog + sex,
-                      A = 'sex', num_intervals = 100, warmup = 1000, post_iter = 1000 )
+                      A = 'sex', num_intervals = 100, warmup = 1000, post_iter = 1000,
+                      chain = 2)
 ### need to rename offset in the stan
 #!!! this get divergence 4 of 1000
 

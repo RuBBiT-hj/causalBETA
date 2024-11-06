@@ -1,8 +1,13 @@
 #' Plot Average Treatment Effect or Marginal Survival Probability Estimated for an `ATE` Object
 #' 
-#' This function displays the information stored in the `ATE` object: it can plot the marginal survival probability of
+#' This function displays the information stored in the `ATE` object.
+#' 
+#' When the estimand is the marginal survival probability, it can plot the posterior probability of
 #' a treatment option or overlay both, and it can plot the ATE estimated corresponding to the reference value,
 #' depending on the plotting choices user provided. It has some default plotting parameters if users don't specify otherwise.
+#' 
+#' For other estimands median survival time and Restricted mean survival time, 
+#' it will generate a single boxplot and print its summary.
 #' 
 #' @param ATE_object ATE_object an object of the class `ATE` created by the `bayesgcomp()` function
 #' @param mode Mode of the plot, the default is `"ATE"` to plot the ATE in the `ATE` object. The other choices are
@@ -45,108 +50,165 @@ plot.ATE = function(ATE_object, mode = "ATE",
                     ...){
   # extract
   t <- ATE_object$t
-  surv_1 <- ATE_object$surv_ref
-  surv_2 <- ATE_object$surv_trt
+  surv_1 <- do.call(rbind, ATE_object$surv_ref)
+  surv_2 <- do.call(rbind, ATE_object$surv_trt)
   ref <- ATE_object$ref
-  ATE <- ATE_object$ATE
+  ATE <- do.call(rbind, ATE_object$ATE)
   trt_values <- ATE_object$trt_values
+  estimand <- ATE_object$estimand
   
   # if ATE is selected
   if (!is.vector(mode)) stop("Mode provided is not valid")
   
-  # Upper and lower quantiles
-  tail_prob = (1-level_CI) / 2
-  
-  lwr <- apply(ATE, 2, quantile, probs = tail_prob)
-  upr <- apply(ATE, 2, quantile, probs = 1 - tail_prob)
-  
-  lwr_1 <- apply(surv_1, 2, quantile, probs = tail_prob)
-  upr_1 <- apply(surv_1, 2, quantile, probs = 1 - tail_prob)
-  
-  lwr_2 <- apply(surv_2, 2, quantile, probs = tail_prob)
-  upr_2 <- apply(surv_2, 2, quantile, probs = 1 - tail_prob)
-  
-  if (length(mode) == 2) {
-    if (all(mode %in% c(0, 1))) { # if two treatment are selected
 
-      # set necessary parameters if not specified
-      if (is.null(xlim)) xlim = c(0, max(t))
-      if (is.null(ylim)) ylim = c(0, 1)
-      if (is.null(xlab)) xlab = "Time"
-      if (is.null(ylab)) ylab = "Marginal Survival Probability" 
-      if (is.null(main)) main = paste0("Marginal Survival Curves under Both Treatments")
-      
-      plot(t, colMeans(surv_1), pch = pch, 
-           xlim = xlim, ylim = ylim,
-           type = type, cex = cex, col = col_0,
-           xlab = xlab, ylab = ylab, main = main,
-           ...)
-      segments(x0 = t, y0 = lwr_1,
-               x1 = t, y1 = upr_1,
-               lwd = lwd, col = col_CI_0)
-      lines(t, colMeans(surv_2), pch = pch, 
-            xlim = xlim, ylim = ylim,
-            type = type, cex = cex, col = col_1,
-            ...)
-      segments(x0 = t, y0 = lwr_2,
-               x1 = t, y1 = upr_2,
-               lwd = lwd, col = col_CI_1)
-      legend("topright", 
-             legend = c(paste0(trt_values[1]), paste0(trt_values[2])),
-             lty = c(1,1),
-             col = c(col_0, col_1))
+  if (estimand == "prob"){
+  
+    # Upper and lower quantiles
+    lwr <- apply(ATE, 2, quantile, probs=.025)
+    upr <- apply(ATE, 2, quantile, probs=.975)
+    
+    lwr_1 <- apply(surv_1, 2, quantile, probs=.025)
+    upr_1 <- apply(surv_1, 2, quantile, probs=.975)
+    
+    lwr_2 <- apply(surv_2, 2, quantile, probs=.025)
+    upr_2 <- apply(surv_2, 2, quantile, probs=.975)
+    
+    if (length(mode) == 2) {
+      if (all(mode %in% c(0, 1))) { # if two treatment are selected
+  
+        # set necessary parameters if not specified
+        if (is.null(xlim)) xlim = c(0, max(t))
+        if (is.null(ylim)) ylim = c(0, 1)
+        if (is.null(xlab)) xlab = "Time"
+        if (is.null(ylab)) ylab = "Marginal Survival Probability" 
+        if (is.null(main)) main = paste0("Marginal Survival Curves for Both Treatments")
+        
+        plot(t, colMeans(surv_1), pch = pch, 
+             xlim = xlim, ylim = ylim,
+             type = type, cex = cex, col = col_0,
+             xlab = xlab, ylab = ylab, main = main,
+             ...)
+        segments(x0 = t, y0 = lwr_1,
+                 x1 = t, y1 = upr_1,
+                 lwd = lwd, col = col_CI_0)
+        lines(t, colMeans(surv_2), pch = pch, 
+              xlim = xlim, ylim = ylim,
+              type = type, cex = cex, col = col_1,
+              ...)
+        segments(x0 = t, y0 = lwr_2,
+                 x1 = t, y1 = upr_2,
+                 lwd = lwd, col = col_CI_1)
+        legend("topright", 
+               legend = c(paste0(trt_values[1]), paste0(trt_values[2])),
+               lty = c(1,1),
+               col = c(col_0, col_1))
+      } else {
+        stop("Mode provided is not valid.")
+      }
+    } else if (length(mode) == 1) {
+      if (mode == "ATE") {
+        # set necessary parameters if not specified
+        if (is.null(xlim)) xlim = c(0, max(t))
+        if (is.null(ylim)) ylim = c(-1, 1)
+        if (is.null(main)) main = "ATE Estimated Over Time"
+        if (is.null(xlab)) xlab = "Time"
+        if (is.null(ylab)) ylab = "ATE Estimated" 
+        
+        message(paste0("The current reference is ", ref))
+        
+        plot(t, colMeans(ATE), pch = pch, col = col_ATE, 
+             xlim = xlim, ylim=ylim,
+             type = type, cex = cex,
+             xlab = xlab, ylab = ylab, main = main,
+             ...)
+        segments(x0 = t, y0 = lwr,
+                 x1 = t, y1 = upr,
+                 lwd = lwd, col = col_CI_ATE)
+      } else if (mode == 0){
+        if (is.null(main)) main = paste0("Marginal Survival Curve for ", trt_values[1])
+        plot(t, colMeans(surv_1), pch = pch, 
+             xlim = xlim, ylim = ylim,
+             type = type, cex = cex,  col = col_0,
+             xlab = xlab, ylab = ylab, main = main)
+        segments(x0 = t, y0 = lwr_1,
+                 x1 = t, y1 = upr_1,
+                 lwd = lwd, col = col_CI_0)
+      } else if (mode == 1){
+        if (is.null(main)) main = paste0("Marginal Survival Curve for ", trt_values[2])
+        plot(t, colMeans(surv_2), pch = pch, 
+             xlim = xlim, ylim = ylim,
+             type = type, cex = cex,  col = col_1,
+             xlab = xlab, ylab = ylab, main = main)
+        segments(x0 = t, y0 = lwr_2,
+                 x1 = t, y1 = upr_2,
+                 lwd = lwd, col = col_CI_1)
+      } else {
+        stop("Mode provided is not valid.")
+      } 
     } else {
       stop("Mode provided is not valid.")
     }
-  } else if (length(mode) == 1) {
-    if (mode == "ATE") {
-      # set necessary parameters if not specified
-      if (is.null(xlim)) xlim = c(0, max(t))
-      if (is.null(ylim)) ylim = c(-1, 1)
-      if (is.null(main)) main = "ATE Estimated Over Time"
-      if (is.null(xlab)) xlab = "Time"
-      if (is.null(ylab)) ylab = "ATE Estimated" 
+  } else {
+    if (length(mode) == 2) {
+      if (all(mode %in% c(0, 1))) { # if two treatment are selected
+        
+        # set necessary parameters if not specified
+        if (is.null(xlim)) xlim = trt_values
+        if (is.null(ylim)) ylim = c(min(surv_1, surv_2)-1,
+                                    max(surv_1, surv_2)+1)
+        if (is.null(xlab)) xlab = "Treatment"
+        if (is.null(ylab)) {
+          if (estimand == "median") ylab = "Median Survival Time"
+          else ylab = "Restricted Mean Survival Time"
+        }
+        
+        if (is.null(main)) main = paste0(ylab, "for Both Treatments")
+        
+        boxplot(c(surv_1, surv_2) ~ rep(c(0,1), each = length(surv_1)),
+                ylim = ylim, xlab = xlab, ylab = ylab,
+                main = main)
+        
+        
+      } else {
+        stop("Mode provided is not valid.")
+      }
+    } else if (length(mode) == 1) {
       
-      message(paste0("The current reference is ", ref))
+      if (is.null(ylab)) {
+        if (estimand == "median") ylab = "Median Survival Time"
+        else ylab = "Restricted Mean Survival Time"
+      }
       
-      plot(t, colMeans(ATE), pch = pch, col = col_ATE, 
-           xlim = xlim, ylim=ylim,
-           type = type, cex = cex,
-           xlab = xlab, ylab = ylab, main = main,
-           ...)
-      
-      segments(x0 = t, y0 = lwr,
-               x1 = t, y1 = upr,
-               lwd = lwd, col = col_CI_ATE)
-      
-    } else if (mode == 0){
-      if (is.null(main)) main = paste0("Marginal Survival Curve under Treatment ", trt_values[1])
-      if (is.null(ylab)) ylab = 'Survival Probability'
-      if (is.null(ylab)) xlab = 'Time'
-      
-      plot(t, colMeans(surv_1), pch = pch, 
-           xlim = xlim, ylim = ylim,
-           type = type, cex = cex,  col = col_0,
-           xlab = xlab, ylab = ylab, main = main)
-      segments(x0 = t, y0 = lwr_1,
-               x1 = t, y1 = upr_1,
-               lwd = lwd, col = col_CI_0)
-    } else if (mode == 1){
-      if (is.null(main)) main = paste0("Marginal Survival Curve under Treatment ", trt_values[2])
-      if (is.null(ylab)) ylab = 'Survival Probability'
-      if (is.null(ylab)) xlab = 'Time'
-      
-      plot(t, colMeans(surv_2), pch = pch, 
-           xlim = xlim, ylim = ylim,
-           type = type, cex = cex,  col = col_1,
-           xlab = xlab, ylab = ylab, main = main)
-      segments(x0 = t, y0 = lwr_2,
-               x1 = t, y1 = upr_2,
-               lwd = lwd, col = col_CI_1)
+      if (mode == "ATE") {
+        # set necessary parameters if not specified
+        # if (is.null(xlim))
+        # if (is.null(ylim))
+        if (is.null(main)) main = "ATE Estimated"
+        if (is.null(xlab)) xlab = "ATE"
+        
+        
+        boxplot(ATE,
+                xlab = xlab, ylab = ylab, main = main)
+        abline(h = 0, lty = 2, col = "red")
+        
+      } else if (mode == 0){
+        if (is.null(main)) main = paste0(ylab, " for ", trt_values[1])
+        if (is.null(xlab)) xlab = trt_values[1]
+        
+        boxplot(surv_1,
+                xlab = xlab, ylab = ylab, main = main)
+        
+      } else if (mode == 1){
+        if (is.null(main)) main = paste0(ylab, " for ", trt_values[2])
+        if (is.null(xlab)) xlab = trt_values[2]
+        
+        boxplot(surv_2,
+                xlab = xlab, ylab = ylab, main = main)
+      } else {
+        stop("Mode provided is not valid.")
+      } 
     } else {
       stop("Mode provided is not valid.")
-    } 
-  } else {
-    stop("Mode provided is not valid.")
+    }
   }
 }

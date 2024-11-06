@@ -5,6 +5,7 @@
 #' If the assumption is met, there should be good overlap in the histograms. Histograms that do not overlap may indicate near violations of positivity.
 #' 
 #' @param bayeshaz_object an object of the class `bayeshaz` created by the `bayeshaz()` function
+#' @param data the data set used to generate `bayeshaz` object
 #' @param formula an optional formula variable used in fitting the propensity score model
 #' @param breaks the parameter set for breaks, default is `"Scott"`
 #' 
@@ -17,22 +18,18 @@
 #' 
 #' @examples
 #' # example demo
-#' df_veteran == survival::veteran
-#' df_veteran$trt == ifelse(df_veteran$trt == 2, 1, 0)
-#' post_draws <- bayeshaz(
-#'   d = df_veteran,
-#'   reg_formula = Surv(time, status) ~ trt + age,
-#'   A = 'trt')
-#' plot_positivity(post_draws) ## bayeshaz output 
-#' plot_positivity(post_draws, formula = formula(trt ~ age)) ## equivalent in this case
+#' ## Continued from ?bayeshaz
+#' plot_positivity(post_draws_ar1_adj, data) ## bayeshaz output 
+#' plot_positivity(post_draws, df_veteran, 
+#' formula = A ~ age + karno + celltype) ## equivalent in this case
 ## usethis namespace: start
 ## usethis namespace: end
 #' @export
 
-plot_positivity = function(bayeshaz_object, formula = NULL, breaks="Scott"){
+plot_positivity = function(bayeshaz_object, data, formula = NULL, breaks="Scott"){
   
   # extract
-  d = bayeshaz_object$data
+  d = data
   
   reg_formula = bayeshaz_object$formula
   covariates = bayeshaz_object$covariates
@@ -43,6 +40,12 @@ plot_positivity = function(bayeshaz_object, formula = NULL, breaks="Scott"){
     # remove the terms and interaction terms related to treatment
     variables <- attr(terms(reg_formula), "term.labels")
     variables <- variables[!grepl(treatment, variables, fixed = TRUE)]
+
+    # if unadjusted analysis - then no need to check
+    if (rlang::is_empty(variables)){
+      stop("Unadjusted analysis doesn't have covariates to check")
+    }
+    
     # construct the formula
     formula = formula(
     paste0(treatment, "~", paste0(variables, collapse = "+"))
@@ -55,8 +58,6 @@ plot_positivity = function(bayeshaz_object, formula = NULL, breaks="Scott"){
     variables <- variables[3:length(variables)]
       
     if (treatment %in% variables) warning("Treatment varibale is in the formula given")
-    if ( !all(variables %in% covariates) ) warning("Formula has variables that are not
-                                                   listed in the survival model")
   }
   
   # output the formula
@@ -89,11 +90,11 @@ plot_positivity = function(bayeshaz_object, formula = NULL, breaks="Scott"){
   # Plot
   par(mfrow=c(2,1), mar=c(0,5,3,3))
   hist(score_1 , main="Distribution of Estimated P-Scores" , ylab="Density", xlab="", 
-       ylim=c(0, y_max), xlim = c(x_min, x_max), 
+       ylim=c(0, y_max), xlim = c(x_min-abs(x_min)*0.1, x_max+abs(x_min)*0.1), 
        xaxt="n", las=1 , col="slateblue1", breaks=breaks, probability = T)
   par(mar=c(5,5,0,3))
   hist(score_2 , main="" , ylab="Density", xlab="Estimated Propensity Score", 
-       ylim=c(y_max, 0),  xlim = c(x_min, x_max),
+       ylim=c(y_max, 0),  xlim = c(x_min-abs(x_min)*0.1, x_max+abs(x_min)*0.1),
        las=1 , col="tomato3", breaks = breaks, probability = T)
   # reset
   par(mfrow=c(1,1),

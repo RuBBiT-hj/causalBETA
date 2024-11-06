@@ -5,18 +5,19 @@
 \title{Bayesian Piece-Wise Exponential Model}
 \usage{
 bayeshaz(
-  d,
+  data,
   reg_formula,
   A,
   model = "AR1",
-  sigma = 3,
-  num_partitions = 100,
+  priorSD = 3,
+  num_partition = 100,
   warmup = 1000,
-  post_iter = 1000
+  post_iter = 1000,
+  chains = 1
 )
 }
 \arguments{
-\item{d}{data, a data frame in survival format. Categorical variables should be
+\item{data}{data, a data frame in survival format. Categorical variables should be
 transformed into dummy variables}
 
 \item{reg_formula}{a formula object that specifies the formula for the poisson regression.
@@ -27,13 +28,15 @@ This also decides the formula will be used the function to check positivity over
 \item{model}{a character variable that tells the stan model used to implement the Bayesian piece-wise exponential model,
 default is "AR1" and the other option is "independent"}
 
-\item{sigma}{a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3}
+\item{priorSD}{a numeric variable as the user-defined standard deviation for beta coefficients prior, the default is 3}
 
-\item{num_partitions}{a numeric variable as the number of partitions of the study time, the default is 100}
+\item{num_partition}{a numeric variable as the number of intervals in the partition, the default is 100}
 
 \item{warmup}{a numeric variable as the number of warmup in MCMC, the default is 1000}
 
 \item{post_iter}{a numeric variable as the number of iterations to draw from the posterior, the default is 1000}
+
+\item{chains}{the number of chains for sampling, the default is 1}
 }
 \value{
 It returns an object of class \code{bayeshaz} that contains the information about the data, model, etc.
@@ -48,12 +51,15 @@ An object of class \code{bayeshaz} is a list containing at least the following c
 \item \code{time}, the name of the time variable
 \item \code{outcome}, the name of the outcome variable
 \item \code{model}, the type of the model used
-\item \code{sigma}, the sigma specified
+\item \code{priorSD}, the prior standard deviation specified
+\item \code{chains}, the number of chains for sampling
 \item \code{partition}, the partition vector
 \item \code{midpoint}, the midpoints of intervals
-\item \code{haz_draws}, the baseline hazard rate from each posterior draws (as an \code{mcmc} object)
-\item \code{beta_draws}, the beta coefficients estimated from each posterior draws (as an \code{mcmc} object)
+\item \code{haz_draws}, a \code{mcmc.list} object storing the baseline hazard rate from each posterior draws
+\item \code{beta_draws}, a \code{mcmc.list} object storing the beta coefficients estimated from each posterior draws
 }
+
+The \code{mcmc.list} is an object type from package \code{coda} and helps users check convergence.
 }
 \description{
 Perform a Bayesian piece-wise exponential model on the given survival data,
@@ -79,16 +85,15 @@ data$A = 1*(data$trt==2)
 var_names = colnames(data)
 colnames(data)[var_names=='status'] = 'delta'
 colnames(data)[var_names=='time'] = 'y'
-## append one-hot encoded celltypes
-data = cbind(data, model.matrix(data=data, ~ -1 + celltype))
-formula1 = Surv(y, delta) ~ A + age + karno + 
-  celltypesquamous + celltypesmallcell + celltypeadeno
+formula1 <- Surv(y, delta) ~ A + age + karno + celltype
 post_draws_ar1_adj = bayeshaz(
-  d = data,
+  data = data,
   reg_formula = formula1 ,
   model = 'AR1',
   A = 'A',
-  warmup = 1000, post_iter = 1000)
+  warmup = 1000, 
+  post_iter = 1000,
+  chains = 1)
 }
 \references{
 Ji, Han, and Oganisian, Arman. 2023.

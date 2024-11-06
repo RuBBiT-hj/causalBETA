@@ -4,10 +4,12 @@
 \alias{plot_positivity}
 \title{Positivity Assumption Checking}
 \usage{
-plot_positivity(bayeshaz_object, formula = NULL, breaks = "Scott")
+plot_positivity(bayeshaz_object, data, formula = NULL, breaks = "Scott")
 }
 \arguments{
 \item{bayeshaz_object}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
+
+\item{data}{the data set used to generate \code{bayeshaz} object}
 
 \item{formula}{an optional formula variable used in fitting the propensity score model}
 
@@ -27,12 +29,8 @@ that are not used in the survival model.
 }
 \examples{
 # example demo
-df_veteran == survival::veteran
-df_veteran$trt == ifelse(df_veteran$trt == 2, 1, 0)
-post_draws <- bayeshaz(
-  d = df_veteran,
-  reg_formula = Surv(time, status) ~ trt + age,
-  A = 'trt')
-plot_positivity(post_draws) ## bayeshaz output 
-plot_positivity(post_draws, formula = formula(trt ~ age)) ## equivalent in this case
+## Continued from ?bayeshaz
+plot_positivity(post_draws_ar1_adj, data) ## bayeshaz output 
+plot_positivity(post_draws, df_veteran, 
+formula = A ~ age + karno + celltype) ## equivalent in this case
 }

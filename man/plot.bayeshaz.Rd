@@ -51,7 +51,7 @@ Plot the average baseline hazard rate from all posterior draws on all intervals 
 ## Continued from ?bayeshaz
 set.seed(1)
 post_draws_ind = bayeshaz(
-  d = data, ## data set
+  data = data, ## data set
   reg_formula = Surv(y, delta) ~ A,
   num_partitions = 100, 
   model = 'independent',

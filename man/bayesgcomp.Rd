@@ -4,26 +4,48 @@
 \alias{bayesgcomp}
 \title{Average Treatment Effect Estimation}
 \usage{
-bayesgcomp(bayeshaz_object, ref, t = NULL, B = 1000)
+bayesgcomp(
+  bayeshaz_object,
+  ref,
+  B = 1000,
+  estimand = "prob",
+  t = NULL,
+  threshold = NULL,
+  ...
+)
 }
 \arguments{
 \item{bayeshaz_object}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
 
 \item{ref}{the reference value of the treatment, so it should be one of the treatment values}
 
+\item{B}{the number of prediction for each posterior draw; the default is 1000}
+
+\item{estimand}{the statistics in interest; the default is the posterior survival
+probability at each value of t, \code{prob}. The other options are the median survival time, \code{median}, and
+the Restricted mean survival time, \code{rmean}.}
+
 \item{t}{optional; a numeric vector of time points at which users want to compute marginal
 survival probabilities}
 
-\item{B}{the number of prediction for each posterior draw; the default is 1000}
+\item{threshold}{optional; the threshold used for Restricted mean survival time. If not provided,
+it will use the maximum time of the study as the default
+survival time as a special case of Restricted mean survival time}
+
+\item{...}{other parameters for estimand function}
 }
 \value{
 This function returns an object of class \code{ATE} that stores the following information:
 \itemize{
-\item \code{surv_ref}, an \code{mcmc} object storing the marginal survival probability for the reference
-\item \code{surv_trt}, an \code{mcmc} object storing the marginal survival probability for the treatment
+\item \code{surv_ref}, the posterior estimates for the reference
+\item \code{surv_trt}, the posterior estimates for the treatment
 \item \code{ref}, the value of the reference treatment
 \item \code{trt_values}, the possible values of the treatment
+\item \code{estimand}, the estimand for the ATE
 \item \code{ATE}, the difference between the marginal survival probability of the treatment and the reference
+\item \code{t}, the timepoints used for calculating the ATE, specifically for posterior survival probabilities
+\item \code{threshold}, the threshold used for calculating the Restricted mean survival time. It would be
+\code{null} if the estimand is not \code{rmean}.
 }
 }
 \description{
@@ -51,11 +73,7 @@ binary variable before creating the \code{bayeshaz} object.
 ## Continued from ?bayeshaz
 gcomp_res = bayesgcomp(post_draws_ar1_adj, ## bayeshaz output 
                        ref = 0, ## treatment reference group
-                       B = 1000) ## monte carlo iterations in g-comp
-}
-\references{
-Ji, Han, and Oganisian, Arman. 2023.
-"causalBETA: An R Package for Bayesian Semiparametric Causal Inference with
-Event-Time Outcomes. \emph{arXiv:2310.12358 [Stat]}, October.
-\url{http://arxiv.org/abs/2310.12358}.
+                       B = 1000, ## monte carlo iterations in g-comp
+                       estimand = "prob"
+                       )
 }

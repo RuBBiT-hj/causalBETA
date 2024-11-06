@@ -4,12 +4,12 @@
 \alias{create_ATE}
 \title{Construct an \code{ATE} object to store the results from g-computation}
 \usage{
-create_ATE(surv_ref, surv_trt, ref, trt_values, ATE, t)
+create_ATE(surv_ref, surv_trt, ref, trt_values, ATE, estimand, t, threshold)
 }
 \arguments{
-\item{surv_ref}{a \code{mcmc} object storing the marginal survival probability for the reference}
+\item{surv_ref}{a \code{mcmc.list} object storing the marginal survival probability for the reference}
 
-\item{surv_trt}{a \code{mcmc} object storing the marginal survival probability for the treatment}
+\item{surv_trt}{a \code{mcmc.list} object storing the marginal survival probability for the treatment}
 
 \item{ref}{the value of the reference treatment}
 
@@ -17,6 +17,14 @@ create_ATE(surv_ref, surv_trt, ref, trt_values, ATE, t)
 
 \item{ATE}{a numeric matrix for the difference between the marginal survival probability
 of the treatment and the reference}
+
+\item{estimand}{the estimand for this ATE}
+
+\item{t}{timepoints used in this ATE object, specifically for posterior survival probability}
+
+\item{threshold}{optional; the threshold used for restrictive mean survival time. If not provided,
+it will use the maximum time of the study as the default
+survival time as a special case of restrictive mean survival time}
 }
 \value{
 It returns an object of class 'ATE'

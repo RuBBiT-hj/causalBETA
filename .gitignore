@@ -3,4 +3,13 @@
 .DS_Store
 .DS_Store
 .Rproj.user
+.Rproj.user/C4F3B954/explorer-cache/226eaa6ceee74a1ba6c1ec0908a4d21d
 *.pper
+run_survival_model.R
+.Rproj.user/*
+backup
+Backup/
+.Rhistory
+.RData
+beta_test.R
+

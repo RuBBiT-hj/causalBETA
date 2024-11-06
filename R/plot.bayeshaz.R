@@ -25,7 +25,7 @@
 #' ## Continued from ?bayeshaz
 #' set.seed(1)
 #' post_draws_ind = bayeshaz(
-#'   d = data, ## data set
+#'   data = data, ## data set
 #'   reg_formula = Surv(y, delta) ~ A,
 #'   num_partitions = 100, 
 #'   model = 'independent',
@@ -49,8 +49,9 @@ plot.bayeshaz = function(bayeshaz_object, col_hazard = "black",
                          xlab = "Time", ylab = NULL, main = NULL, cex = 0.5,
                          lwd = 1.5,
                          ...){
-  # extract the key components from the object
-  hazard <- bayeshaz_object$haz_draws
+ # extract the key components from the object
+  hazard <- do.call(rbind, bayeshaz_object$haz_draws)
+  
   partitions <- bayeshaz_object$partition
   xv <- bayeshaz_object$midpoint
   obs_time <- bayeshaz_object$data[, bayeshaz_object$time]
@@ -101,4 +102,3 @@ plot.bayeshaz = function(bayeshaz_object, col_hazard = "black",
   par(mar = c(5.1, 4.1, 4.1, 2.1),
       mgp = c(3,1,0))
 }
-
