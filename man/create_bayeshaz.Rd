@@ -40,7 +40,7 @@ This also decides the formula will be used the function to check positivity over
 
 \item{chains}{the number of chains for sampling, the default is 1}
 
-\item{partition}{a numeric vector for the partition}
+\item{partition}{a numeric vector for the paritition}
 
 \item{midpoint}{a numeric vector for the midpoints of intervals}
 
