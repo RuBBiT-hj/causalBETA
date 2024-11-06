@@ -14,7 +14,7 @@
 #' @param model a character variable recording which mode of model was used
 #' @param priorSD a numeric variable as the user-defined standard deviation for beta coefficients prior
 #' @param chains the number of chains for sampling, the default is 1
-#' @param partition a numeric vector for the paritition
+#' @param partition a numeric vector for the partition
 #' @param midpoint a numeric vector for the midpoints of intervals
 #' @param haz_draws a `mcmc.list` for the baseline hazard rates from posterior draws
 #' @param beta_draws a `mcmc.list` for the beta coefficients estimated from posterior draws
