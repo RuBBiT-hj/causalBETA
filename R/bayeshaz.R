@@ -144,11 +144,18 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", priorSD = 3,
   ## create covariate model matrix
   xmat = model.matrix(data=dsplit, object = as.formula(paste0(" ~ ", covar_char  )) )
   xmat_names = colnames(xmat)
+  
+  # Check if treatment variable is included
+  if (! trt_names %in% xmat_names){
+    stop("Treatment variable is not included in the formula.")
+  }
+  
   xmat = matrix(xmat[, -1], nrow = nrow(xmat))
   colnames(xmat) <- xmat_names[-1]
   
   covariates = colnames(xmat)
   covariates = covariates[covariates != trt_names]
+
   
   # # model matrix (one hot encoding)
   data =  model.matrix(formula(
