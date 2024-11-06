@@ -110,7 +110,7 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", priorSD = 3,
   
   ## num_partitions actually creates num_partitions - 1 intervals
   ## add one to adjust
-  num_partitions = num_partitions + 1
+  # num_partitions = num_partitions + 1
   
   ## user-specified intervention variable
   trt_names = A
