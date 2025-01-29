@@ -1,11 +1,17 @@
 #' Plot the Posterior Predictive Survival Curve for a Single individual
 #' 
 #' Plot the survival curve based on the predictions from the posterior draws for the specified individual
-#' @param bayeshaz_object an object of the class `bayeshaz` created by the `bayeshaz()` function
-#' @param x the data frame for an individual used for prediction, with the variables specified in the model
+#' @param x an object of the class `bayeshaz` created by the `bayeshaz()` function
+#' @param data the data frame for an individual used for prediction, with the variables specified in the model
 #' @param n the number of prediction for each posterior draw; the default is 1000
 #' @param col the color parameter for the baseline hazard points, default is `black`
 #' @param col_CI the color parameter for the confidence intervals of the baseline hazard, default is semitransparent grey
+#' @param xlim Limits for x-axis
+#' @param ylim Limits for y-axis
+#' @param type Plot type
+#' @param pch Plot character
+#' @param cex Character expansion factor
+#' @param lwd Line width
 #' @param ... other graphical parameters for the plot function. Default ones will be used if not provided.
 #' 
 #' @details
@@ -21,42 +27,46 @@
 #' Each row represents a posterior draw, and each column corresponds to a time interval.
 #' 
 #' @examples
+#' \dontrun{
 #' # example demo
 #' # after getting the posterior draw object
 #' pred_survival <- plot_survival(post_draws_ar1_adj, df_veteran[1, ])
+#' }
 ## usethis namespace: start
 #' @import survival
+#' @import graphics
+#' @import grDevices
 #' @importFrom mets rpch
 ## usethis namespace: end
 #' @export
 
 
-plot_survival = function(bayeshaz_object, x, n=1000,
+plot_survival = function(x, data, n=1000,
                          col = "black", col_CI = rgb(0.5, 0.5, 0.5, 0.5),
                          type = 'o', pch = 20, cex = 0.5, lwd = 1.5,
                          xlim = NULL, ylim = c(0,1),
                          ...){
   
   # extract
-  beta_draws = bayeshaz_object$beta_draws
-  haz_draws = bayeshaz_object$haz_draws
-  partition = bayeshaz_object$partition
+  beta_draws = x$beta_draws
+  haz_draws = x$haz_draws
+  partition = x$partition
   
   # call predict.bayeshaz as a helper function
   # the number of the list - the number of posterior draws
   # the length of each list - the number of predictions (n)
-  all_surv_time = predict.bayeshaz(bayeshaz_object, x, n, func = list)
+  all_surv_time = predict.bayeshaz(x, data, n, func = list)
   all_surv_time = all_surv_time[[1]] # as only a single individual
   
   # let t be the middle points of each partition (the number is the same as the intervals)
-  t <- bayeshaz_object$midpoint
+  t <- x$midpoint
   
   surv_prob <- matrix(nrow = length(all_surv_time),
                       ncol = length(t))
   
   # For each t, we calculate the proportion
   for (i in 1:length(t)){
-    surv_prob[ ,i] <- sapply(all_surv_time, function(x) mean(x > t[i]))
+    surv_prob[ ,i] <- sapply(all_surv_time, function(surv_time) mean(surv_time > t[i]))
   }
   
   # Upper and lower quantiles

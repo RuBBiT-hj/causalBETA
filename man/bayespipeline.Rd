@@ -42,6 +42,8 @@ default is "AR1" and the other option is "independent"}
 
 \item{post_iter}{a numeric variable as the number of iterations to draw from the posterior, the default is 1000}
 
+\item{chains}{the number of chains for sampling, the default is 1}
+
 \item{ref}{the reference value of the treatment, so it should be one of the treatment values}
 
 \item{B}{the number of prediction for each posterior draw; the default is 1000}
@@ -71,6 +73,7 @@ The function is the wrapper function of the main function \code{bayeshaz()} and 
 part of the analysis. For details, check the documentation for these two functions by \code{help(bayeshaz)} and \code{help(bayesgcomp)}.
 }
 \examples{
+\dontrun{
 # example demo
 data = survival :: veteran
 data$A = 1*(data$trt==2)
@@ -82,5 +85,5 @@ results <- bayespipeline(data,
   reg_formula = Surv(y, delta) ~ A,
   A = 'A',
   ref = 0
-)
+)}
 }

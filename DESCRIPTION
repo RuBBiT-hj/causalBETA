@@ -1,13 +1,18 @@
 Package: causalBETA
 Type: Package
-Title: Bayesian Survival Models 
-Version: 0.0.1.0
-Imports: 
-	cmdstanr (>= 0.5.3),
-	coda (>= 0.19-4),
-	mets (>= 1.3.2),
-	survival (>= 3.5-5),
-	LaplacesDemon (>= 16.1.6)
+Title: Bayesian Semiparametric Causal Inference with Event-Time Outcomes 
+Version: 0.1.1
+Authors@R: c(person('Han', 'Ji', role=c('aut', 'cre'),
+  email='han_ji@brown.edu'),
+  person('Arman', 'Oganisian', role='aut'))
+Author: Han Ji [aut, cre],
+  Arman Oganisian [aut]
+Maintainer: Han Ji <han_ji@brown.edu>
+Description: causalBETA (Bayesian Event Time Analysis) is a package for estimating 
+  causal effects on event-time outcomes using Bayesian semiparametric models.
+License: GPL (>= 2)
+Depends: R (>= 4.3), cmdstanr (>= 0.5.3), coda, survival
+Imports: stats, mets, LaplacesDemon, rlang, grDevices, graphics
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1

@@ -12,6 +12,7 @@
 #' @param num_partition a numeric variable as the number of intervals in the partition, the default is 100
 #' @param warmup a numeric variable as the number of warmup in MCMC, the default is 1000
 #' @param post_iter a numeric variable as the number of iterations to draw from the posterior, the default is 1000
+#' @param chains the number of chains for sampling, the default is 1
 #' @param ref the reference value of the treatment, so it should be one of the treatment values
 #' @param B the number of prediction for each posterior draw; the default is 1000
 #' @param estimand the statistics in interest; the default is the posterior survival
@@ -33,6 +34,7 @@
 #' It also plots the result of ATE by calling `plot()` on the ATE object.
 #'
 #' @examples
+#' \dontrun{
 #' # example demo
 #' data = survival :: veteran
 #' data$A = 1*(data$trt==2)
@@ -44,9 +46,11 @@
 #'   reg_formula = Surv(y, delta) ~ A,
 #'   A = 'A',
 #'   ref = 0
-#' )
+#' )}
 ## usethis namespace: start
 #' @import survival
+#' @import cmdstanr
+#' @import coda
 #' @importFrom mets rpch
 #' @importFrom LaplacesDemon rdirichlet
 ## usethis namespace: end

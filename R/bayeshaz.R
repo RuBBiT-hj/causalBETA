@@ -57,8 +57,9 @@
 #' \url{http://arxiv.org/abs/2310.12358}.
 #' 
 #' @examples
+#' \dontrun{
 #' # example demo
-#' data = survival :: veteran
+#' data = survival::veteran
 #' data$A = 1*(data$trt==2)
 #' ## rename variables
 #' var_names = colnames(data)
@@ -73,11 +74,12 @@
 #'   warmup = 1000, 
 #'   post_iter = 1000,
 #'   chains = 1)
+#' }
 
 ## usethis namespace: start
+#' @import survival
+#' @import coda
 #' @import cmdstanr
-#' @importFrom coda mcmc
-#' @importFrom survival survSplit
 ## usethis namespace: end
 #' @export
 
@@ -99,7 +101,8 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", priorSD = 3,
   }
   
   # the address of the stan files
-  path_stan <- paste0(.libPaths(), "/causalBETA/data/")
+  # path_stan <- paste0(.libPaths(), "/causalBETA/inst/stan/") # local test
+  path_stan <- system.file("stan", package = "causalBETA")
   
   # check for priorSD value
   if (priorSD > 3 | priorSD <= 0) {
@@ -110,7 +113,8 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", priorSD = 3,
   
   ## num_partitions actually creates num_partitions - 1 intervals
   ## add one to adjust
-  # num_partitions = num_partitions + 1
+  num_partitions = num_partition + 1
+
   
   ## user-specified intervention variable
   trt_names = A
@@ -186,7 +190,7 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", priorSD = 3,
                  xmat = xmat,
                  sigma_beta = priorSD)
 
-    mod = cmdstan_model(paste0(path_stan, "hazard_mod_v1.stan"))
+    mod = cmdstan_model(paste0(path_stan, "/hazard_mod_v1.stan"))
   } else if (model == "AR1"){ # a different variance for beta coefficients
 
     dlist = list(N=nrow(dsplit),
@@ -197,7 +201,7 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", priorSD = 3,
                  interval_num = dsplit$interval_num,
                  xmat = xmat,
                  sigma_beta = priorSD)
-    mod = cmdstan_model(paste0(path_stan, "hazard_mod_v2.stan"))
+    mod = cmdstan_model(paste0(path_stan, "/hazard_mod_v2.stan"))
   } else { # the model input is not correct
     stop("The model input is not valid. Must be either `independent' or 'AR1' ")
   }

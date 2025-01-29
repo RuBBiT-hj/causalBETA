@@ -4,16 +4,19 @@
 \alias{predict.bayeshaz}
 \title{Piece-wise Constant Hazard Distribution Prediction}
 \usage{
-\method{predict}{bayeshaz}(bayeshaz_object, x, n = 1000, func)
+\method{predict}{bayeshaz}(object, x, n = 1000, func, ...)
 }
 \arguments{
-\item{bayeshaz_object}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
+\item{object}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
 
 \item{x}{a data frame for the individual(s) used for prediction, with the variables specified in the model}
 
 \item{n}{a numeric value as the number of predictions for each posterior draw; the default is 1000}
 
-\item{func}{a function used to obtain the quantities of interest; a common choice is \code{mean} to get the posterior distribution of the expectation of survival time (more details in the demo).   e}
+\item{func}{a function used to obtain the quantities of interest;
+a common choice is \code{mean} to get the posterior distribution of the expectation of survival time (more details in the demo).}
+
+\item{...}{additional arguments affecting the predictions produced.}
 }
 \value{
 This function returns a matrix that contains the predicted quantities of interest.
@@ -32,6 +35,7 @@ It is required that the number and the order of the variables matches the model 
 \code{bayeshaz} object exactly.
 }
 \examples{
+\dontrun{
 # example demo
 ## Continued from ?bayeshaz
 predict(post_draws_ar1_adj,
@@ -40,4 +44,5 @@ predict(post_draws_ar1_adj,
                       "celltypesmallcell",
                       "celltypeadeno")],
         func = mean)
+}
 }

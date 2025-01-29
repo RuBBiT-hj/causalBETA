@@ -2,13 +2,22 @@
 #' 
 #' Plot the average baseline hazard rate from all posterior draws on all intervals from the given `bayeshaz` object.
 #' 
-#' @param bayeshaz_object an object of the class `bayeshaz` created by the `bayeshaz()` function
+#' @param x an object of the class `bayeshaz` created by the `bayeshaz()` function
 #' @param col_hazard the color parameter for the baseline hazard points, default is `black`
 #' @param col_CI the color parameter for the confidence intervals of the baseline hazard, default is semitransparent-grey
 #' @param level_CI Credible interval level, for a specified value an equal-tailed, 
 #' level_CI% credible interval will be plotted which has ((1-level_CI*100)/2)% 
 #' posterior probability below and above the interval. 
 #' E.g. level_CI=.95 (the default) plots a 95% credible interval.
+#' @param xlim Limits for x-axis
+#' @param ylim Limits for y-axis
+#' @param type Plot type
+#' @param pch Plot character
+#' @param cex Character expansion factor
+#' @param lwd Line width
+#' @param main Title of the plot
+#' @param xlab Label for x-axis
+#' @param ylab Label for y-axis
 #' @param ... other graphical parameters for the plot function. Default ones will be used if not provided.
 #' 
 #' @description
@@ -21,6 +30,7 @@
 #' 
 #' 
 #' @examples
+#' \dontrun{
 #' # example demo
 #' ## Continued from ?bayeshaz
 #' set.seed(1)
@@ -39,22 +49,25 @@
 #'   main='Independent Prior Process',
 #'   ylab = 'Baseline Hazard Rate', 
 #'   xlab = 'Time (days)')
+#' }
 ## usethis namespace: start
+#' @import graphics
+#' @import grDevices
 ## usethis namespace: end
 #' @export
 
-plot.bayeshaz = function(bayeshaz_object, col_hazard = "black", 
+plot.bayeshaz = function(x, col_hazard = "black", 
                          col_CI = rgb(0.5, 0.5, 0.5, 0.5), level_CI=.95,
                          type = 's', pch = 20, xlim = NULL, ylim = NULL,
                          xlab = "Time", ylab = NULL, main = NULL, cex = 0.5,
                          lwd = 1.5,
                          ...){
  # extract the key components from the object
-  hazard <- do.call(rbind, bayeshaz_object$haz_draws)
+  hazard <- do.call(rbind, x$haz_draws)
   
-  partitions <- bayeshaz_object$partition
-  xv <- bayeshaz_object$midpoint
-  obs_time <- bayeshaz_object$data[, bayeshaz_object$time]
+  partitions <- x$partition
+  xv <- x$midpoint
+  obs_time <- x$data[, x$time]
   
   # Generate the vector for time axis
   endpoint <- max(partitions)

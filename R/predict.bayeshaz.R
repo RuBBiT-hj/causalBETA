@@ -1,10 +1,12 @@
 #' Piece-wise Constant Hazard Distribution Prediction
 #' 
 #' Predict quantities of interest using the posterior draws from the piecewise exponential model
-#' @param bayeshaz_object an object of the class `bayeshaz` created by the `bayeshaz()` function
+#' @param object an object of the class `bayeshaz` created by the `bayeshaz()` function
 #' @param x a data frame for the individual(s) used for prediction, with the variables specified in the model
 #' @param n a numeric value as the number of predictions for each posterior draw; the default is 1000
-#' @param func a function used to obtain the quantities of interest; a common choice is `mean` to get the posterior distribution of the expectation of survival time (more details in the demo).   e
+#' @param func a function used to obtain the quantities of interest; 
+#' a common choice is `mean` to get the posterior distribution of the expectation of survival time (more details in the demo).
+#' @param ... additional arguments affecting the predictions produced.
 #' 
 #' @details
 #' The data frame used for prediction could be for a single individual or multiple individuals.
@@ -20,6 +22,7 @@
 #' Within each posterior draw, the function eventually obtains the quantity of interest based on `n` predictions and the `func` given.
 #' 
 #' @examples
+#' \dontrun{
 #' # example demo
 #' ## Continued from ?bayeshaz
 #' predict(post_draws_ar1_adj,
@@ -28,6 +31,7 @@
 #'                       "celltypesmallcell",
 #'                       "celltypeadeno")],
 #'         func = mean)
+#' }
 ## usethis namespace: start
 #' @import survival
 #' @importFrom mets rpch
@@ -35,13 +39,13 @@
 #' @export
 
 
-predict.bayeshaz = function(bayeshaz_object, x, n = 1000, func){
+predict.bayeshaz = function(object, x, n = 1000, func, ...){
   
-  beta_draws = do.call(rbind, bayeshaz_object$beta_draws)
-  haz_draws = do.call(rbind, bayeshaz_object$haz_draws)
-  partition = bayeshaz_object$partition
+  beta_draws = do.call(rbind, object$beta_draws)
+  haz_draws = do.call(rbind, object$haz_draws)
+  partition = object$partition
   
-  reg_formula = bayeshaz_object$formula
+  reg_formula = object$formula
   
   # one hot encoding for the x
 
