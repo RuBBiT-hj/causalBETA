@@ -25,6 +25,8 @@ The following packages are required for `causalBETA`:
 * `LaplacesDemon`
 * `stats`
 * `rlang`
+* `grDevices`
+* `graphics`
 
 
 This information is also listed in `DESCRIPTION`.
