@@ -1,4 +1,4 @@
-# causalBETA
+# causalBETA <a href="url"><img src="logo.png" align="right" height="200" width="200" ></a>
 The paper associated with this package is on arXiv: https://arxiv.org/abs/2310.12358.
 
 # About
