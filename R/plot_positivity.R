@@ -25,6 +25,8 @@
 #' formula = A ~ age + karno + celltype) ## equivalent in this case
 #' }
 ## usethis namespace: start
+#' @import graphics
+#' @import grDevices
 ## usethis namespace: end
 #' @export
 

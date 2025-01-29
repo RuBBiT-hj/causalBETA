@@ -12,7 +12,7 @@ Description: causalBETA (Bayesian Event Time Analysis) is a package for estimati
   causal effects on event-time outcomes using Bayesian semiparametric models.
 License: GPL (>= 2)
 Depends: R (>= 4.3), cmdstanr (>= 0.5.3), coda, survival
-Imports: stats, mets, LaplacesDemon, rlang
+Imports: stats, mets, LaplacesDemon, rlang, grDevices, graphics
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1

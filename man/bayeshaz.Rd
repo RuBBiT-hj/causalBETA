@@ -78,6 +78,7 @@ Under the \code{AR1} model, user can specify the standard deviation for the norm
 The default is 3, and only values between 0 and 3 are accepted since 3 is already a relatively weak prior.
 }
 \examples{
+\dontrun{
 # example demo
 data = survival::veteran
 data$A = 1*(data$trt==2)
@@ -94,6 +95,7 @@ post_draws_ar1_adj = bayeshaz(
   warmup = 1000, 
   post_iter = 1000,
   chains = 1)
+}
 }
 \references{
 Ji, Han, and Oganisian, Arman. 2023.

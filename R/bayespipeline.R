@@ -34,6 +34,7 @@
 #' It also plots the result of ATE by calling `plot()` on the ATE object.
 #'
 #' @examples
+#' \dontrun{
 #' # example demo
 #' data = survival :: veteran
 #' data$A = 1*(data$trt==2)
@@ -45,7 +46,7 @@
 #'   reg_formula = Surv(y, delta) ~ A,
 #'   A = 'A',
 #'   ref = 0
-#' )
+#' )}
 ## usethis namespace: start
 #' @import survival
 #' @import cmdstanr

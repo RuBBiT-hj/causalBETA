@@ -51,6 +51,8 @@
 #'   xlab = 'Time (days)')
 #' }
 ## usethis namespace: start
+#' @import graphics
+#' @import grDevices
 ## usethis namespace: end
 #' @export
 

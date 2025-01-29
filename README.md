@@ -17,10 +17,13 @@ library(causalBETA)
 The following packages are required for `causalBETA`:
 
 * `cmdstanr` ≥ 0.5.3
-* `coda` ≥ 0.19-4
-* `mets` ≥ 1.3.2
-* `survival` ≥ 3.5-5
-* `LaplacesDemon` ≥ 16.1.6
+* `coda`
+* `mets`
+* `survival`
+* `LaplacesDemon`
+* `stats`
+* `rlang`
+
 
 This information is also listed in `DESCRIPTION`.
 

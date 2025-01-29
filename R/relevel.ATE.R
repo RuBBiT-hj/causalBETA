@@ -12,12 +12,14 @@
 #' the `ATE_estimation()` function.
 #' @returns An object of `ATE` with the new reference
 #' @examples
+#' \dontrun{
 #' # example demo
 #' ## Continued from ?bayesgcomp
 #' ## original reference is 0
 #' gcomp_res_relevel <- relevel(gcomp_res, ref = 1)
 #' plot(gcomp_res_relevel)
 #' plot(gcomp_res) ## comparison
+#' }
 ## usethis namespace: start
 #' @importFrom stats relevel
 ## usethis namespace: end
@@ -35,7 +37,7 @@ relevel.ATE = function(x, ref, ...){
     temp <- x$surv_ref
     x$surv_ref <- x$surv_trt
     x$surv_trt <- temp
-    x$ATE <- -ATE_object$ATE
+    x$ATE <- -x$ATE
   }
   
   x$ref <- ref

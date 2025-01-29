@@ -47,6 +47,8 @@
 #' plot(gcomp_res) ## ATE
 #' }
 ## usethis namespace: start
+#' @import graphics
+#' @import grDevices
 ## usethis namespace: end
 #' @export
 

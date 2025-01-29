@@ -65,6 +65,7 @@
 
 ## usethis namespace: start
 #' @import coda
+#' @import stats 
 #' @importFrom mets rpch
 #' @importFrom LaplacesDemon rdirichlet
 ## usethis namespace: end
@@ -161,7 +162,7 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
     
   ## Posterior survival probability
   if (estimand == "prob") {
-    func = function(y, time_val){mean(y > time_val)}
+    # func = function(y, time_val){mean(y > time_val)}
     phrase = "Survival Probability"
     
     cat(paste0('Calculating Posterior Draws of ', phrase, ' under reference value...',Sys.time(),'\n'))
@@ -177,7 +178,8 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
       for (i in 1:length(t)){
         # surv_prob[ ,i] <- sapply(all_surv_time, function(x) mean(x > t[i]))
         # time_val <- t[i]
-        surv_prob[ ,i] <- sapply(all_surv_time, func, time_val = t[i], ...)
+        surv_prob[ ,i] <- sapply(all_surv_time, function(y, time_val){mean(y > time_val)}, 
+                                 time_val = t[i], ...)
       }
       return(surv_prob)
     })
@@ -194,7 +196,8 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
       for (i in 1:length(t)){
         # surv_prob[ ,i] <- sapply(all_surv_time, function(x) mean(x > t[i]))
         # time_val <- t[i]
-        surv_prob[ ,i] <- sapply(all_surv_time, func, time_val = t[i], ...)
+        surv_prob[ ,i] <- sapply(all_surv_time, function(y, time_val){mean(y > time_val)}, 
+                                 time_val = t[i], ...)
       }
       return(surv_prob)
     })
@@ -229,7 +232,6 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
     
     # Posterior median survival time
   } else if (estimand == "median") {
-    func = median
     phrase = "Median Survival Time"
     
     cat(paste0('Calculating Posterior Draws of ', phrase, ' under reference value...',Sys.time(),'\n'))
@@ -240,7 +242,7 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
       # the length of each list - the number of predictions (B)
 
 
-      surv_prob <- sapply(all_surv_time, func, ...)
+      surv_prob <- sapply(all_surv_time, median, ...)
       surv_prob <- matrix(surv_prob, nrow = length(all_surv_time))
       
       return(surv_prob)
@@ -253,7 +255,7 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
       # the number of the list - the number of posterior draws
       # the length of each list - the number of predictions (B)
       
-      surv_prob <- sapply(all_surv_time, func, ...)
+      surv_prob <- sapply(all_surv_time, median, ...)
       surv_prob <- matrix(surv_prob, nrow = length(all_surv_time))
       return(surv_prob)
     })
@@ -286,7 +288,6 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
     }
     # Restricted Mean
   } else { 
-    func = function(y){mean(pmin(y, threshold))}
     phrase = "Restricted Mean Survival Time"
     
     
@@ -297,7 +298,7 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
       # the number of the list - the number of posterior draws
       # the length of each list - the number of predictions (B)
       
-      surv_prob <- sapply(all_surv_time, func, ...)
+      surv_prob <- sapply(all_surv_time, function(y){mean(pmin(y, threshold))}, ...)
       surv_prob <- matrix(surv_prob, nrow = length(all_surv_time))
       
       return(surv_prob)
@@ -310,7 +311,7 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
       # the number of the list - the number of posterior draws
       # the length of each list - the number of predictions (B)
       
-      surv_prob <- sapply(all_surv_time, func, ...)
+      surv_prob <- sapply(all_surv_time, function(y){mean(pmin(y, threshold))}, ...)
       surv_prob <- matrix(surv_prob, nrow = length(all_surv_time))
       return(surv_prob)
     })

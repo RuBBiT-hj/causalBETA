@@ -57,6 +57,7 @@
 #' \url{http://arxiv.org/abs/2310.12358}.
 #' 
 #' @examples
+#' \dontrun{
 #' # example demo
 #' data = survival::veteran
 #' data$A = 1*(data$trt==2)
@@ -73,6 +74,7 @@
 #'   warmup = 1000, 
 #'   post_iter = 1000,
 #'   chains = 1)
+#' }
 
 ## usethis namespace: start
 #' @import survival

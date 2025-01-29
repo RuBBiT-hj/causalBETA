@@ -34,6 +34,8 @@
 #' }
 ## usethis namespace: start
 #' @import survival
+#' @import graphics
+#' @import grDevices
 #' @importFrom mets rpch
 ## usethis namespace: end
 #' @export
