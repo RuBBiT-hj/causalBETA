@@ -5,7 +5,7 @@
 \title{Plot Average Baseline Hazard Rates}
 \usage{
 \method{plot}{bayeshaz}(
-  bayeshaz_object,
+  x,
   col_hazard = "black",
   col_CI = rgb(0.5, 0.5, 0.5, 0.5),
   level_CI = 0.95,
@@ -22,7 +22,7 @@
 )
 }
 \arguments{
-\item{bayeshaz_object}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
+\item{x}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
 
 \item{col_hazard}{the color parameter for the baseline hazard points, default is \code{black}}
 
@@ -32,6 +32,24 @@
 level_CI\% credible interval will be plotted which has ((1-level_CI*100)/2)\%
 posterior probability below and above the interval.
 E.g. level_CI=.95 (the default) plots a 95\% credible interval.}
+
+\item{type}{Plot type}
+
+\item{pch}{Plot character}
+
+\item{xlim}{Limits for x-axis}
+
+\item{ylim}{Limits for y-axis}
+
+\item{xlab}{Label for x-axis}
+
+\item{ylab}{Label for y-axis}
+
+\item{main}{Title of the plot}
+
+\item{cex}{Character expansion factor}
+
+\item{lwd}{Line width}
 
 \item{...}{other graphical parameters for the plot function. Default ones will be used if not provided.}
 }
@@ -47,6 +65,7 @@ to generate plot(s).
 Plot the average baseline hazard rate from all posterior draws on all intervals from the given \code{bayeshaz} object.
 }
 \examples{
+\dontrun{
 # example demo
 ## Continued from ?bayeshaz
 set.seed(1)
@@ -65,4 +84,5 @@ plot(post_draws_ind, ylim=c(0,.11),
   main='Independent Prior Process',
   ylab = 'Baseline Hazard Rate', 
   xlab = 'Time (days)')
+}
 }

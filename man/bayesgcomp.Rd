@@ -69,6 +69,7 @@ These ATE-related functions only considers binary treatments so it is not applic
 binary variable before creating the \code{bayeshaz} object.
 }
 \examples{
+\dontrun{
 # example demo
 ## Continued from ?bayeshaz
 gcomp_res = bayesgcomp(post_draws_ar1_adj, ## bayeshaz output 
@@ -76,6 +77,7 @@ gcomp_res = bayesgcomp(post_draws_ar1_adj, ## bayeshaz output
                        B = 1000, ## monte carlo iterations in g-comp
                        estimand = "prob"
                        )
+}
 }
 \references{
 Ji, Han, and Oganisian, Arman. 2023.

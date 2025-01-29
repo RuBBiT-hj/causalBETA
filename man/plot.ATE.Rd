@@ -5,7 +5,7 @@
 \title{Plot Average Treatment Effect or Marginal Survival Probability Estimated for an \code{ATE} Object}
 \usage{
 \method{plot}{ATE}(
-  ATE_object,
+  x,
   mode = "ATE",
   col_ATE = "black",
   col_0 = rgb(0.9, 0.1, 0.1, 0.9),
@@ -27,7 +27,7 @@
 )
 }
 \arguments{
-\item{ATE_object}{ATE_object an object of the class \code{ATE} created by the \code{bayesgcomp()} function}
+\item{x}{ATE_object an object of the class \code{ATE} created by the \code{bayesgcomp()} function}
 
 \item{mode}{Mode of the plot, the default is \code{"ATE"} to plot the ATE in the \code{ATE} object. The other choices are
 \code{0}, \code{1}, and \code{c(0,1)}, which plot the control, treatment, and both respectively.}
@@ -42,6 +42,24 @@ The default are semitransparent grey, red, and blue}
 level_CI\% credible interval will be plotted which has ((1-level_CI*100)/2)\%
 posterior probability below and above the interval.
 E.g. level_CI=.95 (the default) plots a 95\% credible interval.}
+
+\item{xlim}{Limits for x-axis}
+
+\item{ylim}{Limits for y-axis}
+
+\item{type}{Plot type}
+
+\item{pch}{Plot character}
+
+\item{cex}{Character expansion factor}
+
+\item{lwd}{Line width}
+
+\item{main}{Title of the plot}
+
+\item{xlab}{Label for x-axis}
+
+\item{ylab}{Label for y-axis}
 
 \item{...}{other other graphical parameters for the plot function. Default ones will be used if not provided.}
 }
@@ -66,7 +84,9 @@ When the mode is \code{c(0,1)} (or \code{c(1,0)}), this function plots the contr
 The default title is \verb{Marginal Survival Curves for Both Treatments}.
 }
 \examples{
+\dontrun{
 # example demo
 ## Continued from ?bayesgcomp
 plot(gcomp_res) ## ATE
+}
 }

@@ -20,6 +20,7 @@
 #' Within each posterior draw, the function eventually obtains the quantity of interest based on `n` predictions and the `func` given.
 #' 
 #' @examples
+#' \dontrun{
 #' # example demo
 #' ## Continued from ?bayeshaz
 #' predict(post_draws_ar1_adj,
@@ -28,6 +29,7 @@
 #'                       "celltypesmallcell",
 #'                       "celltypeadeno")],
 #'         func = mean)
+#' }
 ## usethis namespace: start
 #' @import survival
 #' @importFrom mets rpch

@@ -53,6 +53,7 @@
 #' \url{http://arxiv.org/abs/2310.12358}.
 #' 
 #' @examples
+#' \dontrun{
 #' # example demo
 #' ## Continued from ?bayeshaz
 #' gcomp_res = bayesgcomp(post_draws_ar1_adj, ## bayeshaz output 
@@ -60,13 +61,12 @@
 #'                        B = 1000, ## monte carlo iterations in g-comp
 #'                        estimand = "prob"
 #'                        )
+#' }
 
 ## usethis namespace: start
-#' @import survival
+#' @import coda
 #' @importFrom mets rpch
-#' @importFrom coda mcmc
 #' @importFrom LaplacesDemon rdirichlet
-#' @importFrom coda mcmc
 ## usethis namespace: end
 #' @export
 

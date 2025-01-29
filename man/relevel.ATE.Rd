@@ -4,12 +4,14 @@
 \alias{relevel.ATE}
 \title{Modify the Reference Value}
 \usage{
-\method{relevel}{ATE}(ATE_object, ref)
+\method{relevel}{ATE}(x, ref, ...)
 }
 \arguments{
-\item{ATE_object}{an object of the class \code{ATE} created by the \code{bayesgcomp()} function}
+\item{x}{an object of the class \code{ATE} created by the \code{bayesgcomp()} function}
 
 \item{ref}{the new reference value, so it should be one of the treatment values}
+
+\item{...}{additional arguments for future methods}
 }
 \value{
 An object of \code{ATE} with the new reference

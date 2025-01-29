@@ -9,7 +9,7 @@
 #' For other estimands median survival time and Restricted mean survival time, 
 #' it will generate a single boxplot and print its summary.
 #' 
-#' @param ATE_object ATE_object an object of the class `ATE` created by the `bayesgcomp()` function
+#' @param x ATE_object an object of the class `ATE` created by the `bayesgcomp()` function
 #' @param mode Mode of the plot, the default is `"ATE"` to plot the ATE in the `ATE` object. The other choices are
 #' `0`, `1`, and `c(0,1)`, which plot the control, treatment, and both respectively.  
 #' @param col_ATE,col_0,col_1 the colors for the ATE, control and treatment points and lines. The default are
@@ -20,6 +20,15 @@
 #' level_CI% credible interval will be plotted which has ((1-level_CI*100)/2)% 
 #' posterior probability below and above the interval.
 #' E.g. level_CI=.95 (the default) plots a 95% credible interval.
+#' @param xlim Limits for x-axis
+#' @param ylim Limits for y-axis
+#' @param type Plot type
+#' @param pch Plot character
+#' @param cex Character expansion factor
+#' @param lwd Line width
+#' @param main Title of the plot
+#' @param xlab Label for x-axis
+#' @param ylab Label for y-axis
 #' @param ... other other graphical parameters for the plot function. Default ones will be used if not provided.
 #' @details
 #' When the mode is `ATE`, this function plots the ATE and its 95% CI, and the default color is black and grey.
@@ -32,14 +41,16 @@
 #' The default title is `Marginal Survival Curves for Both Treatments`.
 #' 
 #' @examples
+#' \dontrun{
 #' # example demo
 #' ## Continued from ?bayesgcomp
 #' plot(gcomp_res) ## ATE
+#' }
 ## usethis namespace: start
 ## usethis namespace: end
 #' @export
 
-plot.ATE = function(ATE_object, mode = "ATE",
+plot.ATE = function(x, mode = "ATE",
                     col_ATE = "black", col_0 = rgb(0.9, 0.1, 0.1, 0.9), col_1 = rgb(0.1, 0.1, 0.9, 0.9),
                     col_CI_ATE = rgb(0.5, 0.5, 0.5, 0.5), col_CI_0 = rgb(0.9, 0.5, 0.5, 0.4),
                     col_CI_1 = rgb(0.5, 0.5, 0.9, 0.4),
@@ -49,13 +60,13 @@ plot.ATE = function(ATE_object, mode = "ATE",
                     main = NULL, xlab = NULL, ylab = NULL,
                     ...){
   # extract
-  t <- ATE_object$t
-  surv_1 <- do.call(rbind, ATE_object$surv_ref)
-  surv_2 <- do.call(rbind, ATE_object$surv_trt)
-  ref <- ATE_object$ref
-  ATE <- do.call(rbind, ATE_object$ATE)
-  trt_values <- ATE_object$trt_values
-  estimand <- ATE_object$estimand
+  t <- x$t
+  surv_1 <- do.call(rbind, x$surv_ref)
+  surv_2 <- do.call(rbind, x$surv_trt)
+  ref <- x$ref
+  ATE <- do.call(rbind, x$ATE)
+  trt_values <- x$trt_values
+  estimand <- x$estimand
   
   # if ATE is selected
   if (!is.vector(mode)) stop("Mode provided is not valid")

@@ -32,6 +32,7 @@ It is required that the number and the order of the variables matches the model 
 \code{bayeshaz} object exactly.
 }
 \examples{
+\dontrun{
 # example demo
 ## Continued from ?bayeshaz
 predict(post_draws_ar1_adj,
@@ -40,4 +41,5 @@ predict(post_draws_ar1_adj,
                       "celltypesmallcell",
                       "celltypeadeno")],
         func = mean)
+}
 }

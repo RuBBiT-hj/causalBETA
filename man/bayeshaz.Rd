@@ -79,7 +79,7 @@ The default is 3, and only values between 0 and 3 are accepted since 3 is alread
 }
 \examples{
 # example demo
-data = survival :: veteran
+data = survival::veteran
 data$A = 1*(data$trt==2)
 ## rename variables
 var_names = colnames(data)

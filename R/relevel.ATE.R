@@ -2,8 +2,9 @@
 #' 
 #' The reference value of the `ATE` class object is changed to be the argument `ref`. If the new value provided is the
 #' other treatment, then this function will exchange the marginal survival probability between reference and treatment.
-#' @param ATE_object an object of the class `ATE` created by the `bayesgcomp()` function
+#' @param x an object of the class `ATE` created by the `bayesgcomp()` function
 #' @param ref the new reference value, so it should be one of the treatment values
+#' @param ... additional arguments for future methods
 #' @details
 #' When the reference provided is the other treatment than the current `ref` in the `ATE` object,
 #' this function swaps the marginal survival probabilities, but it doesn't recalculate them for computational
@@ -18,24 +19,25 @@
 #' plot(gcomp_res_relevel)
 #' plot(gcomp_res) ## comparison
 ## usethis namespace: start
+#' @importFrom stats relevel
 ## usethis namespace: end
 #' @export
 
-relevel.ATE = function(ATE_object, ref){
+relevel.ATE = function(x, ref, ...){
   # extract
-  trt_values <- ATE_object$trt_values
-  ref_current <- ATE_object$ref
+  trt_values <- x$trt_values
+  ref_current <- x$ref
   
   # if the ref is valid
   if ( !(ref %in% trt_values) ) stop("Reference provided is not a valid treatment value")
   # if the ref is the other treatment
   if ( ref != ref_current){
-    temp <- ATE_object$surv_ref
-    ATE_object$surv_ref <- ATE_object$surv_trt
-    ATE_object$surv_trt <- temp
-    ATE_object$ATE <- -ATE_object$ATE
+    temp <- x$surv_ref
+    x$surv_ref <- x$surv_trt
+    x$surv_trt <- temp
+    x$ATE <- -ATE_object$ATE
   }
   
-  ATE_object$ref <- ref
-  return(ATE_object)
+  x$ref <- ref
+  return(x)
 }

@@ -42,6 +42,8 @@ default is "AR1" and the other option is "independent"}
 
 \item{post_iter}{a numeric variable as the number of iterations to draw from the posterior, the default is 1000}
 
+\item{chains}{the number of chains for sampling, the default is 1}
+
 \item{ref}{the reference value of the treatment, so it should be one of the treatment values}
 
 \item{B}{the number of prediction for each posterior draw; the default is 1000}

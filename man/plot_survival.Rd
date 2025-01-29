@@ -5,8 +5,8 @@
 \title{Plot the Posterior Predictive Survival Curve for a Single individual}
 \usage{
 plot_survival(
-  bayeshaz_object,
   x,
+  data,
   n = 1000,
   col = "black",
   col_CI = rgb(0.5, 0.5, 0.5, 0.5),
@@ -20,15 +20,27 @@ plot_survival(
 )
 }
 \arguments{
-\item{bayeshaz_object}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
+\item{x}{an object of the class \code{bayeshaz} created by the \code{bayeshaz()} function}
 
-\item{x}{the data frame for an individual used for prediction, with the variables specified in the model}
+\item{data}{the data frame for an individual used for prediction, with the variables specified in the model}
 
 \item{n}{the number of prediction for each posterior draw; the default is 1000}
 
 \item{col}{the color parameter for the baseline hazard points, default is \code{black}}
 
 \item{col_CI}{the color parameter for the confidence intervals of the baseline hazard, default is semitransparent grey}
+
+\item{type}{Plot type}
+
+\item{pch}{Plot character}
+
+\item{cex}{Character expansion factor}
+
+\item{lwd}{Line width}
+
+\item{xlim}{Limits for x-axis}
+
+\item{ylim}{Limits for y-axis}
 
 \item{...}{other graphical parameters for the plot function. Default ones will be used if not provided.}
 }
@@ -48,7 +60,9 @@ The plot has the the mean survival probability and the 95\% CI from bootstrappin
 If the users want to make their own new plot, they can utilizes the returned matrix.
 }
 \examples{
+\dontrun{
 # example demo
 # after getting the posterior draw object
 pred_survival <- plot_survival(post_draws_ar1_adj, df_veteran[1, ])
+}
 }

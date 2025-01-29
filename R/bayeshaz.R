@@ -58,7 +58,7 @@
 #' 
 #' @examples
 #' # example demo
-#' data = survival :: veteran
+#' data = survival::veteran
 #' data$A = 1*(data$trt==2)
 #' ## rename variables
 #' var_names = colnames(data)
@@ -75,9 +75,9 @@
 #'   chains = 1)
 
 ## usethis namespace: start
+#' @import survival
+#' @import coda
 #' @import cmdstanr
-#' @importFrom coda mcmc
-#' @importFrom survival survSplit
 ## usethis namespace: end
 #' @export
 
@@ -99,7 +99,7 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", priorSD = 3,
   }
   
   # the address of the stan files
-  path_stan <- paste0(.libPaths(), "/causalBETA/data/")
+  path_stan <- paste0(.libPaths(), "/causalBETA/inst/stan/")
   
   # check for priorSD value
   if (priorSD > 3 | priorSD <= 0) {
