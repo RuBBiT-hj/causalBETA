@@ -50,7 +50,7 @@ plot(post_draws_ind,
      main='Independent Prior Process', ylab = 'Baseline Hazard Rate', 
      xlab = 'Time (days)')
 
-abline(h=mean(colMeans(post_draws_ind$haz_draws)), lty=2, col='black')
+abline(h=mean(colMeans(post_draws_ind$haz_draws[[1]])), lty=2, col='black')
 
 legend(x=0, y=.111, 
        legend = c('Posterior Point/Interval Estimate', 'Frequentist Estimate'), 
