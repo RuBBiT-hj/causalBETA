@@ -68,7 +68,7 @@ the function will use the default time points - the midpoints stored in the \cod
 These ATE-related functions only considers binary treatments so it is not applicable for more than two treatment values, or the multiple levels need to be coerced into a
 binary variable before creating the \code{bayeshaz} object.
 }
-\examples{
+@examples{
 \dontrun{
 # example demo
 ## Continued from ?bayeshaz
@@ -79,6 +79,7 @@ gcomp_res = bayesgcomp(post_draws_ar1_adj, ## bayeshaz output
                        )
 }
 }
+
 \references{
 Ji, Han, and Oganisian, Arman. 2023.
 "causalBETA: An R Package for Bayesian Semiparametric Causal Inference with

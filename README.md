@@ -1,6 +1,8 @@
-# causalBETA
+# causalBETA <a href="url"><img src="logo.png" align="right" height="200" width="200" ></a>
 The paper associated with this package is on arXiv: https://arxiv.org/abs/2310.12358.
-
+<br/>
+<br/>
+<br/>
 # About
 The R package `causalBETA` is an MCMC-based implementation of piecewise exponential model for survival data, and it uses G-computation to conduct causal inference for binary treatment on survival data. We provide generic plot functions to visualize estimates easily and allow users to run MCMC diagnostics by `coda` package.
 
