@@ -99,7 +99,8 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", priorSD = 3,
   }
   
   # the address of the stan files
-  path_stan <- paste0(.libPaths(), "/causalBETA/inst/stan/")
+  # path_stan <- paste0(.libPaths(), "/causalBETA/inst/stan/") # local test
+  path_stan <- system.file("stan", package = "causalBETA")
   
   # check for priorSD value
   if (priorSD > 3 | priorSD <= 0) {
