@@ -1,3 +1,9 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 notebook*
+^\beta_test.R$
+^logo\.png$
+^run_survival_model\.R$
+
+^backup$
+^demo_code$
