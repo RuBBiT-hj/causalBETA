@@ -8,8 +8,7 @@ Authors@R: c(person('Han', 'Ji', role=c('aut', 'cre'),
 Author: Han Ji [aut, cre],
   Arman Oganisian [aut]
 Maintainer: Han Ji <han_ji@brown.edu>
-Description: causalBETA (Bayesian Event Time Analysis) is a package for estimating 
-  causal effects on event-time outcomes using Bayesian semiparametric models.
+Description: Estimating causal effects on event-time outcomes using Bayesian semiparametric models based on Stan.
 License: GPL (>= 2)
 Depends: R (>= 4.3), cmdstanr (>= 0.5.3), coda, survival
 Imports: stats, mets, LaplacesDemon, rlang, grDevices, graphics
