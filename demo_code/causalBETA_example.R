@@ -10,8 +10,8 @@ data$A = 1*(data$trt==2)
 
 ## rename variables
 var_names = colnames(data)
-colnames(data)[var_names=='status'] = 'delta'
-colnames(data)[var_names=='time'] = 'y'
+colnames(data)[var_names=="status"] = "delta"
+colnames(data)[var_names=="time"] = "y"
 
 #------------------------------------------------------------------------------#
 ###       Run Unadjusted Analyses                                            ###
@@ -37,8 +37,8 @@ post_draws_ind = bayeshaz(data = data, ## data set
 set.seed(122132)
 post_draws_ar1 = bayeshaz(data = data, ## data set
                           reg_formula = Surv(y, delta) ~ A,
-                          model = 'AR1', ## choice of smoothing prior - independent or AR1 smoothing
-                          A = 'A', ## which variable is treatment
+                          model = "AR", ## choice of smoothing prior - independent or AR1 smoothing
+                          A = "A", ## which variable is treatment
                           warmup = 1000, post_iter = 1000)
 
 png(filename = "hazard_plots_unadj.png", width = 800, height = 400)
@@ -46,30 +46,30 @@ par(mfrow=c(1,2))
 ## ----- plot results with independence prior ----- ##
 plot(post_draws_ind, 
      ylim=c(0,.11), xlim=c(0, 900),
-     type='p', level_CI = .95,
-     main='Independent Prior Process', ylab = 'Baseline Hazard Rate', 
-     xlab = 'Time (days)')
+     type="p", level_CI = .95,
+     main="Independent Prior Process", ylab = "Baseline Hazard Rate", 
+     xlab = "Time (days)")
 
-abline(h=mean(colMeans(post_draws_ind$haz_draws[[1]])), lty=2, col='black')
+abline(h=mean(colMeans(post_draws_ind$haz_draws[[1]])), lty=2, col="black")
 
 legend(x=0, y=.111, 
-       legend = c('Posterior Point/Interval Estimate', 'Frequentist Estimate'), 
+       legend = c("Posterior Point/Interval Estimate", "Frequentist Estimate"), 
        col=c('black', 'red'), pch=c(20,20), bty='n')
 
 ## overlay frequentist point estimates 
 freq_res = eha::pchreg(data=data,
                        cuts = post_draws_ind$partition,
                        formula = Surv(y, delta) ~  A)
-points(post_draws_ind$midpoint, freq_res$hazards, col='red',pch=20, cex=.5)
+points(post_draws_ind$midpoint, freq_res$hazards, col="red",pch=20, cex=.5)
 
 ## ----- plot results with AR1 prior ----- ##
 plot(post_draws_ar1, 
      ylim=c(0,.11), xlim=c(0, 900), 
-     type='p', level_CI = .95,
-     main='AR1 Prior Process',
-     ylab = 'Baseline Hazard Rate', 
-     xlab = 'Time (days)')
-points(post_draws_ar1$midpoint, freq_res$hazards, col='red',pch=20, cex=.5)
+     type="p", level_CI = .95,
+     main="AR1 Prior Process",
+     ylab = "Baseline Hazard Rate", 
+     xlab = "Time (days)")
+points(post_draws_ar1$midpoint, freq_res$hazards, col="red",pch=20, cex=.5)
 dev.off()
 
 #------------------------------------------------------------------------------#
@@ -81,8 +81,8 @@ formula1 = Surv(y, delta) ~ A + age + karno + celltype
 
 post_draws_ar1_adj = bayeshaz(data = data, 
                                reg_formula = formula1,
-                               model = 'AR1',
-                               A = 'A', 
+                               model = "AR1",
+                               A = "A", 
                                warmup = 1000, post_iter = 1000) 
 
 summary(post_draws_ar1_adj$beta_draws, quantiles = c(.025, .975))
@@ -103,29 +103,29 @@ summary( gcomp_res$ATE, quantiles = c(.025, .975) )
 png(filename = "survival_plots_adj.png", width = 700, height = 300)
 par(mfrow=c(1,3))
 ## survival curve under A=0
-plot(gcomp_res, mode = 0, type ='p', 
+plot(gcomp_res, mode = 0, type ="p", 
      ylim=c(0,1), xlim=c(0, 1000), 
-     xlab='Time (days)', ylab='Survival Probability',
-     main='Marginal Survival Curve under Standard Chemo')
+     xlab="Time (days)", ylab="Survival Probability",
+     main="Marginal Survival Curve under Standard Chemo")
 ## overlay kaplan-meier
 d0 = data[data$A==0, ]
 lines(survfit(data=d0, Surv(y, delta)~ 1))
 
 ## survival curve under A=1
-plot(gcomp_res, mode = 1, type ='p', 
+plot(gcomp_res, mode = 1, type ="p", 
      ylim=c(0,1), xlim=c(0, 1000), 
-     xlab='Time (days)', ylab='Survival Probability',
-     main='Marginal Survival Curve under Novel Chemo')
+     xlab="Time (days)", ylab="Survival Probability",
+     main="Marginal Survival Curve under Novel Chemo")
 ## overlay kaplan-meier
 d1 = data[data$A==1, ]
 lines(survfit(data=d1, Surv(y, delta)~ 1))
 
 ## difference in survival rate
-plot(gcomp_res, mode = 'ATE', ylim=c(-1,1), 
-     main = 'Difference in Marginal Survival Probability',
-     xlab = 'Time (days)', 
-     ylab = 'Difference')
-abline(h=0, lty=2, col='red')
+plot(gcomp_res, mode = "ATE", ylim=c(-1,1), 
+     main = "Difference in Marginal Survival Probability",
+     xlab = "Time (days)", 
+     ylab = "Difference")
+abline(h=0, lty=2, col="red")
 dev.off()
 
 
@@ -139,8 +139,8 @@ n_chains = 3
 set.seed(1)
 post_draws = bayeshaz(data = data, 
                       reg_formula = formula1,
-                      model = 'AR1',
-                      A = 'A', 
+                      model = "AR1",
+                      A = "A", 
                       warmup = 2000, 
                       post_iter = 1000, ## output 1000 draws
                       chains = n_chains)
@@ -186,9 +186,9 @@ for(B in B_vec){
         ATE_list[[length(ATE_list) + 1 ]] = gcomp_res$ATE
 }
 
-png(filename = 'density.png', width = 700, height = 500)
+png(filename = "density.png", width = 700, height = 500)
 par(mfrow=c(1,1))
-plot(density(ATE_list[[1]][[1]]), ylim=c(0, 20), col='red', 
+plot(density(ATE_list[[1]][[1]]), ylim=c(0, 20), col="red", 
      main = latex2exp::TeX(paste0('Posterior Density of $\\Psi(t)$ for $t=365$') ) )
 lines(density(ATE_list[[2]][[1]]), col='black')
 lines(density(ATE_list[[3]][[1]]), col='blue')
