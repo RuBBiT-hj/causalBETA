@@ -79,7 +79,6 @@
 ## usethis namespace: start
 #' @import survival
 #' @import coda
-#' @import cmdstanr
 ## usethis namespace: end
 #' @export
 
@@ -190,7 +189,7 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", priorSD = 3,
                  xmat = xmat,
                  sigma_beta = priorSD)
 
-    mod = cmdstan_model(paste0(path_stan, "/hazard_mod_v1.stan"))
+    mod = cmdstanr::cmdstan_model(paste0(path_stan, "/hazard_mod_v1.stan"))
   } else if (model == "AR1"){ # a different variance for beta coefficients
 
     dlist = list(N=nrow(dsplit),
@@ -201,7 +200,7 @@ bayeshaz = function(data, reg_formula, A, model = "AR1", priorSD = 3,
                  interval_num = dsplit$interval_num,
                  xmat = xmat,
                  sigma_beta = priorSD)
-    mod = cmdstan_model(paste0(path_stan, "/hazard_mod_v2.stan"))
+    mod = cmdstanr::cmdstan_model(paste0(path_stan, "/hazard_mod_v2.stan"))
   } else { # the model input is not correct
     stop("The model input is not valid. Must be either `independent' or 'AR1' ")
   }

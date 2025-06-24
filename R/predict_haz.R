@@ -10,7 +10,7 @@
 #' @return The posterior predictive quantity in interest
 
 
-predict.haz = function(x, beta_draws, haz_draws, partition, n = 1000, func){
+predict_haz = function(x, beta_draws, haz_draws, partition, n = 1000, func){
   
   post_iter = nrow(haz_draws)
   res = numeric(length = post_iter)

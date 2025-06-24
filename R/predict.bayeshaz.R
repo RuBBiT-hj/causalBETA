@@ -67,7 +67,7 @@ predict.bayeshaz = function(object, x, n = 1000, func, ...){
   post_iter = nrow(haz_draws)
   
   res = apply(x, MARGIN = 1, function(y) {
-    res_single = predict.haz(x = y,
+    res_single = predict_haz(x = y,
                              beta_draws = beta_draws,
                              haz_draws = haz_draws,
                              partition = partition,

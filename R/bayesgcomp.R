@@ -37,7 +37,6 @@
 #' 
 #' * `surv_ref`, the posterior estimates for the reference
 #' * `surv_trt`, the posterior estimates for the treatment
-
 #' * `ref`, the value of the reference treatment
 #' * `trt_values`, the possible values of the treatment
 #' * `estimand`, the estimand for the ATE
@@ -167,8 +166,8 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
     
     cat(paste0('Calculating Posterior Draws of ', phrase, ' under reference value...',Sys.time(),'\n'))
     surv_est_1 <- lapply(1:n_subject, function(x){
-      # call predict.haz as a helper function
-      all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, B, func = list)
+      # call predict_haz as a helper function
+      all_surv_time = predict_haz(d_1[x, ], beta_draws, haz_draws, partition, B, func = list)
       # the number of the list - the number of posterior draws
       # the length of each list - the number of predictions (B)
       
@@ -186,8 +185,8 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
     
     cat(paste0('Calculating Posterior Draws of ', phrase, ' under treatment...',Sys.time(),'\n'))
     surv_est_2 <- lapply(1:n_subject, function(x){
-      # call predict.haz as a helper function
-      all_surv_time = predict.haz(d_2[x, ], beta_draws, haz_draws, partition, B, func = list)
+      # call predict_haz as a helper function
+      all_surv_time = predict_haz(d_2[x, ], beta_draws, haz_draws, partition, B, func = list)
       # the number of the list - the number of posterior draws
       # the length of each list - the number of predictions (B)
       surv_prob <- matrix(nrow = length(all_surv_time),
@@ -236,8 +235,8 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
     
     cat(paste0('Calculating Posterior Draws of ', phrase, ' under reference value...',Sys.time(),'\n'))
     surv_est_1 <- lapply(1:n_subject, function(x){
-      # call predict.haz as a helper function
-      all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, B, func = list)
+      # call predict_haz as a helper function
+      all_surv_time = predict_haz(d_1[x, ], beta_draws, haz_draws, partition, B, func = list)
       # the number of the list - the number of posterior draws
       # the length of each list - the number of predictions (B)
 
@@ -250,8 +249,8 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
     
     cat(paste0('Calculating Posterior Draws of ', phrase, ' under treatment...',Sys.time(),'\n'))
     surv_est_2 <- lapply(1:n_subject, function(x){
-      # call predict.haz as a helper function
-      all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, B, func = list)
+      # call predict_haz as a helper function
+      all_surv_time = predict_haz(d_1[x, ], beta_draws, haz_draws, partition, B, func = list)
       # the number of the list - the number of posterior draws
       # the length of each list - the number of predictions (B)
       
@@ -293,8 +292,8 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
     
     cat(paste0('Calculating Posterior Draws of ', phrase, ' under reference value...',Sys.time(),'\n'))
     surv_est_1 <- lapply(1:n_subject, function(x){
-      # call predict.haz as a helper function
-      all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, B, func = list)
+      # call predict_haz as a helper function
+      all_surv_time = predict_haz(d_1[x, ], beta_draws, haz_draws, partition, B, func = list)
       # the number of the list - the number of posterior draws
       # the length of each list - the number of predictions (B)
       
@@ -306,8 +305,8 @@ bayesgcomp = function(bayeshaz_object, ref, B = 1000,
     
     cat(paste0('Calculating Posterior Draws of ', phrase, ' under treatment...',Sys.time(),'\n'))
     surv_est_2 <- lapply(1:n_subject, function(x){
-      # call predict.haz as a helper function
-      all_surv_time = predict.haz(d_1[x, ], beta_draws, haz_draws, partition, B, func = list)
+      # call predict_haz as a helper function
+      all_surv_time = predict_haz(d_1[x, ], beta_draws, haz_draws, partition, B, func = list)
       # the number of the list - the number of posterior draws
       # the length of each list - the number of predictions (B)
       

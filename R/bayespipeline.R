@@ -49,7 +49,6 @@
 #' )}
 ## usethis namespace: start
 #' @import survival
-#' @import cmdstanr
 #' @import coda
 #' @importFrom mets rpch
 #' @importFrom LaplacesDemon rdirichlet

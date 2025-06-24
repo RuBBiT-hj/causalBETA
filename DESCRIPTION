@@ -10,8 +10,11 @@ Author: Han Ji [aut, cre],
 Maintainer: Han Ji <han_ji@brown.edu>
 Description: Estimating causal effects on event-time outcomes using Bayesian semiparametric models based on Stan.
 License: GPL (>= 2)
-Depends: R (>= 4.3), cmdstanr (>= 0.5.3), coda, survival
+Depends: R (>= 4.3), coda, survival
 Imports: stats, mets, LaplacesDemon, rlang, grDevices, graphics
+Suggests: cmdstanr (>= 0.5.3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
+Additional_repositories:
+    https://stan-dev.r-universe.dev/
 RoxygenNote: 7.3.1
